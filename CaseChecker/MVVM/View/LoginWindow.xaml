@@ -1,0 +1,74 @@
+﻿<Window x:Class="CaseChecker.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewmodel="clr-namespace:CaseChecker.MVVM.ViewModel"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="SingleBorderWindow"
+        ResizeMode="CanMinimize"
+        Title="CaseChecker for Stats" Height="500" Width="400"
+        Icon="/Images/new_logo.png">
+
+    <Window.DataContext>
+        <viewmodel:LoginViewModel />
+    </Window.DataContext>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition />
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Vertical">
+            <Image Source="/Images/new_logo.png"
+                   Width="128"
+                   Height="128" />
+            <Label Content="Case Checker for Stats" 
+                   HorizontalAlignment="Center"
+                   FontSize="30"
+                   FontWeight="SemiBold"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Vertical"
+                    Grid.Row="1"
+                    Margin="15,20,15,0">
+
+            <Label Content="Your Device Secret" />
+            <TextBox Text="{Binding DeviceId}" 
+                     IsReadOnly="True"
+                     Margin="4,0,4,0"
+                     FontSize="14"
+                     Padding="3" />
+
+            <Label Content="Server Address" 
+                   Margin="0,20,0,0"/>
+            <TextBox Text="{Binding ServerAddress, Mode=TwoWay}"
+                     Margin="4,0,4,0"
+                     FontSize="14"
+                     Padding="3"
+                     IsEnabled="{Binding IsNotWorking, Mode=TwoWay}"
+                     />
+            
+            <Button Content="Connect to Server" 
+                    Height="40"
+                    FontSize="14"
+                    Margin="4,20,4,20"
+                    IsEnabled="{Binding IsNotWorking, Mode=TwoWay}"
+                    Command="{Binding ConnectToServerCommand}"
+                    />
+
+            <Label Content="{Binding Messages}" 
+                   HorizontalAlignment="Center"
+                   Foreground="{Binding MessagesColor}"/>
+        </StackPanel>
+
+        <Label Content="Made by AmL - 2024" 
+               Grid.Row="2"
+               FontSize="11"
+               Foreground="Gray"
+               HorizontalAlignment="Center"/>
+    </Grid>
+</Window>

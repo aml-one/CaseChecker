@@ -1,0 +1,936 @@
+﻿<Window x:Class="CaseChecker.MVVM.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:localView="clr-namespace:CaseChecker.MVVM.View"
+        xmlns:core="clr-namespace:CaseChecker.MVVM.Core"
+        xmlns:converter="clr-namespace:CaseChecker.MVVM.Converters"
+        xmlns:viewmodel="clr-namespace:CaseChecker.MVVM.ViewModel"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResizeWithGrip"
+        Closing="Window_Closing"
+        Title="CaseChecker for Stats 2024"
+        Height="700"
+        Width="1000"
+        MinHeight="500"
+        MinWidth="800"
+        Icon="/Images/new_logo.png">
+
+    <Window.DataContext>
+        <viewmodel:MainViewModel />
+    </Window.DataContext>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Themes/LvItem.xaml" />
+                <ResourceDictionary Source="/Themes/ScrollBar.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <converter:LeftSideColumnVisibilityConverter x:Key="LeftSideColumnVisibilityConverter" />
+            <converter:RightSideColumnVisibilityConverter x:Key="RightSideColumnVisibilityConverter" />
+            <converter:LeftSideColumnSpanConverter x:Key="LeftSideColumnSpanConverter" />
+            <converter:RightSideColumnSpanConverter x:Key="RightSideColumnSpanConverter" />
+            <converter:RightSideColumnPositionConverter x:Key="RightSideColumnPositionConverter" />
+            <converter:DateFormatConverter x:Key="DateFormatConverter" />
+            <converter:RemoveFirstCharFromStringIfItsZConverter x:Key="RemoveFirstCharFromStringIfItsZConverter" />
+            <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <converter:BoolToInverseVisibilityConverter x:Key="BoolToInverseVisibilityConverter" />
+
+            <Style x:Key="lvHeaderStyle"
+                   TargetType="{x:Type GridViewColumnHeader}">
+                <Setter Property="Background"
+                        Value="WhiteSmoke" />
+                <Setter Property="HorizontalContentAlignment"
+                        Value="Left" />
+                <Setter Property="BorderThickness"
+                        Value="0,0,0,0" />
+                <Setter Property="IsHitTestVisible"
+                        Value="False" />
+                <Setter Property="Margin"
+                        Value="-3,0,-3,0" />
+            </Style>
+
+            <DataTemplate x:Key="lvHeaderTemplate">
+                <DockPanel HorizontalAlignment="Left"
+                           LastChildFill="False">
+                    <TextBlock FontSize="11"
+                               Foreground="Black"
+                               FontWeight="Normal"
+                               Width="{TemplateBinding Width}"
+                               HorizontalAlignment="Left">
+                        <TextBlock.Text>
+                            <Binding />
+                        </TextBlock.Text>
+                    </TextBlock>
+                </DockPanel>
+            </DataTemplate>
+
+            <DataTemplate x:Key="CrownsHeaderTemplate">
+                <Image Source="/Images/crown.png"
+                       Width="17"
+                       Height="17"
+                       Margin="10,0,6,0" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="AbutmentsHeaderTemplate">
+                <Image Source="/Images/abutment.png"
+                       Width="17"
+                       Height="17"
+                       Margin="10,0,6,0" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="ModelsHeaderTemplate">
+                <Image Source="/Images/i32.png"
+                       Width="17"
+                       Height="17"
+                       Margin="10,0,6,0" />
+            </DataTemplate>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Margin="4,0,4,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="38" />
+            <RowDefinition />
+            <RowDefinition Height="20" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="0"
+              Grid.Column="0"
+              Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            
+            <Label Content="Server Status"
+                   Grid.Column="0"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   FontSize="7" />
+
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Bottom">
+
+                <Label Content="Server is"
+                       FontSize="16"
+                       Foreground="{Binding ProgressBarColor}"
+                       Margin="0,0,-4,0" />
+                <Label Content="{Binding ServerInfoModel.StatsServerStatus}"
+                       FontSize="16"
+                       Foreground="{Binding ProgressBarColor}"
+                       FontWeight="SemiBold"
+                       />
+
+            </StackPanel>
+
+            <ProgressBar IsIndeterminate="True"
+                         Grid.ColumnSpan="2"
+                         Margin="2,0,2,0"
+                         Panel.ZIndex="-10"
+                         Opacity="0.10"
+                         Foreground="{Binding ProgressBarColor}"
+                         Visibility="{Binding ServerInfoModel.ServerIsWritingDatabase, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+
+
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Right">
+                <StackPanel Orientation="Vertical">
+                    <Label Content="Next Expected Export Time In"
+                           Grid.Column="0"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Top"
+                           FontSize="7" />
+                    <Label Content="{Binding ExportClockCountDown}"
+                           FontSize="18"
+                           FontFamily="Courier New"
+                           Margin="0,-9,0,0"
+                           HorizontalAlignment="Center"
+                           FontWeight="SemiBold" />
+                </StackPanel>
+
+            </StackPanel>
+
+            <Label Content="In Local Time"
+                   Grid.Column="1"
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Top"
+                   FontSize="7" />
+
+            <StackPanel Orientation="Horizontal"
+                        Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom">
+                <Label Content="Last change in database:"
+                       FontSize="14"
+                       Margin="0,0,-4,0" />
+
+                <Label Content="{Binding LastDBUpdateLocalTime}"
+                       FontSize="14"
+                       Foreground="{Binding UpdateTimeColor}"
+                       Opacity="{Binding UpdateTimeOpacity}"
+                       FontWeight="SemiBold" />
+            </StackPanel>
+        </Grid>
+
+
+        
+
+        <Grid Grid.Row="1"
+              Grid.Column="0"
+              Grid.ColumnSpan="{Binding ColumnAccess, Converter={StaticResource LeftSideColumnSpanConverter}}"
+              Visibility="{Binding ColumnAccess, Converter={StaticResource LeftSideColumnVisibilityConverter}}"
+              Margin="2,0,2,0">
+
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="66" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Column="0"
+                  Grid.Row="0">
+                <Image Source="/Images/new_logo.png"
+                       Panel.ZIndex="1"
+                       Opacity="1"
+                       Width="512"
+                       Height="512"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center" />
+                <core:OutlinedTextBlock Text="{Binding ServerInfoModel.DesignerNameAnteriors}"
+                                        Grid.Column="3"
+                                        Stroke="#000"
+                                        StrokePosition="Outside"
+                                        FontSize="60"
+                                        FontWeight="SemiBold"
+                                        Fill="DarkGreen"
+                                        Panel.ZIndex="2"
+                                        StrokeThickness="1"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Margin="3,8,3,0" />
+            </Grid>
+
+            <ListView ItemsSource="{Binding SentOutCasesModelLeftSide}"
+                      ItemContainerStyle="{StaticResource LvItemLeft}"
+                      x:Name="listViewLeft"
+                      AlternationCount="2"
+                      Grid.Row="0"
+                      Panel.ZIndex="2"
+                      Opacity="0.96"
+                      SizeChanged="listViewLeft_SizeChanged">
+                <ListView.Resources>
+                    <Style TargetType="{x:Type GridViewColumnHeader}">
+                        <Setter Property="HorizontalContentAlignment"
+                                Value="Left" />
+                        <Setter Property="IsEnabled"
+                                Value="True" />
+
+                    </Style>
+                </ListView.Resources>
+
+                <ListView.View>
+
+                    <GridView AllowsColumnReorder="False"
+                              ColumnHeaderTemplate="{StaticResource lvHeaderTemplate}"
+                              ColumnHeaderContainerStyle="{StaticResource lvHeaderStyle}">
+                        <GridViewColumn x:Name="headerIcon"
+                                        Width="34"
+                                        Header=""
+                                        DisplayMemberBinding="{Binding IconImage}" />
+                        <GridViewColumn x:Name="headerCaseID"
+                                        Width="400"
+                                        Header="  Order ID"
+                                        DisplayMemberBinding="{Binding OrderID}" />
+                        <GridViewColumn x:Name="headerCrowns"
+                                        Width="30"
+                                        HeaderTemplate="{StaticResource CrownsHeaderTemplate}"
+                                        DisplayMemberBinding="{Binding Crowns}" />
+                        <GridViewColumn x:Name="headerAbutments"
+                                        Width="30"
+                                        HeaderTemplate="{StaticResource AbutmentsHeaderTemplate}"
+                                        DisplayMemberBinding="{Binding Abutments}" />
+                        <GridViewColumn x:Name="headerModels"
+                                        Width="30"
+                                        HeaderTemplate="{StaticResource ModelsHeaderTemplate}"
+                                        DisplayMemberBinding="{Binding Models}" />
+                        <GridViewColumn x:Name="headerSentOn"
+                                        Header="   Received from Lab"
+                                        Width="110"
+                                        DisplayMemberBinding="{Binding SentOn}" />
+
+                    </GridView>
+
+                </ListView.View>
+
+                <ListView.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.ContainerStyle>
+                            <Style TargetType="{x:Type GroupItem}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Expander IsExpanded="True"
+                                                      Margin="0,0,0,30"
+                                                      Loaded="ExpanderLeft_Loaded"
+                                                      Collapsed="ExpanderLeft_ExpandedCollapsed"
+                                                      Expanded="ExpanderLeft_ExpandedCollapsed">
+                                                <Expander.Header>
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="auto" />
+                                                            <ColumnDefinition Width="auto" />
+                                                            <ColumnDefinition Width="auto" />
+                                                            <ColumnDefinition />
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <TextBlock Text="{Binding Name, Converter={StaticResource RemoveFirstCharFromStringIfItsZConverter}}"
+                                                                   FontWeight="Bold"
+                                                                   Foreground="Gray"
+                                                                   FontSize="18"
+                                                                   VerticalAlignment="Bottom"
+                                                                   Grid.Column="0" />
+
+                                                        <StackPanel Orientation="Horizontal"
+                                                                    HorizontalAlignment="Right"
+                                                                    Grid.Column="2">
+
+                                                            <TextBlock Text="{Binding ItemCount}"
+                                                                       FontSize="16"
+                                                                       Foreground="Green"
+                                                                       FontWeight="Bold"
+                                                                       FontStyle="Italic"
+                                                                       Margin="10,0,0,0"
+                                                                       VerticalAlignment="Bottom"
+                                                                       HorizontalAlignment="Right" />
+
+                                                            <TextBlock Text=" case(s)"
+                                                                       FontSize="16"
+                                                                       Foreground="Silver"
+                                                                       FontStyle="Italic"
+                                                                       VerticalAlignment="Bottom"
+                                                                       HorizontalAlignment="Right" />
+                                                        </StackPanel>
+
+                                                    </Grid>
+                                                </Expander.Header>
+                                                <ItemsPresenter />
+                                            </Expander>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </GroupStyle.ContainerStyle>
+                    </GroupStyle>
+                </ListView.GroupStyle>
+            </ListView>
+
+            <Border Grid.Row="1"
+                    Grid.Column="0"
+                    BorderThickness="1"
+                    Margin="0,4,0,0"
+                    BorderBrush="#AAA">
+
+                <Grid Background="White">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="0.75*" />
+                        <ColumnDefinition Width="0.75*" />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="0.75*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <core:OutlinedTextBlock Text="{Binding TotalUnitsLeftSide}"
+                                            Grid.Column="0"
+                                            Stroke="#888"
+                                            StrokePosition="Outside"
+                                            FontSize="40"
+                                            FontWeight="SemiBold"
+                                            Fill="Lime"
+                                            StrokeThickness="1"
+                                            HorizontalAlignment="Center"
+                                            Margin="3,-8,3,0" />
+                    <Label Content="Total Units"
+                           Grid.Row="1"
+                           Grid.Column="0"
+                           Margin="0,-8,0,0"
+                           FontSize="9"
+                           HorizontalAlignment="Center" />
+
+                    <core:OutlinedTextBlock Text="{Binding TotalCrownsLeftSide}"
+                                            Grid.Column="1"
+                                            Stroke="#888"
+                                            StrokePosition="Outside"
+                                            FontSize="30"
+                                            FontWeight="SemiBold"
+                                            Fill="PaleTurquoise"
+                                            HorizontalAlignment="Center"
+                                            StrokeThickness="1"
+                                            Margin="3" />
+
+                    <Label Content="Crowns"
+                           Grid.Row="1"
+                           Grid.Column="1"
+                           Margin="0,-8,0,0"
+                           FontSize="9"
+                           HorizontalAlignment="Center" />
+
+                    <core:OutlinedTextBlock Text="{Binding TotalAbutmentsLeftSide}"
+                                            Grid.Column="2"
+                                            Stroke="#888"
+                                            StrokePosition="Outside"
+                                            FontSize="30"
+                                            FontWeight="SemiBold"
+                                            Fill="PaleVioletRed"
+                                            StrokeThickness="1"
+                                            HorizontalAlignment="Center"
+                                            Margin="3" />
+                    <Label Content="Abutments"
+                           Grid.Row="1"
+                           Grid.Column="2"
+                           Margin="0,-8,0,0"
+                           FontSize="9"
+                           HorizontalAlignment="Center" />
+
+                    <core:OutlinedTextBlock Text="{Binding TotalOrdersLeftSide}"
+                                            Grid.Column="3"
+                                            Stroke="#888"
+                                            StrokePosition="Outside"
+                                            FontSize="40"
+                                            FontWeight="SemiBold"
+                                            Fill="LightGreen"
+                                            StrokeThickness="1"
+                                            HorizontalAlignment="Center"
+                                            Margin="3,-8,3,0" />
+                    <Label Content="All Cases"
+                           Grid.Row="1"
+                           Grid.Column="3"
+                           Margin="0,-8,0,0"
+                           FontSize="9"
+                           HorizontalAlignment="Center" />
+
+
+                    <Label Content="Leftover Units"
+                           Grid.Row="0"
+                           Grid.Column="4"
+                           Margin="0,-6,0,0"
+                           FontSize="9"
+                           Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalLeftSide}"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top" />
+
+                    <Grid Grid.Column="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+
+                        <core:OutlinedTextBlock Text="{Binding TotalUnitsLeftOverLeftSide}"
+                                                Grid.Column="0"
+                                                Grid.Row="0"
+                                                Stroke="#888"
+                                                StrokePosition="Outside"
+                                                FontSize="16"
+                                                FontWeight="SemiBold"
+                                                Fill="Green"
+                                                StrokeThickness="1"
+                                                HorizontalAlignment="Left"
+                                                Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalLeftSide}"
+                                                Margin="4,7,-2,-8" />
+
+                        <core:OutlinedTextBlock Text="{Binding TotalUnitsTodayLeftSide}"
+                                                Grid.Column="0"
+                                                Grid.Row="1"
+                                                Stroke="#888"
+                                                StrokePosition="Outside"
+                                                FontSize="16"
+                                                FontWeight="SemiBold"
+                                                Fill="Yellow"
+                                                StrokeThickness="1"
+                                                HorizontalAlignment="Left"
+                                                Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalLeftSide}"
+                                                Margin="4,2,-2,-8" />
+                    </Grid>
+
+                    <Label Content="Total Units Today"
+                           Grid.Row="1"
+                           Grid.Column="4"
+                           Margin="0,-8,2,0"
+                           FontSize="9"
+                           Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalLeftSide}"
+                           HorizontalAlignment="Left" />
+
+
+                    <Label Content="Leftover Cases"
+                           Grid.Row="0"
+                           Grid.Column="5"
+                           Margin="0,-6,0,0"
+                           FontSize="9"
+                           Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalLeftSide}"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top" />
+
+                    <Grid Grid.Column="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+
+                        <core:OutlinedTextBlock Text="{Binding TotalOrdersLeftOversLeftSide}"
+                                                Grid.Column="0"
+                                                Grid.Row="0"
+                                                Stroke="#888"
+                                                StrokePosition="Outside"
+                                                FontSize="16"
+                                                FontWeight="SemiBold"
+                                                Fill="Maroon"
+                                                StrokeThickness="1"
+                                                HorizontalAlignment="Left"
+                                                Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalLeftSide}"
+                                                Margin="4,7,-2,-8" />
+
+                        <core:OutlinedTextBlock Text="{Binding TotalOrdersTodayLeftSide}"
+                                                Grid.Column="0"
+                                                Grid.Row="1"
+                                                Stroke="#888"
+                                                StrokePosition="Outside"
+                                                FontSize="16"
+                                                FontWeight="SemiBold"
+                                                Fill="LightBlue"
+                                                StrokeThickness="1"
+                                                HorizontalAlignment="Left"
+                                                Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalLeftSide}"
+                                                Margin="4,2,2,-8" />
+                    </Grid>
+
+
+                    <Label Content="New Cases Today"
+                           Grid.Row="1"
+                           Grid.Column="5"
+                           Margin="0,-8,2,0"
+                           FontSize="9"
+                           Visibility="{Binding TotalOrdersTodaySameAsAllTimeTotalLeftSide}"
+                           HorizontalAlignment="Left" />
+
+
+                </Grid>
+            </Border>
+
+        </Grid>
+
+        <Grid Grid.Row="1"
+              Grid.Column="{Binding ColumnAccess, Converter={StaticResource RightSideColumnPositionConverter}}"
+              Grid.ColumnSpan="{Binding ColumnAccess, Converter={StaticResource RightSideColumnSpanConverter}}"
+              Visibility="{Binding ColumnAccess, Converter={StaticResource RightSideColumnVisibilityConverter}}"
+              Margin="2,0,2,0">
+
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="66" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Column="0"
+                  Grid.Row="0">
+                <Image Source="/Images/new_logo.png"
+                       Panel.ZIndex="1"
+                       Opacity="1"
+                       Width="512"
+                       Height="512"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center" />
+                <core:OutlinedTextBlock Text="{Binding ServerInfoModel.DesignerNamePosteriors}"
+                                        Grid.Column="3"
+                                        Stroke="#000"
+                                        StrokePosition="Outside"
+                                        FontSize="60"
+                                        FontWeight="SemiBold"
+                                        Fill="DarkGreen"
+                                        Panel.ZIndex="2"
+                                        StrokeThickness="1"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Margin="3,8,3,0" />
+            </Grid>
+
+            <ListView ItemsSource="{Binding SentOutCasesModelRightSide}"
+                      ItemContainerStyle="{StaticResource LvItemRight}"
+                      x:Name="listViewRight"
+                      AlternationCount="2"
+                      Panel.ZIndex="2"
+                      Opacity="0.96"
+                      Grid.Row="0"
+                      SizeChanged="listViewRight_SizeChanged">
+                <ListView.Resources>
+                    <Style TargetType="{x:Type GridViewColumnHeader}">
+                        <Setter Property="HorizontalContentAlignment"
+                                Value="Left" />
+                        <Setter Property="IsEnabled"
+                                Value="True" />
+
+                    </Style>
+                </ListView.Resources>
+                <ListView.View>
+
+                    <GridView AllowsColumnReorder="False"
+                              ColumnHeaderTemplate="{StaticResource lvHeaderTemplate}"
+                              ColumnHeaderContainerStyle="{StaticResource lvHeaderStyle}">
+                        <GridViewColumn x:Name="headerIconR"
+                                        Width="26"
+                                        Header=""
+                                        DisplayMemberBinding="{Binding IconImage}" />
+                        <GridViewColumn x:Name="headerCaseIDR"
+                                        Width="400"
+                                        Header="  Case ID"
+                                        DisplayMemberBinding="{Binding OrderID}" />
+
+
+                        <GridViewColumn x:Name="headerCrownsR"
+                                        Width="30"
+                                        HeaderTemplate="{StaticResource CrownsHeaderTemplate}"
+                                        DisplayMemberBinding="{Binding Crowns}" />
+                        <GridViewColumn x:Name="headerAbutmentsR"
+                                        Width="30"
+                                        HeaderTemplate="{StaticResource AbutmentsHeaderTemplate}"
+                                        DisplayMemberBinding="{Binding Abutments}" />
+                        <GridViewColumn x:Name="headerModelsR"
+                                        Width="30"
+                                        HeaderTemplate="{StaticResource ModelsHeaderTemplate}"
+                                        DisplayMemberBinding="{Binding Models}" />
+                        <GridViewColumn x:Name="headerSentOnR"
+                                        Header="   Received from Lab"
+                                        Width="360"
+                                        DisplayMemberBinding="{Binding SentOn}" />
+
+                    </GridView>
+
+                </ListView.View>
+                <ListView.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.ContainerStyle>
+                            <Style TargetType="{x:Type GroupItem}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Expander IsExpanded="True"
+                                                      Margin="0,0,0,30"
+                                                      Loaded="ExpanderRight_Loaded"
+                                                      Collapsed="ExpanderRight_ExpandedCollapsed"
+                                                      Expanded="ExpanderRight_ExpandedCollapsed">
+                                                <Expander.Header>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="{Binding Name, Converter={StaticResource RemoveFirstCharFromStringIfItsZConverter}}"
+                                                                   FontWeight="Bold"
+                                                                   Foreground="Gray"
+                                                                   FontSize="18"
+                                                                   VerticalAlignment="Bottom" />
+                                                        <TextBlock Text="{Binding ItemCount}"
+                                                                   FontSize="18"
+                                                                   Foreground="Green"
+                                                                   FontWeight="Bold"
+                                                                   FontStyle="Italic"
+                                                                   Margin="10,0,0,0"
+                                                                   VerticalAlignment="Bottom" />
+                                                        <TextBlock Text=" case(s)"
+                                                                   FontSize="16"
+                                                                   Foreground="Silver"
+                                                                   FontStyle="Italic"
+                                                                   VerticalAlignment="Bottom" />
+                                                    </StackPanel>
+                                                </Expander.Header>
+                                                <ItemsPresenter />
+                                            </Expander>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </GroupStyle.ContainerStyle>
+                    </GroupStyle>
+                </ListView.GroupStyle>
+            </ListView>
+
+            <Border Grid.Row="1"
+                    Grid.Column="0"
+                    BorderThickness="1"
+                    Margin="0,4,0,0"
+                    BorderBrush="#AAA">
+
+                <Grid Background="White">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="0.75*" />
+                        <ColumnDefinition Width="0.75*" />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="0.75*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <core:OutlinedTextBlock Text="{Binding TotalUnitsRightSide}"
+                                            Grid.Column="0"
+                                            Stroke="#888"
+                                            StrokePosition="Outside"
+                                            FontSize="40"
+                                            FontWeight="SemiBold"
+                                            Fill="Lime"
+                                            StrokeThickness="1"
+                                            HorizontalAlignment="Center"
+                                            Margin="3,-8,3,0" />
+                    <Label Content="Total Units"
+                           Grid.Row="1"
+                           Grid.Column="0"
+                           Margin="0,-8,0,0"
+                           FontSize="9"
+                           HorizontalAlignment="Center" />
+
+                    <core:OutlinedTextBlock Text="{Binding TotalCrownsRightSide}"
+                                            Grid.Column="1"
+                                            Stroke="#888"
+                                            StrokePosition="Outside"
+                                            FontSize="30"
+                                            FontWeight="SemiBold"
+                                            Fill="PaleTurquoise"
+                                            HorizontalAlignment="Center"
+                                            StrokeThickness="1"
+                                            Margin="3" />
+
+                    <Label Content="Crowns"
+                           Grid.Row="1"
+                           Grid.Column="1"
+                           Margin="0,-8,0,0"
+                           FontSize="9"
+                           HorizontalAlignment="Center" />
+
+                    <core:OutlinedTextBlock Text="{Binding TotalAbutmentsRightSide}"
+                                            Grid.Column="2"
+                                            Stroke="#888"
+                                            StrokePosition="Outside"
+                                            FontSize="30"
+                                            FontWeight="SemiBold"
+                                            Fill="PaleVioletRed"
+                                            StrokeThickness="1"
+                                            HorizontalAlignment="Center"
+                                            Margin="3" />
+                    <Label Content="Abutments"
+                           Grid.Row="1"
+                           Grid.Column="2"
+                           Margin="0,-8,0,0"
+                           FontSize="9"
+                           HorizontalAlignment="Center" />
+
+                    <core:OutlinedTextBlock Text="{Binding TotalOrdersRightSide}"
+                                            Grid.Column="3"
+                                            Stroke="#888"
+                                            StrokePosition="Outside"
+                                            FontSize="40"
+                                            FontWeight="SemiBold"
+                                            Fill="LightGreen"
+                                            StrokeThickness="1"
+                                            HorizontalAlignment="Center"
+                                            Margin="3,-8,3,0" />
+                    <Label Content="All Cases"
+                           Grid.Row="1"
+                           Grid.Column="3"
+                           Margin="0,-8,0,0"
+                           FontSize="9"
+                           HorizontalAlignment="Center" />
+
+
+                    <Label Content="Leftover Units"
+                           Grid.Row="0"
+                           Grid.Column="4"
+                           Margin="0,-6,0,0"
+                           FontSize="9"
+                           Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalRightSide}"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top" />
+
+                    <Grid Grid.Column="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+
+                        <core:OutlinedTextBlock Text="{Binding TotalUnitsLeftOverRightSide}"
+                                                Grid.Column="0"
+                                                Grid.Row="0"
+                                                Stroke="#888"
+                                                StrokePosition="Outside"
+                                                FontSize="16"
+                                                FontWeight="SemiBold"
+                                                Fill="Green"
+                                                StrokeThickness="1"
+                                                HorizontalAlignment="Left"
+                                                Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalRightSide}"
+                                                Margin="4,7,-2,-8" />
+
+                        <core:OutlinedTextBlock Text="{Binding TotalUnitsTodayRightSide}"
+                                                Grid.Column="0"
+                                                Grid.Row="1"
+                                                Stroke="#888"
+                                                StrokePosition="Outside"
+                                                FontSize="16"
+                                                FontWeight="SemiBold"
+                                                Fill="Yellow"
+                                                StrokeThickness="1"
+                                                HorizontalAlignment="Left"
+                                                Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalRightSide}"
+                                                Margin="4,2,-2,-8" />
+                    </Grid>
+
+                    <Label Content="Total Units Today"
+                           Grid.Row="1"
+                           Grid.Column="4"
+                           Margin="0,-8,2,0"
+                           FontSize="9"
+                           Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalRightSide}"
+                           HorizontalAlignment="Left" />
+
+
+                    <Label Content="Leftover Cases"
+                           Grid.Row="0"
+                           Grid.Column="5"
+                           Margin="0,-6,0,0"
+                           FontSize="9"
+                           Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalRightSide}"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top" />
+
+                    <Grid Grid.Column="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+
+                        <core:OutlinedTextBlock Text="{Binding TotalOrdersLeftOversRightSide}"
+                                                Grid.Column="0"
+                                                Grid.Row="0"
+                                                Stroke="#888"
+                                                StrokePosition="Outside"
+                                                FontSize="16"
+                                                FontWeight="SemiBold"
+                                                Fill="Maroon"
+                                                StrokeThickness="1"
+                                                HorizontalAlignment="Left"
+                                                Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalRightSide}"
+                                                Margin="4,7,-2,-8" />
+
+                        <core:OutlinedTextBlock Text="{Binding TotalOrdersTodayRightSide}"
+                                                Grid.Column="0"
+                                                Grid.Row="1"
+                                                Stroke="#888"
+                                                StrokePosition="Outside"
+                                                FontSize="16"
+                                                FontWeight="SemiBold"
+                                                Fill="LightBlue"
+                                                StrokeThickness="1"
+                                                HorizontalAlignment="Left"
+                                                Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalRightSide}"
+                                                Margin="4,2,2,-8" />
+                    </Grid>
+
+
+                    <Label Content="New Cases Today"
+                           Grid.Row="1"
+                           Grid.Column="5"
+                           Margin="0,-8,2,0"
+                           FontSize="9"
+                           Visibility="{Binding TotalOrdersTodaySameAsAllTimeTotalRightSide}"
+                           HorizontalAlignment="Left" />
+
+
+                </Grid>
+            </Border>
+        </Grid>
+        <Button Grid.Row="2"
+                Width="70"
+                Height="16"
+                HorizontalAlignment="Left"
+                Margin="2,0,0,0"
+                FontSize="8"
+                Background="AliceBlue"
+                BorderBrush="#AAA"
+                Cursor="Hand"
+                Command="{Binding UpdateRequestCommand}"
+                Content="Request Update"/>
+
+
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    HorizontalAlignment="Right">
+
+            <Ellipse Fill="LightSeaGreen"
+                     Width="8"
+                     Height="8"
+                     VerticalAlignment="Center"
+                     Visibility="{Binding ServerIsOnline, Converter={StaticResource BoolToVisibilityConverter}}"
+                     />
+            
+            <Label Content="Server is online"
+                   Foreground="Green"
+                   FontSize="9"
+                   Margin="0,-2,8,0"
+                   Visibility="{Binding ServerIsOnline, Converter={StaticResource BoolToVisibilityConverter}}"
+                   />
+
+            <Ellipse Fill="Crimson"
+                     Width="8"
+                     Height="8"
+                     VerticalAlignment="Center"
+                     Visibility="{Binding ServerIsOnline, Converter={StaticResource BoolToInverseVisibilityConverter}}" />
+
+            <Label Content="Server is offline"
+                   Foreground="Crimson"
+                   FontSize="9"
+                   Margin="0,-2,8,0"
+                   Visibility="{Binding ServerIsOnline, Converter={StaticResource BoolToInverseVisibilityConverter}}" />
+
+
+
+            <Label FontSize="9"
+                   Margin="0,-2,8,0"
+                   Content="{Binding AppVersion}"
+                   />
+        </StackPanel>
+    </Grid>
+</Window>
