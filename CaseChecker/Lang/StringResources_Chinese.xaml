@@ -19,7 +19,7 @@
     <system:String x:Key="connectToServer">连接到服务器</system:String>
     
     <!-- MainWindow XAML -->
-    <system:String x:Key="updateAvailableMessageBox">新版本上线！\n您想将程序更新到新版本吗？</system:String>
+    <system:String x:Key="updateAvailableMessageBox">新版本上线！ 您想将程序更新到新版本吗？</system:String>
     <system:String x:Key="updateAvailableMessageBoxTitle">有更新</system:String>
     <system:String x:Key="updateAvailable">新版本可用</system:String>
     <system:String x:Key="refresh">刷新</system:String>
