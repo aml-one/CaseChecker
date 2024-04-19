@@ -7,12 +7,14 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Diagnostics.Metrics;
+using System.IO;
 using System.Net.Http;
 using System.Reflection;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using static CaseChecker.MVVM.ViewModel.LoginViewModel;
 
 namespace CaseChecker.MVVM.ViewModel;
 
@@ -36,7 +38,18 @@ public class MainViewModel : ObservableObject
         }
     }
 
-    private string appVersion = "v1.2";
+    private static ResourceDictionary lang = [];
+    public static ResourceDictionary Lang
+    {
+        get => lang;
+        set
+        {
+            lang = value;
+            RaisePropertyChangedStatic(nameof(Lang));
+        }
+    }
+
+    private string appVersion = "v1.0";
     public string AppVersion
     {
         get => appVersion;
@@ -44,6 +57,28 @@ public class MainViewModel : ObservableObject
         {
             appVersion = value;
             RaisePropertyChanged(nameof(AppVersion));
+        }
+    }
+    
+    private double appVersionDouble;
+    public double AppVersionDouble
+    {
+        get => appVersionDouble;
+        set
+        {
+            appVersionDouble = value;
+            RaisePropertyChanged(nameof(AppVersionDouble));
+        }
+    }
+    
+    private bool updateAvailable = false;
+    public bool UpdateAvailable
+    {
+        get => updateAvailable;
+        set
+        {
+            updateAvailable = value;
+            RaisePropertyChanged(nameof(UpdateAvailable));
         }
     }
     
@@ -55,6 +90,17 @@ public class MainViewModel : ObservableObject
         {
             accessLevel = value;
             RaisePropertyChanged(nameof(AccessLevel));
+        }
+    }
+    
+    private string siteID = "";
+    public string SiteID
+    {
+        get => siteID;
+        set
+        {
+            siteID = value;
+            RaisePropertyChanged(nameof(SiteID));
         }
     }
 
@@ -235,7 +281,18 @@ public class MainViewModel : ObservableObject
         }
     }
     
-    private string progressBarColor = "Green";
+    private string language = "English";
+    public string Language
+    {
+        get => language;
+        set
+        {
+            language = value;
+            RaisePropertyChanged(nameof(Language));
+        }
+    }
+    
+    private string progressBarColor = "LightGreen";
     public string ProgressBarColor
     {
         get => progressBarColor;
@@ -246,7 +303,18 @@ public class MainViewModel : ObservableObject
         }
     }
     
-    private string updateTimeColor = "Crimson";
+    private string statusColor = "LightGreen";
+    public string StatusColor
+    {
+        get => statusColor;
+        set
+        {
+            statusColor = value;
+            RaisePropertyChanged(nameof(StatusColor));
+        }
+    }
+    
+    private string updateTimeColor = "LightGreen";
     public string UpdateTimeColor
     {
         get => updateTimeColor;
@@ -479,9 +547,23 @@ public class MainViewModel : ObservableObject
         }
     }
 
-#endregion
+    private int orderByIndex = 0;
+    public int OrderByIndex
+    {
+        get => orderByIndex;
+        set
+        {
+            orderByIndex = value;
+            RaisePropertyChanged(nameof(OrderByIndex));
+            SortOrders();
+        }
+    }
+
+    #endregion
 
     public RelayCommand UpdateRequestCommand { get; set; }
+    public RelayCommand StartProgramUpdateCommand { get; set; }
+    public RelayCommand SwitchLanguageCommand { get; set; }
 
     public MainViewModel()
     {
@@ -489,8 +571,30 @@ public class MainViewModel : ObservableObject
         AccessLevel = LoginViewModel.Instance.AccessLevel;
         DeviceId = LoginViewModel.Instance.DeviceId;
         ServerAddress = LoginViewModel.Instance.ServerAddress;
+        Lang = LoginViewModel.Instance.Lang;
 
-        AppVersion = "Made by AmL - v1.22 - 041424a";
+        Language = (string)Lang["language"];
+
+        LastDBUpdateLocalTime = (string)Lang["fetchingData"];
+
+        var assembly = Assembly.GetExecutingAssembly();
+        string resourceName = assembly.GetManifestResourceNames().Single(str => str.EndsWith("version.txt"));
+        string versionResult = "";
+        using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+        using (StreamReader reader = new(stream))
+        {
+            versionResult = reader.ReadToEnd();
+            if (double.TryParse(versionResult[..versionResult.IndexOf('-')].Trim(), out var dbl))
+                AppVersionDouble = dbl;
+        }
+
+        AppVersion = $"Made by AmL - v{versionResult}";
+
+        if (File.Exists($"{LocalConfigFolderHelper}settings.cf"))
+        {
+            if (int.TryParse(File.ReadAllText($"{LocalConfigFolderHelper}settings.cf"), out int OrderByIdx))
+            OrderByIndex = OrderByIdx;
+        }
 
         ColumnAccess = AccessLevel switch
         {
@@ -501,9 +605,11 @@ public class MainViewModel : ObservableObject
         };
 
         UpdateRequestCommand = new RelayCommand(o => UpdateRequest());
+        StartProgramUpdateCommand = new RelayCommand(o => StartProgramUpdate());
+        SwitchLanguageCommand = new RelayCommand(o => SwitchLanguage());
 
         _countdownClock = new System.Timers.Timer(1000);
-        _countdownClock.Elapsed += CountDownCLock_Elapsed;
+        _countdownClock.Elapsed += CountDownClock_Elapsed;
         _countdownClock.Start();
         
         _timer = new System.Timers.Timer(10000);
@@ -520,6 +626,48 @@ public class MainViewModel : ObservableObject
         _ = GetTheOrderInfos();
     }
 
+    private void SwitchLanguage()
+    {
+        if (Language == "English")
+        {
+            MainWindow.Instance.SetLanguageDictionary("Chinese");
+            SetLanguageDictionary("Chinese");
+            Language = "Chinese";
+        }
+        else
+        {
+            MainWindow.Instance.SetLanguageDictionary("English");
+            SetLanguageDictionary("English");
+            Language = "English";
+        }
+    }
+
+    public void SetLanguageDictionary(string language = "")
+    {
+        if (language.Equals(""))
+        {
+            Lang.Source = Thread.CurrentThread.CurrentCulture.ToString() switch
+            {
+                "en-US" => new Uri("..\\..\\Lang\\StringResources_English.xaml", UriKind.Relative),
+                "zh-Hans" => new Uri("..\\..\\Lang\\StringResources_Chinese.xaml", UriKind.Relative),
+                _ => new Uri("..\\..\\Lang\\StringResources_English.xaml", UriKind.Relative),
+            };
+        }
+        else
+        {
+            try
+            {
+                Lang.Source = new Uri("..\\..\\Lang\\StringResources_" + language + ".xaml", UriKind.Relative);
+            }
+            catch (IOException)
+            {
+                Lang.Source = new Uri("..\\..\\Lang\\StringResources_English.xaml", UriKind.Relative);
+            }
+        }
+
+        MainWindow.Instance.Resources.MergedDictionaries.Add(lang);
+    }
+
     private async void UpdateRequest()
     {
         if (!ServerInfoModel.ServerIsWritingDatabase && ServerIsOnline)
@@ -529,7 +677,73 @@ public class MainViewModel : ObservableObject
         }
     }
 
-    private async void CountDownCLock_Elapsed(object? sender, ElapsedEventArgs e)
+    public void StartProgramUpdate()
+    {
+        var Processes = Process.GetProcesses()
+                           .Where(pr => pr.ProcessName == "CaseCheckerUpdater");
+        foreach (var process in Processes)
+        {
+            process.Kill();
+        }
+
+        Task.Run(DownloadUpdater).Wait();
+
+        StartUpdaterApp();
+    }
+
+    private async void DownloadUpdater()
+    {
+        Thread.Sleep(500);
+
+        string appPath = Path.GetDirectoryName(AppContext.BaseDirectory);
+        try
+        {
+            Thread.Sleep(500);
+            if (!File.Exists($@"{appPath}\CaseCheckerUpdater.exe"))
+            {
+                using var client = new HttpClient();
+                using var s = await client.GetStreamAsync("https://raw.githubusercontent.com/aml-one/CaseChecker/master/CaseChecker/Executable/CaseCheckerUpdater.exe");
+                using var fs = new FileStream($@"{appPath}\CaseCheckerUpdater.exe", FileMode.OpenOrCreate);
+                await s.CopyToAsync(fs);
+            }
+        }
+        catch (Exception ex)
+        {
+            Application.Current.Dispatcher.Invoke(() => 
+                MessageBox.Show(MainWindow.Instance, ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error)
+            );
+        }
+
+        Thread.Sleep(3000);
+    }
+
+    private static void StartUpdaterApp()
+    {
+        Thread.Sleep(3000);
+        try
+        {
+            string appPath = Path.GetDirectoryName(AppContext.BaseDirectory);
+
+            var p = new Process();
+
+            p.StartInfo.FileName = "cmd.exe";
+            p.StartInfo.Arguments = $"/c \"{appPath}\\CaseCheckerUpdater.exe\"";
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.CreateNoWindow = true;
+            p.Start();
+
+            Thread.Sleep(2000);
+        }
+        catch (Exception ex)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+                MessageBox.Show(MainWindow.Instance, ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error)
+            );
+        }
+    }
+
+    private async void CountDownClock_Elapsed(object? sender, ElapsedEventArgs e)
     {
         if (DateTime.Now.Second % 10 == 1)
             ServerIsOnline = await CheckIfServerIsAlive();
@@ -537,18 +751,22 @@ public class MainViewModel : ObservableObject
         
         if (!ServerIsOnline)
         {
-            StatsDBSettingsModel infoModl = new StatsDBSettingsModel();
-            infoModl.StatsServerStatus = "Offline";
-            infoModl.ServerIsWritingDatabase = true;
+            StatsDBSettingsModel infoModl = new()
+            {
+                StatsServerStatus = (string)Lang["offline"],
+                ServerIsWritingDatabase = true
+            };
             ServerInfoModel = infoModl;
-            ProgressBarColor = "Crimson";
+            ProgressBarColor = "LightSalmon";
+            StatusColor = "LightSalmon";
             ExportClockCountDown = "-";
-            LastDBUpdateLocalTime = "Waiting for server to come online..";
+            LastDBUpdateLocalTime = (string)Lang["waitingForServer"]; 
             return;
         }
         else
         {
-            ProgressBarColor = "Green";
+            ProgressBarColor = "#a1fa93";
+            StatusColor = "LightGreen";
         }
         
 
@@ -568,14 +786,14 @@ public class MainViewModel : ObservableObject
 
             if (UpdateTimeOpacity > 0.5)
             {
-                UpdateTimeColor = "Crimson";
+                UpdateTimeColor = "LightGreen";
                 UpdateTimeOpacity -= 0.02;
             }
             else
-                UpdateTimeColor = "Black";
+                UpdateTimeColor = "#DDD";
         }
         else
-            ExportClockCountDown = "Due";
+            ExportClockCountDown = (string)Lang["due"]; ;
 
 
         if (Counter < 5)
@@ -615,7 +833,7 @@ public class MainViewModel : ObservableObject
         {
             LastDBUpdateLocalTime = DateTime.Now.ToString("MMM d - h:mm:ss tt");
             _ = GetTheOrderInfos();
-            UpdateTimeColor = "Crimson";
+            UpdateTimeColor = "LightGreen";
             UpdateTimeOpacity = 1;
             CanResetCounter = true;
         }
@@ -662,6 +880,10 @@ public class MainViewModel : ObservableObject
 
                 foreach (var model in modelList)
                 {
+                    model.RushCaseComment = (string)Lang["rushCaseComment"];
+                    model.RushForMorningComment = (string)Lang["rushForMorningComment"];
+                    model.OrderDesignedComment = (string)Lang["orderDesignedComment"];
+
                     if (model.TotalUnits!.Length == 1)
                         model.TotalUnitsWithPrefixZero = "0" + model.TotalUnits;
                     else
@@ -675,11 +897,11 @@ public class MainViewModel : ObservableObject
                         model.Models = "";
 
                     if (model.SentOn == DateTime.Now.ToString("MM-dd-yyyy"))
-                        model.SentOn = "zToday";
+                        model.SentOn = $"z{(string)Lang["today"]}";
                     if (model.SentOn == DateTime.Now.AddDays(-1).ToString("MM-dd-yyyy"))
-                        model.SentOn = "9Yesterday";
+                        model.SentOn = $"9{(string)Lang["yesterday"]}";
 
-                    if (model.SentOn != "zToday" || model.SentOn != "9Yesterday")
+                    if (model.SentOn != $"z{(string)Lang["today"]}" || model.SentOn != $"9{(string)Lang["yesterday"]}")
                     {
                         if (DateTime.TryParse(model.SentOn, out DateTime sentOn))
                         {
@@ -687,20 +909,20 @@ public class MainViewModel : ObservableObject
 
                             dayName = dayName switch
                             {
-                                "星期一" => "2Monday",
-                                "星期二" => "3Tuesday",
-                                "星期三" => "4Wednesday",
-                                "星期四" => "5Thursday",
-                                "星期五" => "6Friday",
-                                "星期六" => "7Saturday",
-                                "星期日" => "8Sunday",
-                                "Monday" => "2Monday",
-                                "Tuesday" => "3Tuesday",
-                                "Wednesday" => "4Wednesday",
-                                "Thursday" => "5Thursday",
-                                "Friday" => "6Friday",
-                                "Saturday" => "7Saturday",
-                                "Sunday" => "8Sunday",
+                                "星期一" => $"2{(string)Lang["monday"]}",
+                                "星期二" => $"3{(string)Lang["tuesday"]}",
+                                "星期三" => $"4{(string)Lang["wednesday"]}",
+                                "星期四" => $"5{(string)Lang["thursday"]}",
+                                "星期五" => $"6{(string)Lang["friday"]}",
+                                "星期六" => $"7{(string)Lang["saturday"]}",
+                                "星期日" => $"8{(string)Lang["sunday"]}",
+                                "Monday" => $"2{(string)Lang["monday"]}",
+                                "Tuesday" => $"3{(string)Lang["tuesday"]}",
+                                "Wednesday" => $"4{(string)Lang["wednesday"]}",
+                                "Thursday" => $"5{(string)Lang["thursday"]}",
+                                "Friday" => $"6{(string)Lang["friday"]}",
+                                "Saturday" => $"7{(string)Lang["saturday"]}",
+                                "Sunday" => $"8{(string)Lang["sunday"]}",
                                 _ => dayName,
                             };
                             model.SentOn = dayName;
@@ -709,9 +931,12 @@ public class MainViewModel : ObservableObject
 
                     model.IconImage = GetIcon(model.ScanSource!, model.CommentIcon!);
 
-                    model.Items = model.Items!.Replace("Unsectioned model, Antagonist model", "Model")
-                                              .Replace("Unsectioned model", "Model")
-                                              .Replace("Antagonist model", "Model");
+                    if (Language == "Chinese")
+                        model.Items = Translate(model.Items);
+
+                    model.Items = model.Items!.Replace($"{(string)Lang["unsectionedModel"]}, {(string)Lang["antagonistModel"]}", (string)Lang["model"])
+                                              .Replace((string)Lang["unsectionedModel"], (string)Lang["model"])
+                                              .Replace((string)Lang["antagonistModel"], (string)Lang["model"]);
 
 
                     if (model.CommentIcon == "7")
@@ -721,7 +946,7 @@ public class MainViewModel : ObservableObject
                         model.Models = "";
                         model.TotalUnits = "0";
                         model.TotalUnitsWithPrefixZero = "00";
-                        model.SentOn = "Design ready";
+                        model.SentOn = $"0{(string)Lang["designReady"]}";
                     }
 
                     if (!string.IsNullOrEmpty(model.Crowns)) 
@@ -732,10 +957,10 @@ public class MainViewModel : ObservableObject
                             TotalCrownsLeftSide += crowns;
                             TotalUnitsLeftSide += crowns;
 
-                            if (model.SentOn!.Equals("zToday"))
+                            if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
                                 TotalUnitsTodayLeftSide += crowns;
                             
-                            if (model.SentOn!.Equals("9Yesterday") && DateTime.Now.Hour < 5)
+                            if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
                                 TotalUnitsTodayLeftSide += crowns;
                         }
                         
@@ -744,9 +969,9 @@ public class MainViewModel : ObservableObject
                             TotalCrownsRightSide += crowns;
                             TotalUnitsRightSide += crowns;
 
-                            if (model.SentOn!.Equals("zToday"))
+                            if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
                                 TotalUnitsTodayRightSide += crowns;
-                            if (model.SentOn!.Equals("9Yesterday") && DateTime.Now.Hour < 5)
+                            if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
                                 TotalUnitsTodayRightSide += crowns;
                         }
                     }
@@ -759,9 +984,9 @@ public class MainViewModel : ObservableObject
                             TotalAbutmentsLeftSide += abutments;
                             TotalUnitsLeftSide += abutments;
 
-                            if (model.SentOn!.Equals("zToday"))
+                            if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
                                 TotalUnitsTodayLeftSide += abutments;
-                            if (model.SentOn!.Equals("9Yesterday") && DateTime.Now.Hour < 5)
+                            if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
                                 TotalUnitsTodayLeftSide += abutments;
                         }
                         
@@ -770,18 +995,18 @@ public class MainViewModel : ObservableObject
                             TotalAbutmentsRightSide += abutments;
                             TotalUnitsRightSide += abutments;
 
-                            if (model.SentOn!.Equals("zToday"))
+                            if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
                                 TotalUnitsTodayRightSide += abutments;
-                            if (model.SentOn!.Equals("9Yesterday") && DateTime.Now.Hour < 5)
+                            if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
                                 TotalUnitsTodayRightSide += abutments;
                         }
                     }
 
                     if (model.Side!.Equals("left", StringComparison.CurrentCultureIgnoreCase))
                     {
-                        if (model.SentOn!.Equals("zToday"))
+                        if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
                             TotalOrdersTodayLeftSide++;
-                        if (model.SentOn!.Equals("9Yesterday") && DateTime.Now.Hour < 5)
+                        if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
                             TotalOrdersTodayLeftSide++;
 
                         TotalOrdersLeftSide++;
@@ -789,9 +1014,9 @@ public class MainViewModel : ObservableObject
                     
                     if (model.Side!.Equals("right", StringComparison.CurrentCultureIgnoreCase))
                     {
-                        if (model.SentOn!.Equals("zToday"))
+                        if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
                             TotalOrdersTodayRightSide++;
-                        if (model.SentOn!.Equals("9Yesterday") && DateTime.Now.Hour < 5)
+                        if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
                             TotalOrdersTodayRightSide++;
 
                         TotalOrdersRightSide++;
@@ -820,7 +1045,7 @@ public class MainViewModel : ObservableObject
                     if (model.Rush == "1")
                     {
                         model.CommentColor = "Crimson";
-                        model.SentOn = "0RUSH";
+                        model.SentOn = $"0{(string)Lang["rush"]}";
                     }
 
                     if (model.Comment is not null)
@@ -828,7 +1053,7 @@ public class MainViewModel : ObservableObject
                         if (model.Comment.StartsWith("This case is NOT in"))
                         {
                             model.CommentColor = "Gray";
-                            model.SentOn = "No scan file";
+                            model.SentOn = (string)Lang["noScanFile"];
                         }
                     }
                 }
@@ -841,7 +1066,15 @@ public class MainViewModel : ObservableObject
             TotalUnitsLeftOverLeftSide = TotalUnitsLeftSide - TotalUnitsTodayLeftSide;
             TotalUnitsLeftOverRightSide = TotalUnitsRightSide - TotalUnitsTodayRightSide;
 
-            sortedModelList = [.. modelList.OrderBy(x => x.SentOn).ThenByDescending(x => x.Rush).ThenBy(x => x.CommentIcon).ThenByDescending(x => x.TotalUnitsWithPrefixZero)];
+            if (OrderByIndex == 0)
+            {
+                sortedModelList = [.. modelList.OrderBy(x => x.SentOn).ThenByDescending(x => x.Rush).ThenBy(x => x.CommentIcon).ThenByDescending(x => x.TotalUnitsWithPrefixZero)];
+            }
+            else if (OrderByIndex == 1)
+            {
+                sortedModelList = [.. modelList.OrderBy(x => x.SentOn).ThenByDescending(x => x.Rush).ThenBy(x => x.CommentIcon).ThenBy(x => x.OrderID)];
+            }
+
 
 
             if (side.Equals("left", StringComparison.CurrentCultureIgnoreCase))
@@ -864,6 +1097,81 @@ public class MainViewModel : ObservableObject
         }
         http.Dispose();
         handler.Dispose();
+    }
+
+    private static string Translate(string text)
+    {
+        text = text.Replace("Unsectioned model", "未分割模型");
+        text = text.Replace("Antagonist model", "对合模型");
+        text = text.Replace("Sectioned (die ditched) model", "分割模型");
+        text = text.Replace("Die", "代型");
+
+        text = text.Replace("Temporary on prepared model", "已制备模型上的临时冠");
+        text = text.Replace("Anatomy bridge with gingiva", "解剖牙桥 含牙龈");
+        text = text.Replace("Crown with gingiva", "牙冠 含牙龈");
+        text = text.Replace("Anatomical coping", "解剖型内冠");
+
+
+        text = text.Replace("Anatomy bridge", "解剖牙桥");
+        text = text.Replace("Frame bridge", "框架桥");
+
+        text = text.Replace("Temporary Crown", "临时冠");
+
+        text = text.Replace("Anatomical Abutment", "解剖型基台");
+        text = text.Replace("Post and Core", "桩核");
+        text = text.Replace("Inlay", "嵌体");
+        text = text.Replace("Onlay", "高嵌体");
+        text = text.Replace("Abutment", "基台");
+        text = text.Replace("Screw Retained Crown", "螺丝固位冠");
+        text = text.Replace("Veneer", "贴面");
+
+        text = text.Replace("Coping", "内冠");
+        text = text.Replace("Crown", "牙冠");
+
+        return text;
+    }
+
+    private void SortOrders()
+    {
+        if (SentOutCasesModelLeftSide is not null || SentOutCasesModelRightSide is not null)
+        {
+            List<SentOutCasesModel>? modelListLeftSide = SentOutCasesModelLeftSide;
+            List<SentOutCasesModel>? modelListRightSide = SentOutCasesModelRightSide;
+            List<SentOutCasesModel>? sortedModelListLeftSide = [];
+            List<SentOutCasesModel>? sortedModelListRightSide = [];
+
+            if (OrderByIndex == 0)
+            {
+                if (modelListLeftSide is not null)
+                {
+                    sortedModelListLeftSide = [.. modelListLeftSide.OrderBy(x => x.SentOn).ThenByDescending(x => x.Rush).ThenBy(x => x.CommentIcon).ThenByDescending(x => x.TotalUnitsWithPrefixZero)];
+                    SentOutCasesModelLeftSide = sortedModelListLeftSide;
+                }
+
+                if (modelListRightSide is not null)
+                {
+                    sortedModelListRightSide = [.. modelListRightSide.OrderBy(x => x.SentOn).ThenByDescending(x => x.Rush).ThenBy(x => x.CommentIcon).ThenByDescending(x => x.TotalUnitsWithPrefixZero)];
+                    SentOutCasesModelRightSide = sortedModelListRightSide;
+                }
+            }
+            else if (OrderByIndex == 1)
+            {
+                if (modelListLeftSide is not null)
+                {
+                    sortedModelListLeftSide = [.. modelListLeftSide.OrderBy(x => x.SentOn).ThenByDescending(x => x.Rush).ThenBy(x => x.CommentIcon).ThenByDescending(x => x.OrderID)];
+                    SentOutCasesModelLeftSide = sortedModelListLeftSide;
+                }
+
+                if (modelListRightSide is not null)
+                {
+                    sortedModelListRightSide = [.. modelListRightSide.OrderBy(x => x.SentOn).ThenByDescending(x => x.Rush).ThenBy(x => x.CommentIcon).ThenByDescending(x => x.OrderID)];
+                    SentOutCasesModelRightSide = sortedModelListRightSide;
+                }
+            }
+
+        }
+
+        File.WriteAllText($"{LocalConfigFolderHelper}settings.cf", OrderByIndex.ToString());
     }
 
     private static string GetIcon(string ScanSource, string commentIcon)
@@ -913,9 +1221,25 @@ public class MainViewModel : ObservableObject
                 {
                     ServerInfoModel.DesignerNameAnteriors = siteId[..siteId.IndexOf('-')];
                     ServerInfoModel.DesignerNamePosteriors = siteId[..siteId.IndexOf('-')];
+                    SiteID = siteId[..siteId.IndexOf('-')];
                 }
-
             }
+            else
+            {
+                string siteId = ServerInfoModel.SiteID;
+                if (siteId is not null)
+                    SiteID = siteId[..siteId.IndexOf('-')];
+            }
+
+            ServerInfoModel.StatsServerStatus = ServerInfoModel.StatsServerStatus switch
+            {
+                "Idle" => (string)Lang["srvIdle"],
+                "Exporting cases" => (string)Lang["srvExporting"],
+                "Collecting cases" => (string)Lang["srvCollecting"],
+                "Cleaning database" => (string)Lang["srvCleaning"],
+                "Calculating daily statistics" => (string)Lang["srvCalculating"],
+                _ => (string)Lang["srvIdle"],
+            };
         }
         catch (Exception ex)
         {

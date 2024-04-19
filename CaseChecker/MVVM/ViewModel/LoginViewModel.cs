@@ -22,7 +22,18 @@ public class LoginViewModel : ObservableObject
             RaisePropertyChangedStatic(nameof(Instance));
         }
     }
-    
+
+    private ResourceDictionary lang = [];
+    public ResourceDictionary Lang
+    {
+        get => lang;
+        set
+        {
+            lang = value;
+            RaisePropertyChanged(nameof(Lang));
+        }
+    }
+
     private string deviceId = "";
     public string DeviceId
     {
@@ -66,7 +77,7 @@ public class LoginViewModel : ObservableObject
         }
     }
     
-    private string messageColor = "Black";
+    private string messageColor = "Beige";
     public string MessagesColor
     {
         get => messageColor;
@@ -113,6 +124,8 @@ public class LoginViewModel : ObservableObject
 
         if (File.Exists($"{LocalConfigFolderHelper}serverAddress.cf"))
             ServerAddress = File.ReadAllText($"{LocalConfigFolderHelper}serverAddress.cf");
+
+        Lang = LoginWindow.Lang;
     }
 
     private void ConnectToServer()
@@ -141,22 +154,24 @@ public class LoginViewModel : ObservableObject
         {
         }
 
-        Messages = "Checking server..";
-        MessagesColor = "Green";
+        
+
+        Messages = (string)Lang["checkingServer"];
+        MessagesColor = "LightGreen";
         if (await CheckIfServerIsAlive())
         {
-            Messages = "Checking if device is registered";
-            MessagesColor = "SteelBlue";
+            Messages = (string)Lang["checkingIfDeviceRegistered"];
+            MessagesColor = "LightBlue";
 
             if (await CheckIfDeviceIsRegistered())
             {
-                Messages = "Attemting to login to server..";
-                MessagesColor = "Green";
+                Messages = (string)Lang["attemtingToLogin"];
+                MessagesColor = "LightGreen";
 
                 if (await GetBackDeviceAccessLevel())
                 {
-                    Messages = "Login success, gathering access info";
-                    MessagesColor = "Purple";
+                    Messages = (string)Lang["loginSuccess"];
+                    MessagesColor = "LightPurple";
                     
                     LoginWindow.Instance.Hide();
                     MainWindow mainWindow = new();
@@ -166,22 +181,22 @@ public class LoginViewModel : ObservableObject
                 }
                 else
                 {
-                    Messages = "An error occured, please try again later!";
-                    MessagesColor = "Maroon";
+                    Messages = (string)Lang["errorOccuredDuringLogin"];
+                    MessagesColor = "IndianRed";
                     IsNotWorking = true;
                 }
             }
             else
             {
-                Messages = "Device is not registered on the server!";
-                MessagesColor = "Maroon";
+                Messages = (string)Lang["deviceNotRegistered"];
+                MessagesColor = "IndianRed";
                 IsNotWorking = true;
             }
         }
         else
         {
-            Messages = "Could not connect to server! Please check address!";
-            MessagesColor = "Crimson";
+            Messages = (string)Lang["couldNotConnectToServer"];
+            MessagesColor = "IndianRed";
             IsNotWorking = true;
         }
     }

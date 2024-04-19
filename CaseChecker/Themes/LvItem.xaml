@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:converter="clr-namespace:CaseChecker.MVVM.Converters"                    
+                    xmlns:converter="clr-namespace:CaseChecker.MVVM.Converters"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     x:Class="CaseChecker.Themes.LvItem">
 
     <converter:RushToVisibleConverter x:Key="RushToVisibleConverter" />
@@ -45,14 +46,14 @@
                                                Foreground="{Binding CommentColor}"
                                                TextTrimming="CharacterEllipsis" />
 
-                                    <TextBlock Text="(RUSH CASE)"
+                                    <TextBlock Text="{Binding RushCaseComment}"
                                                VerticalAlignment="Center"
                                                FontWeight="Bold"
                                                Foreground="Crimson"
                                                Visibility="{Binding Rush, Converter={StaticResource RushToVisibleConverter}}"
                                                TextTrimming="CharacterEllipsis" />
 
-                                    <TextBlock Text="(Order received by the lab, but auto import failed)"
+                                    <TextBlock Text="{Binding OrderDesignedComment}"
                                                VerticalAlignment="Center"
                                                FontWeight="Bold"
                                                Foreground="Green"
@@ -75,7 +76,7 @@
                                            Visibility="{Binding Comment, Converter={StaticResource TextToVisibilityConverter}}"
                                            TextTrimming="CharacterEllipsis" />
 
-                                <TextBlock Text="RUSH case for the morning!"
+                                <TextBlock Text="{Binding RushForMorningComment}"
                                            VerticalAlignment="Center"
                                            FontWeight="Bold"
                                            Margin="5,-2,10,0"
@@ -176,14 +177,14 @@
                                                Foreground="{Binding CommentColor}"
                                                TextTrimming="CharacterEllipsis" />
 
-                                    <TextBlock Text="(RUSH CASE)"
+                                    <TextBlock Text="{Binding RushCaseComment}"
                                                VerticalAlignment="Center"
                                                FontWeight="Bold"
                                                Foreground="Crimson"
                                                Visibility="{Binding Rush, Converter={StaticResource RushToVisibleConverter}}"
                                                TextTrimming="CharacterEllipsis" />
-                                    
-                                    <TextBlock Text="(Order received by the lab, but auto import failed)"
+
+                                    <TextBlock Text="{Binding OrderDesignedComment}"
                                                VerticalAlignment="Center"
                                                FontWeight="Bold"
                                                Foreground="Green"
@@ -205,7 +206,7 @@
                                            Foreground="IndianRed"
                                            Visibility="{Binding Comment, Converter={StaticResource TextToVisibilityConverter}}"
                                            TextTrimming="CharacterEllipsis" />
-                                <TextBlock Text="RUSH case for the morning!"
+                                <TextBlock Text="{Binding RushForMorningComment}"
                                            VerticalAlignment="Center"
                                            FontWeight="Bold"
                                            Margin="5,-2,10,0"

@@ -3,11 +3,15 @@ using CaseChecker.MVVM.Model;
 using CaseChecker.MVVM.ViewModel;
 using System.ComponentModel;
 using System.Data;
+using System.IO;
+using System.Net;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace CaseChecker.MVVM.View
 {
@@ -16,9 +20,22 @@ namespace CaseChecker.MVVM.View
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        private ResourceDictionary lang = [];
+        public ResourceDictionary Lang
+        {
+            get => lang;
+            set
+            {
+                lang = value;
+                RaisePropertyChanged(nameof(Lang));
+            }
+        }
+
         private Dictionary<string, bool> expandStatesLeft = [];
         private Dictionary<string, bool> expandStatesRight = [];
         public System.Timers.Timer _timer;
+        public System.Timers.Timer _updateTimer;
+        private static bool UpdateMessagePresented = false;
 
         public static event PropertyChangedEventHandler? PropertyChangedStatic;
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -53,6 +70,10 @@ namespace CaseChecker.MVVM.View
             _timer.Elapsed += Timer_Elapsed;
             _timer.Start();
 
+            _updateTimer = new System.Timers.Timer(20000);
+            _updateTimer.Elapsed += UpdateTimer_Elapsed;
+            _updateTimer.Start();
+
             PropertyGroupDescription groupDescription = new("SentOn");
             listViewLeft.Items.GroupDescriptions.Add(groupDescription);
             listViewRight.Items.GroupDescriptions.Add(groupDescription);
@@ -61,6 +82,70 @@ namespace CaseChecker.MVVM.View
                 this.Width = 1200;
             else
                 this.Width = 500;
+
+            SetLanguageDictionary();
+        }
+
+        private void UpdateTimer_Elapsed(object? sender, ElapsedEventArgs e)
+        {
+            _updateTimer.Interval = (12 * 3600 * 1000);
+            LookForUpdate();
+        }
+
+        private async void LookForUpdate()
+        {
+            double remoteVersion = 0;
+            try
+            {
+                string result = await new HttpClient().GetStringAsync("https://raw.githubusercontent.com/aml-one/CaseChecker/master/CaseChecker/version.txt");
+                _ = double.TryParse(result[..result.IndexOf('-')].Trim(), out remoteVersion); 
+
+            }
+            catch (Exception)
+            {
+            }
+
+            if (remoteVersion > MainViewModel.Instance.AppVersionDouble)
+            {
+                MainViewModel.Instance.UpdateAvailable = true;
+                if (!UpdateMessagePresented)
+                {
+                    UpdateMessagePresented = true;
+                    MessageBoxResult result = MessageBox.Show((string)Lang["updateAvailableMessageBox"], (string)Lang["updateAvailableMessageBoxTitle"], MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        MainViewModel.Instance.StartProgramUpdate();
+                    }
+                }
+            }
+            else
+                MainViewModel.Instance.UpdateAvailable = false;
+        }
+
+        public void SetLanguageDictionary(string language = "")
+        {
+            if (language.Equals(""))
+            {
+                Lang.Source = Thread.CurrentThread.CurrentCulture.ToString() switch
+                {
+                    "en-US" => new Uri("..\\..\\Lang\\StringResources_English.xaml", UriKind.Relative),
+                    "zh-Hans" => new Uri("..\\..\\Lang\\StringResources_Chinese.xaml", UriKind.Relative),
+                    _ => new Uri("..\\..\\Lang\\StringResources_English.xaml", UriKind.Relative),
+                };
+            }
+            else
+            {
+                try
+                {
+                    Lang.Source = new Uri("..\\..\\Lang\\StringResources_" + language + ".xaml", UriKind.Relative);
+                }
+                catch (IOException)
+                {
+                    Lang.Source = new Uri("..\\..\\Lang\\StringResources_English.xaml", UriKind.Relative);
+                }
+            }
+
+            this.Resources.MergedDictionaries.Add(lang);
         }
 
         private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
@@ -145,6 +230,60 @@ namespace CaseChecker.MVVM.View
             var dc = (CollectionViewGroup)expander.DataContext;
             var groupName = dc.Name.ToString();
             expandStatesRight[groupName] = expander.IsExpanded;
+        }
+
+        public void TitleBar_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount >= 2)
+                BtnMaximize_Click(sender, e);
+
+            if (e.ChangedButton == MouseButton.Left)
+                try
+                {
+                    this.DragMove();
+                }
+                catch { }
+        }
+
+        private void BtnMinimize_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+        private void BtnMaximize_Click(object sender, RoutedEventArgs e)
+        {
+            if (WindowState == WindowState.Maximized)
+            {
+                WindowState = WindowState.Normal;
+                this.BorderThickness = new Thickness(0);
+                btnMaximize.Content = "▣";
+            }
+            else if (WindowState == WindowState.Normal)
+            {
+                WindowState = WindowState.Maximized;
+                this.BorderThickness = new Thickness(6, 6, 6, 3);
+                btnMaximize.Content = "⧉";
+            }
+
+        }
+
+        private void BtnCloseApplication_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (WindowState == WindowState.Maximized)
+            {
+                this.BorderThickness = new Thickness(6, 6, 6, 0);
+                btnMaximize.Content = "⧉";
+            }
+            else if (WindowState == WindowState.Normal)
+            {
+                this.BorderThickness = new Thickness(0);
+                btnMaximize.Content = "▣";
+            }
         }
     }
 }
