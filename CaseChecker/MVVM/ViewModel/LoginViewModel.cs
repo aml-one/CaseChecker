@@ -133,6 +133,11 @@ public class LoginViewModel : ObservableObject
         Login();
     }
 
+    public void AutoLogin()
+    {
+        Login();
+    }
+
     public async void Login()
     {
         File.WriteAllText($"{LocalConfigFolderHelper}serverAddress.cf", ServerAddress);

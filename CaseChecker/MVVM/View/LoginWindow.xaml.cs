@@ -1,4 +1,5 @@
 ﻿using CaseChecker.MVVM.Core;
+using CaseChecker.MVVM.ViewModel;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -38,6 +39,9 @@ namespace CaseChecker
             InitializeComponent();
             SetLanguageDictionary();
             Instance = this;
+
+            if (Environment.GetCommandLineArgs().Length > 1)
+                LoginViewModel.Instance.AutoLogin();
         }
 
         public static event PropertyChangedEventHandler? PropertyChangedStatic;
