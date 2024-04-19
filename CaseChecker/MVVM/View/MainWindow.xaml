@@ -1318,6 +1318,7 @@
             <Label FontSize="9"
                    Margin="0,-2,8,0"
                    Foreground="Beige"
+                   x:Name="versionLabel"
                    Content="{Binding AppVersion}"
                    d:Content="Made by AmL - v1.0 000000b"/>
         </StackPanel>

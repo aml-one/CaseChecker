@@ -22,6 +22,7 @@
     <system:String x:Key="updateAvailableMessageBox">新版本上线！ 您想将程序更新到新版本吗？</system:String>
     <system:String x:Key="updateAvailableMessageBoxTitle">有更新</system:String>
     <system:String x:Key="updateAvailable">新版本可用</system:String>
+    <system:String x:Key="lastAvailableVersion">最后可用版本</system:String>
     <system:String x:Key="refresh">刷新</system:String>
     <system:String x:Key="requestUpdate">请求更新</system:String>
     <system:String x:Key="orderBy">订购依据</system:String>

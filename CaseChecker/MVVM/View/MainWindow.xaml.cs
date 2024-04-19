@@ -31,6 +31,17 @@ namespace CaseChecker.MVVM.View
             }
         }
 
+        private double remoteAppVersionDouble;
+        public double RemoteAppVersionDouble
+        {
+            get => remoteAppVersionDouble;
+            set
+            {
+                remoteAppVersionDouble = value;
+                RaisePropertyChanged(nameof(RemoteAppVersionDouble));
+            }
+        }
+
         private Dictionary<string, bool> expandStatesLeft = [];
         private Dictionary<string, bool> expandStatesRight = [];
         public System.Timers.Timer _timer;
@@ -98,8 +109,8 @@ namespace CaseChecker.MVVM.View
             try
             {
                 string result = await new HttpClient().GetStringAsync("https://raw.githubusercontent.com/aml-one/CaseChecker/master/CaseChecker/version.txt");
-                _ = double.TryParse(result[..result.IndexOf('-')].Trim(), out remoteVersion); 
-
+                _ = double.TryParse(result[..result.IndexOf('-')].Trim(), out remoteVersion);
+                versionLabel.ToolTip = $"{(string)Lang["lastAvailableVersion"]}: {remoteVersion}";
             }
             catch (Exception)
             {

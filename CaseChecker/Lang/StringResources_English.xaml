@@ -22,6 +22,7 @@
     <system:String x:Key="updateAvailableMessageBox">New version available! Would you like to update the program to the new version?</system:String>
     <system:String x:Key="updateAvailableMessageBoxTitle">There is an update</system:String>
     <system:String x:Key="updateAvailable">New version available</system:String>
+    <system:String x:Key="lastAvailableVersion">Last available version</system:String>
     <system:String x:Key="refresh">Refresh</system:String>
     <system:String x:Key="requestUpdate">Request Update</system:String>
     <system:String x:Key="orderBy">Order By</system:String>
