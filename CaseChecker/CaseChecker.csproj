@@ -12,7 +12,7 @@
     <Authors>AmL 2024</Authors>
     <Company>AmL</Company>
     <Copyright>AmL 2024</Copyright>
-    <Version>1.30</Version>
+    <Version>1</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

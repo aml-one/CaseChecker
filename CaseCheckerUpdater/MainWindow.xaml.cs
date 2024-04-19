@@ -130,7 +130,7 @@ namespace CaseCheckerUpdater
                 var p = new Process();
 
                 p.StartInfo.FileName = "cmd.exe";
-                p.StartInfo.Arguments = $"/c \"{appPath}\\CaseChecker.exe updated\"";
+                p.StartInfo.Arguments = $"/c \"{appPath}\\CaseChecker.exe\" updated";
                 p.StartInfo.RedirectStandardOutput = true;
                 p.StartInfo.UseShellExecute = false;
                 p.StartInfo.CreateNoWindow = true;

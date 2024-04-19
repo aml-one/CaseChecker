@@ -70,7 +70,7 @@ namespace CaseChecker.MVVM.View
             _timer.Elapsed += Timer_Elapsed;
             _timer.Start();
 
-            _updateTimer = new System.Timers.Timer(20000);
+            _updateTimer = new System.Timers.Timer(10000);
             _updateTimer.Elapsed += UpdateTimer_Elapsed;
             _updateTimer.Start();
 
@@ -88,7 +88,7 @@ namespace CaseChecker.MVVM.View
 
         private void UpdateTimer_Elapsed(object? sender, ElapsedEventArgs e)
         {
-            _updateTimer.Interval = (12 * 3600 * 1000);
+            _updateTimer.Interval = (3600 * 1000);
             LookForUpdate();
         }
 
