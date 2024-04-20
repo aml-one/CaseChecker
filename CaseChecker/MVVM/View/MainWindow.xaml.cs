@@ -141,6 +141,11 @@ namespace CaseChecker.MVVM.View
                 {
                     "en-US" => new Uri("..\\..\\Lang\\StringResources_English.xaml", UriKind.Relative),
                     "zh-Hans" => new Uri("..\\..\\Lang\\StringResources_Chinese.xaml", UriKind.Relative),
+                    "zh-Hant" => new Uri("..\\..\\Lang\\StringResources_Chinese.xaml", UriKind.Relative),
+                    "zh-CHT" => new Uri("..\\..\\Lang\\StringResources_Chinese.xaml", UriKind.Relative),
+                    "zh-CN" => new Uri("..\\..\\Lang\\StringResources_Chinese.xaml", UriKind.Relative),
+                    "zh-CHS" => new Uri("..\\..\\Lang\\StringResources_Chinese.xaml", UriKind.Relative),
+                    "zh-HK" => new Uri("..\\..\\Lang\\StringResources_Chinese.xaml", UriKind.Relative),
                     _ => new Uri("..\\..\\Lang\\StringResources_English.xaml", UriKind.Relative),
                 };
             }
