@@ -110,7 +110,13 @@ namespace CaseChecker.MVVM.View
             {
                 string result = await new HttpClient().GetStringAsync("https://raw.githubusercontent.com/aml-one/CaseChecker/master/CaseChecker/version.txt");
                 _ = double.TryParse(result[..result.IndexOf('-')].Trim(), out remoteVersion);
-                versionLabel.ToolTip = $"{(string)Lang["lastAvailableVersion"]}: {remoteVersion}";
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    string remVersion = remoteVersion.ToString();
+                    if (!remVersion.Contains('.'))
+                        remVersion += ".0";
+                    versionLabel.ToolTip = $"{(string)Lang["lastAvailableVersion"]}: v{remVersion}";
+                }));
             }
             catch (Exception)
             {
