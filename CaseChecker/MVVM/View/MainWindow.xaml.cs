@@ -122,11 +122,14 @@ namespace CaseChecker.MVVM.View
                 if (!UpdateMessagePresented)
                 {
                     UpdateMessagePresented = true;
-                    MessageBoxResult result = MessageBox.Show(this, (string)Lang["updateAvailableMessageBox"], (string)Lang["updateAvailableMessageBoxTitle"], MessageBoxButton.YesNo, MessageBoxImage.Question);
-                    if (result == MessageBoxResult.Yes)
+                    Application.Current.Dispatcher.Invoke(new Action(() =>
                     {
-                        MainViewModel.Instance.StartProgramUpdate();
-                    }
+                        MessageBoxResult result = MessageBox.Show(this, (string)Lang["updateAvailableMessageBox"], (string)Lang["updateAvailableMessageBoxTitle"], MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        if (result == MessageBoxResult.Yes)
+                        {
+                            MainViewModel.Instance.StartProgramUpdate();
+                        }
+                    }));
                 }
             }
             else

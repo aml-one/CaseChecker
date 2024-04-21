@@ -703,6 +703,9 @@ public class MainViewModel : ObservableObject
         string appPath = Path.GetDirectoryName(AppContext.BaseDirectory);
         try
         {
+            if (File.Exists($@"{appPath}\CaseCheckerUpdater.exe"))
+                File.Delete($@"{appPath}\CaseCheckerUpdater.exe");
+
             Thread.Sleep(500);
             if (!File.Exists($@"{appPath}\CaseCheckerUpdater.exe"))
             {
