@@ -904,6 +904,8 @@ public partial class MainViewModel : ObservableObject
                         model.Abutments = "";
                     if (model.Models == "0")
                         model.Models = "";
+                    else
+                        model.Models = "🗸";
 
                     if (model.SentOn == DateTime.Now.ToString("MM-dd-yyyy"))
                         model.SentOn = $"z{(string)Lang["today"]}";
