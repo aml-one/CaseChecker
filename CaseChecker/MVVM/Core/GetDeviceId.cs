@@ -2,6 +2,8 @@
 using System.Text;
 using System.Management;
 using System.Windows;
+using System.IO;
+using System.Reflection;
 
 namespace CaseChecker.MVVM.Core;
 
@@ -43,10 +45,25 @@ public class GetDeviceId
         sb.AppendLine("\"OSVersion\" : \"" + OSVersion() + "\", ");
         sb.AppendLine("\"Idiom\" : \"" + "Desktop" + "\", ");
         sb.AppendLine("\"Platform\" : \"" + "WPF" + "\", ");
-        sb.AppendLine("\"VirtualDevice\" : \"False\"");
+        sb.AppendLine("\"VirtualDevice\" : \"False\", ");
+        sb.AppendLine("\"AppVersion\" : \"" + GetAppVersion() + "\"");
         sb.AppendLine("}");
 
         return sb.ToString();
+    }
+
+    public static string GetAppVersion()
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+        string resourceName = assembly.GetManifestResourceNames().Single(str => str.EndsWith("version.txt"));
+        string versionResult = "";
+        using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+        using (StreamReader reader = new(stream))
+        {
+            versionResult = reader.ReadToEnd();
+        }
+
+        return versionResult;
     }
 
     public static string OSVersion()

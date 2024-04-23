@@ -19,6 +19,7 @@ public class SentOutCasesModel
     public string? ScanSource { get; set; }
     public string? CommentIcon { get; set; } = "-1";
     public string? CommentColor { get; set; }
+    public string? CommentIn3Shape { get; set; }
     public string? IconImage { get; set; }
 
     public string? TotalUnitsWithPrefixZero { get; set; } = "0";

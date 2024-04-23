@@ -55,6 +55,7 @@
     <system:String x:Key="waitingForServer">等待服务器上线</system:String>
     <system:String x:Key="fetchingData">获取数据</system:String>
     <system:String x:Key="noScanFile">没有扫描</system:String>
+    <system:String x:Key="change">需要改变</system:String>
     <system:String x:Key="designReady">设计就绪</system:String>
     <system:String x:Key="rush">匆忙</system:String>
     <system:String x:Key="today">今天</system:String>

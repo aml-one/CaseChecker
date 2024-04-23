@@ -77,7 +77,7 @@ namespace CaseChecker.MVVM.View
             InitializeComponent();
             Instance = this;
 
-            _timer = new System.Timers.Timer(2500);
+            _timer = new System.Timers.Timer(4000);
             _timer.Elapsed += Timer_Elapsed;
             _timer.Start();
 
@@ -310,5 +310,8 @@ namespace CaseChecker.MVVM.View
                 btnMaximize.Content = "▣";
             }
         }
+
+        
+        
     }
 }

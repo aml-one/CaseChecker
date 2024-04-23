@@ -55,6 +55,7 @@
     <system:String x:Key="waitingForServer">Waiting for server to come online..</system:String>
     <system:String x:Key="fetchingData">Fetching data..</system:String>
     <system:String x:Key="noScanFile">No scan file</system:String>
+    <system:String x:Key="change">NEEDS CHANGE</system:String>
     <system:String x:Key="designReady">Design ready</system:String>
     <system:String x:Key="rush">RUSH</system:String>
     <system:String x:Key="today">Today</system:String>

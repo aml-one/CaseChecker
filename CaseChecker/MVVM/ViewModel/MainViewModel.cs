@@ -10,6 +10,7 @@ using System.Diagnostics.Metrics;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,7 +19,7 @@ using static CaseChecker.MVVM.ViewModel.LoginViewModel;
 
 namespace CaseChecker.MVVM.ViewModel;
 
-public class MainViewModel : ObservableObject
+public partial class MainViewModel : ObservableObject
 {
     public System.Timers.Timer _timer;
     public System.Timers.Timer _orderTimer;
@@ -59,7 +60,7 @@ public class MainViewModel : ObservableObject
             RaisePropertyChanged(nameof(AppVersion));
         }
     }
-    
+
     private double appVersionDouble;
     public double AppVersionDouble
     {
@@ -70,7 +71,7 @@ public class MainViewModel : ObservableObject
             RaisePropertyChanged(nameof(AppVersionDouble));
         }
     }
-    
+
     private bool updateAvailable = false;
     public bool UpdateAvailable
     {
@@ -81,7 +82,7 @@ public class MainViewModel : ObservableObject
             RaisePropertyChanged(nameof(UpdateAvailable));
         }
     }
-    
+
     private string accessLevel = "";
     public string AccessLevel
     {
@@ -92,7 +93,7 @@ public class MainViewModel : ObservableObject
             RaisePropertyChanged(nameof(AccessLevel));
         }
     }
-    
+
     private string siteID = "";
     public string SiteID
     {
@@ -125,7 +126,7 @@ public class MainViewModel : ObservableObject
             RaisePropertyChanged(nameof(ServerAddress));
         }
     }
-    
+
     private string exportClockCountDown = "0:00";
     public string ExportClockCountDown
     {
@@ -147,8 +148,8 @@ public class MainViewModel : ObservableObject
             RaisePropertyChanged(nameof(ServerInfoModel));
         }
     }
-    
-    private List<SentOutCasesModel> sentOutCasesModelLeftSide;
+
+    private List<SentOutCasesModel> sentOutCasesModelLeftSide = [];
     public List<SentOutCasesModel> SentOutCasesModelLeftSide
     {
         get => sentOutCasesModelLeftSide;
@@ -159,7 +160,7 @@ public class MainViewModel : ObservableObject
         }
     }
     
-    private List<SentOutCasesModel> sentOutCasesModelRightSide;
+    private List<SentOutCasesModel> sentOutCasesModelRightSide = [];
     public List<SentOutCasesModel> SentOutCasesModelRightSide
     {
         get => sentOutCasesModelRightSide;
@@ -580,7 +581,7 @@ public class MainViewModel : ObservableObject
         var assembly = Assembly.GetExecutingAssembly();
         string resourceName = assembly.GetManifestResourceNames().Single(str => str.EndsWith("version.txt"));
         string versionResult = "";
-        using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+        using (Stream stream = assembly.GetManifestResourceStream(resourceName)!)
         using (StreamReader reader = new(stream))
         {
             versionResult = reader.ReadToEnd();
@@ -607,7 +608,7 @@ public class MainViewModel : ObservableObject
         UpdateRequestCommand = new RelayCommand(o => UpdateRequest());
         StartProgramUpdateCommand = new RelayCommand(o => StartProgramUpdate());
         SwitchLanguageCommand = new RelayCommand(o => SwitchLanguage());
-
+        
         _countdownClock = new System.Timers.Timer(1000);
         _countdownClock.Elapsed += CountDownClock_Elapsed;
         _countdownClock.Start();
@@ -946,6 +947,16 @@ public class MainViewModel : ObservableObject
                                               .Replace((string)Lang["unsectionedModel"], (string)Lang["model"])
                                               .Replace((string)Lang["antagonistModel"], (string)Lang["model"]);
 
+                    model.CommentIn3Shape = model.CommentIn3Shape.Trim()
+                                                                 .Replace("!", "")
+                                                                 .Replace("Thanks","")
+                                                                 .Replace("Thank you","")
+                                                                 .Replace("Thank You","")
+                                                                 .Replace("[Converted From FDI]", "")
+                                                                 .Trim();
+
+                    model.CommentIn3Shape = LineBreaksRegEx().Replace(model.CommentIn3Shape, string.Empty);
+
 
                     if (model.CommentIcon == "7")
                     {
@@ -956,6 +967,28 @@ public class MainViewModel : ObservableObject
                         model.TotalUnitsWithPrefixZero = "00";
                         model.SentOn = $"0{(string)Lang["designReady"]}";
                     }
+
+                    if (model.Comment is not null)
+                    {
+                        if (model.Comment.StartsWith("This case is NOT in"))
+                        {
+                            model.Crowns = "";
+                            model.Abutments = "";
+                            model.Models = "";
+                            model.TotalUnits = "0";
+                            model.TotalUnitsWithPrefixZero = "00";
+                            model.CommentColor = "Gray";
+                            model.SentOn = (string)Lang["noScanFile"];
+                        }    
+                    }
+
+                    if (model.CommentIcon == "8")
+                    {
+                        model.CommentColor = "Blue";
+                        model.SentOn = $"1{(string)Lang["change"]}";
+                    }
+
+                    #region Counting units
 
                     if (!string.IsNullOrEmpty(model.Crowns)) 
                     {
@@ -1050,20 +1083,18 @@ public class MainViewModel : ObservableObject
                     else
                         TotalUnitsTodaySameAsAllTimeTotalRightSide = Visibility.Visible;
 
+                    #endregion Counting units
+
                     if (model.Rush == "1")
                     {
                         model.CommentColor = "Crimson";
                         model.SentOn = $"0{(string)Lang["rush"]}";
                     }
 
-                    if (model.Comment is not null)
-                    {
-                        if (model.Comment.StartsWith("This case is NOT in"))
-                        {
-                            model.CommentColor = "Gray";
-                            model.SentOn = (string)Lang["noScanFile"];
-                        }
-                    }
+                    
+
+                    if (Language == "Chinese")
+                        model.Comment = TranslateComment(model.Comment);
                 }
 
             }).Wait();
@@ -1106,6 +1137,16 @@ public class MainViewModel : ObservableObject
         http.Dispose();
         handler.Dispose();
     }
+
+    private static string TranslateComment(string text)
+    {
+        text = text.Replace("Someone moved this case manually here.", "有人手动将此案例移至此处");
+        text = text.Replace("This case is NOT in the export folder!!!", "此案例不在导出文件夹中！ 忽略这个案例");
+        text = text.Replace("This case were sent to both designer!", "这个案子发给了两位设计师");
+        text = text.Replace("The design needs to change!", "设计需要改变！");        
+        return text;
+    }
+
 
     private static string Translate(string text)
     {
@@ -1359,4 +1400,7 @@ public class MainViewModel : ObservableObject
         handler.Dispose();
         return false;
     }
+
+    [GeneratedRegex(@"^\s+$[\r\n]*", RegexOptions.Multiline)]
+    private static partial Regex LineBreaksRegEx();
 }
