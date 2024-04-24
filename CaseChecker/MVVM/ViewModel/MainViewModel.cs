@@ -1048,6 +1048,8 @@ public partial class MainViewModel : ObservableObject
 
                             if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
                                 TotalUnitsTodayLeftSide += abutments;
+                            if (model.SentOn!.Equals($"1{(string)Lang["change"]}"))
+                                TotalUnitsTodayLeftSide += abutments;
                             if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
                                 TotalUnitsTodayLeftSide += abutments;
                         }
@@ -1058,6 +1060,8 @@ public partial class MainViewModel : ObservableObject
                             TotalUnitsRightSide += abutments;
 
                             if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
+                                TotalUnitsTodayRightSide += abutments;
+                            if (model.SentOn!.Equals($"1{(string)Lang["change"]}"))
                                 TotalUnitsTodayRightSide += abutments;
                             if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
                                 TotalUnitsTodayRightSide += abutments;
