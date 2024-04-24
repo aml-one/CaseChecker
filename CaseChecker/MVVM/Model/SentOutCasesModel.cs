@@ -24,6 +24,8 @@ public class SentOutCasesModel
 
     public string? TotalUnitsWithPrefixZero { get; set; } = "0";
 
+    public string? Redo { get; set; } = "";
+    public string? RedoCaseComment { get; set; } = "(REDO)";
     public string? RushCaseComment { get; set; } = "(RUSH CASE)";
     public string? RushForMorningComment { get; set; } = "RUSH case for the morning!";
     public string? OrderDesignedComment { get; set; } = "(Order received by the lab, but auto import failed)";

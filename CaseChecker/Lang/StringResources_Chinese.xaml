@@ -58,6 +58,7 @@
     <system:String x:Key="change">需要改变</system:String>
     <system:String x:Key="designReady">设计就绪</system:String>
     <system:String x:Key="rush">匆忙</system:String>
+    <system:String x:Key="redo">重做</system:String>
     <system:String x:Key="today">今天</system:String>
     <system:String x:Key="yesterday">昨天</system:String>
     <system:String x:Key="model">模型</system:String>
@@ -79,6 +80,7 @@
 
 
     <!-- LvItem XAML -->
+    <system:String x:Key="redoCaseComment">重做</system:String>
     <system:String x:Key="rushCaseComment">匆忙案例</system:String>
     <system:String x:Key="rushForMorningComment">匆忙 案例 早上!</system:String>
     <system:String x:Key="orderDesignedComment">实验室收到订单，但自动导入失败</system:String>

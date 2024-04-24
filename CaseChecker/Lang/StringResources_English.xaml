@@ -55,9 +55,10 @@
     <system:String x:Key="waitingForServer">Waiting for server to come online..</system:String>
     <system:String x:Key="fetchingData">Fetching data..</system:String>
     <system:String x:Key="noScanFile">No scan file</system:String>
-    <system:String x:Key="change">NEEDS CHANGE</system:String>
+    <system:String x:Key="change">Needs to change</system:String>
     <system:String x:Key="designReady">Design ready</system:String>
     <system:String x:Key="rush">RUSH</system:String>
+    <system:String x:Key="redo">REDO</system:String>
     <system:String x:Key="today">Today</system:String>
     <system:String x:Key="yesterday">Yesterday</system:String>
     <system:String x:Key="model">Model</system:String>
@@ -79,6 +80,7 @@
 
 
     <!-- LvItem XAML -->
+    <system:String x:Key="redoCaseComment">(REDO)</system:String>
     <system:String x:Key="rushCaseComment">(RUSH CASE)</system:String>
     <system:String x:Key="rushForMorningComment">RUSH case for the morning!</system:String>
     <system:String x:Key="orderDesignedComment">(Order received by the lab, but auto import failed)</system:String>

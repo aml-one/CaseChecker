@@ -889,6 +889,7 @@ public partial class MainViewModel : ObservableObject
 
                 foreach (var model in modelList)
                 {
+                    model.RedoCaseComment = (string)Lang["redoCaseComment"];
                     model.RushCaseComment = (string)Lang["rushCaseComment"];
                     model.RushForMorningComment = (string)Lang["rushForMorningComment"];
                     model.OrderDesignedComment = (string)Lang["orderDesignedComment"];
@@ -943,13 +944,13 @@ public partial class MainViewModel : ObservableObject
                     model.IconImage = GetIcon(model.ScanSource!, model.CommentIcon!);
 
                     if (Language == "Chinese")
-                        model.Items = Translate(model.Items);
+                        model.Items = Translate(model.Items!);
 
                     model.Items = model.Items!.Replace($"{(string)Lang["unsectionedModel"]}, {(string)Lang["antagonistModel"]}", (string)Lang["model"])
                                               .Replace((string)Lang["unsectionedModel"], (string)Lang["model"])
                                               .Replace((string)Lang["antagonistModel"], (string)Lang["model"]);
 
-                    model.CommentIn3Shape = model.CommentIn3Shape.Trim()
+                    model.CommentIn3Shape = model.CommentIn3Shape!.Trim()
                                                                  .Replace("!", "")
                                                                  .Replace("Thanks","")
                                                                  .Replace("Thank you","")
@@ -958,6 +959,18 @@ public partial class MainViewModel : ObservableObject
                                                                  .Trim();
 
                     model.CommentIn3Shape = LineBreaksRegEx().Replace(model.CommentIn3Shape, string.Empty);
+
+                    if (model.CommentIn3Shape!.Contains(" redo", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.CommentIn3Shape!.Contains("redo ", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.CommentIn3Shape!.Equals("redo", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        model.CommentColor = "Maroon";
+                        model.Redo = "1";
+                    }
+
+                    // clearing comment, if it's a standard iTero comment
+                    if (model.CommentIn3Shape.Contains("Exported from iTero system"))
+                        model.CommentIn3Shape = "";
 
 
                     if (model.CommentIcon == "7")

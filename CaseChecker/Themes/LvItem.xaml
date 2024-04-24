@@ -44,10 +44,13 @@
 
                             </StackPanel>
 
-                            <StackPanel Grid.Column="1">
-                                <StackPanel Orientation="Horizontal">
+                            <StackPanel Grid.Column="1"
+                                        HorizontalAlignment="Stretch">
+                                <DockPanel HorizontalAlignment="Stretch"
+                                           Margin="0">
                                     <TextBlock Text="{Binding OrderID}"
                                                VerticalAlignment="Center"
+                                               HorizontalAlignment="Left"
                                                Margin="5,0,10,0"
                                                FontWeight="SemiBold"
                                                Foreground="{Binding CommentColor}"
@@ -57,6 +60,8 @@
                                                VerticalAlignment="Center"
                                                FontWeight="Bold"
                                                Foreground="Crimson"
+                                               Margin="0,0,5,0"
+                                               HorizontalAlignment="Left"
                                                Visibility="{Binding Rush, Converter={StaticResource RushToVisibleConverter}}"
                                                TextTrimming="CharacterEllipsis" />
 
@@ -64,10 +69,20 @@
                                                VerticalAlignment="Center"
                                                FontWeight="Bold"
                                                Foreground="Green"
+                                               Margin="0,0,5,0"
                                                Visibility="{Binding CommentIcon, Converter={StaticResource CommentIconToVisibleConverter}}"
                                                TextTrimming="CharacterEllipsis" />
 
-                                </StackPanel>
+                                    <TextBlock Text="{Binding RedoCaseComment}"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Right"
+                                               FontWeight="Bold"
+                                               Foreground="Crimson"
+                                               Margin="0,0,5,0"
+                                               Visibility="{Binding Redo, Converter={StaticResource RushToVisibleConverter}}"
+                                               TextTrimming="CharacterEllipsis" />
+
+                                </DockPanel>
 
                                 <TextBlock Text="{Binding Items}"
                                            VerticalAlignment="Center"
@@ -214,10 +229,13 @@
 
                             </StackPanel>
 
-                            <StackPanel Grid.Column="1">
-                                <StackPanel Orientation="Horizontal">
+                            <StackPanel Grid.Column="1"
+                                        HorizontalAlignment="Stretch">
+                                <DockPanel HorizontalAlignment="Stretch"
+                                           Margin="0">
                                     <TextBlock Text="{Binding OrderID}"
                                                VerticalAlignment="Center"
+                                               HorizontalAlignment="Left"
                                                Margin="5,0,10,0"
                                                FontWeight="SemiBold"
                                                Foreground="{Binding CommentColor}"
@@ -227,17 +245,30 @@
                                                VerticalAlignment="Center"
                                                FontWeight="Bold"
                                                Foreground="Crimson"
+                                               Margin="0,0,5,0"
+                                               HorizontalAlignment="Left"
                                                Visibility="{Binding Rush, Converter={StaticResource RushToVisibleConverter}}"
                                                TextTrimming="CharacterEllipsis" />
+                                    
 
                                     <TextBlock Text="{Binding OrderDesignedComment}"
                                                VerticalAlignment="Center"
                                                FontWeight="Bold"
                                                Foreground="Green"
+                                               Margin="0,0,5,0"
                                                Visibility="{Binding CommentIcon, Converter={StaticResource CommentIconToVisibleConverter}}"
                                                TextTrimming="CharacterEllipsis" />
 
-                                </StackPanel>
+                                    <TextBlock Text="{Binding RedoCaseComment}"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Right"
+                                               FontWeight="Bold"
+                                               Foreground="Crimson"
+                                               Margin="0,0,5,0"
+                                               Visibility="{Binding Redo, Converter={StaticResource RushToVisibleConverter}}"
+                                               TextTrimming="CharacterEllipsis" />
+
+                                </DockPanel>
 
                                 <TextBlock Text="{Binding Items}"
                                            VerticalAlignment="Center"
