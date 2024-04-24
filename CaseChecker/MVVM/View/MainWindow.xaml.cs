@@ -47,6 +47,7 @@ namespace CaseChecker.MVVM.View
         public System.Timers.Timer _timer;
         public System.Timers.Timer _updateTimer;
         private static bool UpdateMessagePresented = false;
+        private static bool AutoUpdateAtStart = false;
 
         public static event PropertyChangedEventHandler? PropertyChangedStatic;
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -137,9 +138,19 @@ namespace CaseChecker.MVVM.View
                         }
                     }));
                 }
+                
+                if (!AutoUpdateAtStart)
+                {
+                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    {
+                        MainViewModel.Instance.StartProgramUpdate();
+                    }));
+                }
             }
             else
                 MainViewModel.Instance.UpdateAvailable = false;
+
+            AutoUpdateAtStart = true;
         }
 
         public void SetLanguageDictionary(string language = "")
