@@ -962,7 +962,10 @@ public partial class MainViewModel : ObservableObject
 
                     if (model.CommentIn3Shape!.Contains(" redo", StringComparison.CurrentCultureIgnoreCase) ||
                         model.CommentIn3Shape!.Contains("redo ", StringComparison.CurrentCultureIgnoreCase) ||
-                        model.CommentIn3Shape!.Equals("redo", StringComparison.CurrentCultureIgnoreCase))
+                        model.CommentIn3Shape!.Equals("redo", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.CommentIn3Shape!.Contains("return to lab", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.CommentIn3Shape!.Contains("returned to lab", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.CommentIn3Shape!.Contains("open margin", StringComparison.CurrentCultureIgnoreCase))
                     {
                         model.CommentColor = "Maroon";
                         model.Redo = "1";
