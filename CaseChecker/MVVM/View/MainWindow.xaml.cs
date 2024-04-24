@@ -48,6 +48,7 @@ namespace CaseChecker.MVVM.View
         public System.Timers.Timer _updateTimer;
         private static bool UpdateMessagePresented = false;
         private static bool AutoUpdateAtStart = false;
+        private static bool AppJustStarted = true;
 
         public static event PropertyChangedEventHandler? PropertyChangedStatic;
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -126,17 +127,20 @@ namespace CaseChecker.MVVM.View
             if (remoteVersion > MainViewModel.Instance.AppVersionDouble)
             {
                 MainViewModel.Instance.UpdateAvailable = true;
-                if (!UpdateMessagePresented)
+                if (!AppJustStarted)
                 {
-                    UpdateMessagePresented = true;
-                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    if (!UpdateMessagePresented)
                     {
-                        MessageBoxResult result = MessageBox.Show(this, (string)Lang["updateAvailableMessageBox"], (string)Lang["updateAvailableMessageBoxTitle"], MessageBoxButton.YesNo, MessageBoxImage.Question);
-                        if (result == MessageBoxResult.Yes)
+                        UpdateMessagePresented = true;
+                        Application.Current.Dispatcher.Invoke(new Action(() =>
                         {
-                            MainViewModel.Instance.StartProgramUpdate();
-                        }
-                    }));
+                            MessageBoxResult result = MessageBox.Show(this, (string)Lang["updateAvailableMessageBox"], (string)Lang["updateAvailableMessageBoxTitle"], MessageBoxButton.YesNo, MessageBoxImage.Question);
+                            if (result == MessageBoxResult.Yes)
+                            {
+                                MainViewModel.Instance.StartProgramUpdate();
+                            }
+                        }));
+                    }
                 }
                 
                 if (!AutoUpdateAtStart)
@@ -146,6 +150,8 @@ namespace CaseChecker.MVVM.View
                         MainViewModel.Instance.StartProgramUpdate();
                     }));
                 }
+
+                AppJustStarted = false;
             }
             else
                 MainViewModel.Instance.UpdateAvailable = false;
