@@ -328,7 +328,9 @@ namespace CaseChecker.MVVM.View
             }
         }
 
-        
-        
+        private void versionLabel_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            LookForUpdate();
+        }
     }
 }
