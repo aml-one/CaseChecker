@@ -89,14 +89,14 @@
                 <Image Source="/Images/crown.png"
                        Width="17"
                        Height="17"
-                       Margin="10,0,6,0" />
+                       Margin="16,0,6,0" />
             </DataTemplate>
 
             <DataTemplate x:Key="AbutmentsHeaderTemplate">
                 <Image Source="/Images/abutment.png"
                        Width="17"
                        Height="17"
-                       Margin="10,0,6,0" />
+                       Margin="13,0,6,0" />
             </DataTemplate>
 
             <DataTemplate x:Key="ModelsHeaderTemplate">
@@ -533,11 +533,11 @@
                                         d:Header="Case ID"
                                         DisplayMemberBinding="{Binding OrderID}" />
                         <GridViewColumn x:Name="headerCrowns"
-                                        Width="30"
+                                        Width="38"
                                         HeaderTemplate="{StaticResource CrownsHeaderTemplate}"
                                         DisplayMemberBinding="{Binding Crowns}" />
                         <GridViewColumn x:Name="headerAbutments"
-                                        Width="30"
+                                        Width="34"
                                         HeaderTemplate="{StaticResource AbutmentsHeaderTemplate}"
                                         DisplayMemberBinding="{Binding Abutments}" />
                         <GridViewColumn x:Name="headerModels"
@@ -795,7 +795,7 @@
                                                 StrokePosition="Outside"
                                                 FontSize="16"
                                                 FontWeight="SemiBold"
-                                                Fill="Crimson"
+                                                Fill="Salmon"
                                                 StrokeThickness="1"
                                                 HorizontalAlignment="Left"
                                                 Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalLeftSide}"
@@ -817,7 +817,7 @@
                         <d:Label Grid.Column="0"
                                  Grid.Row="0"
                                  Content="13"
-                                 Foreground="Crimson"
+                                 Foreground="Salmon"
                                  FontSize="16"
                                  HorizontalAlignment="Left"
                                  Margin="-2,2,-2,-8" />
@@ -870,7 +870,7 @@
                                                 StrokePosition="Outside"
                                                 FontSize="16"
                                                 FontWeight="SemiBold"
-                                                Fill="Crimson"
+                                                Fill="Salmon"
                                                 StrokeThickness="1"
                                                 HorizontalAlignment="Left"
                                                 Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalLeftSide}"
@@ -892,7 +892,7 @@
                         <d:Label Grid.Column="0"
                                  Grid.Row="0"
                                  Content="13"
-                                 Foreground="Crimson"
+                                 Foreground="Salmon"
                                  FontSize="16"
                                  HorizontalAlignment="Left"
                                  Margin="-2,2,-2,-8" />
@@ -999,11 +999,11 @@
                                         d:Header="Case ID"
                                         DisplayMemberBinding="{Binding OrderID}" />
                         <GridViewColumn x:Name="headerCrownsR"
-                                        Width="30"
+                                        Width="38"
                                         HeaderTemplate="{StaticResource CrownsHeaderTemplate}"
                                         DisplayMemberBinding="{Binding Crowns}" />
                         <GridViewColumn x:Name="headerAbutmentsR"
-                                        Width="30"
+                                        Width="34"
                                         HeaderTemplate="{StaticResource AbutmentsHeaderTemplate}"
                                         DisplayMemberBinding="{Binding Abutments}" />
                         <GridViewColumn x:Name="headerModelsR"
@@ -1242,7 +1242,7 @@
                                                 StrokePosition="Outside"
                                                 FontSize="16"
                                                 FontWeight="SemiBold"
-                                                Fill="Crimson"
+                                                Fill="Salmon"
                                                 StrokeThickness="1"
                                                 HorizontalAlignment="Left"
                                                 Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalRightSide}"
@@ -1264,7 +1264,7 @@
                         <d:Label Grid.Column="0"
                                  Grid.Row="0"
                                  Content="13"
-                                 Foreground="Crimson"
+                                 Foreground="Salmon"
                                  FontSize="16"
                                  HorizontalAlignment="Left"
                                  Margin="-2,2,-2,-8" />
@@ -1317,7 +1317,7 @@
                                                 StrokePosition="Outside"
                                                 FontSize="16"
                                                 FontWeight="SemiBold"
-                                                Fill="Crimson"
+                                                Fill="Salmon"
                                                 StrokeThickness="1"
                                                 HorizontalAlignment="Left"
                                                 Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalRightSide}"
@@ -1339,7 +1339,7 @@
                         <d:Label Grid.Column="0"
                                  Grid.Row="0"
                                  Content="13"
-                                 Foreground="Crimson"
+                                 Foreground="Salmon"
                                  FontSize="16"
                                  HorizontalAlignment="Left"
                                  Margin="-2,2,-2,-8" />

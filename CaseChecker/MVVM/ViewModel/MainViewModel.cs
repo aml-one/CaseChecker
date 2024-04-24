@@ -1002,7 +1002,8 @@ public partial class MainViewModel : ObservableObject
 
                             if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
                                 TotalUnitsTodayLeftSide += crowns;
-                            
+                            if (model.SentOn!.Equals($"1{(string)Lang["change"]}"))
+                                TotalUnitsTodayLeftSide += crowns;
                             if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
                                 TotalUnitsTodayLeftSide += crowns;
                         }
@@ -1013,6 +1014,8 @@ public partial class MainViewModel : ObservableObject
                             TotalUnitsRightSide += crowns;
 
                             if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
+                                TotalUnitsTodayRightSide += crowns;
+                            if (model.SentOn!.Equals($"1{(string)Lang["change"]}"))
                                 TotalUnitsTodayRightSide += crowns;
                             if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
                                 TotalUnitsTodayRightSide += crowns;
@@ -1049,6 +1052,8 @@ public partial class MainViewModel : ObservableObject
                     {
                         if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
                             TotalOrdersTodayLeftSide++;
+                        if (model.SentOn!.Equals($"1{(string)Lang["change"]}"))
+                            TotalOrdersTodayLeftSide++;
                         if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
                             TotalOrdersTodayLeftSide++;
 
@@ -1058,6 +1063,8 @@ public partial class MainViewModel : ObservableObject
                     if (model.Side!.Equals("right", StringComparison.CurrentCultureIgnoreCase))
                     {
                         if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
+                            TotalOrdersTodayRightSide++;
+                        if (model.SentOn!.Equals($"1{(string)Lang["change"]}"))
                             TotalOrdersTodayRightSide++;
                         if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
                             TotalOrdersTodayRightSide++;
