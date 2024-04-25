@@ -49,6 +49,8 @@
     <system:String x:Key="sentOnHeader">从实验室收到</system:String>
     <system:String x:Key="cases">案例</system:String>
 
+    <system:String x:Key="openDebugWindow">打开调试面板</system:String>
+
     <!-- MainViewModel -->
     <system:String x:Key="due">到期的</system:String>
     <system:String x:Key="offline">离线</system:String>

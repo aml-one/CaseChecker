@@ -1,0 +1,49 @@
+﻿<Window x:Class="CaseChecker.MVVM.View.ManagementWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CaseChecker.MVVM.View"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        WindowState="Normal"
+        Foreground="Beige"
+        Background="Transparent"
+        AllowsTransparency="True"
+        Title="ManagementWindow" Height="450" Width="800">
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome ResizeBorderThickness="0,0,5,5"
+                      CaptionHeight="0" />
+    </WindowChrome.WindowChrome>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Themes/ScrollBar.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Border CornerRadius="8"
+            BorderThickness="0.5"
+            BorderBrush="Black"
+            Background="#56595F">
+        <Grid>
+            <Label Content="╳"
+                   Grid.Row="0"
+                   Foreground="#CCC"
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Top"
+                   FontSize="20"
+                   Margin="0,0,10,0"
+                   FontFamily="Sans Serif"
+                   Cursor="Hand"
+                   PreviewMouseDown="Label_PreviewMouseDown"
+                   Height="35"
+                   Width="30" />
+        </Grid>
+    </Border>
+</Window>

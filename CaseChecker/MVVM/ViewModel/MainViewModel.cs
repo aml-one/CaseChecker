@@ -2,19 +2,14 @@
 using CaseChecker.MVVM.Model;
 using CaseChecker.MVVM.View;
 using Newtonsoft.Json;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
-using System.Diagnostics.Metrics;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Timers;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
 using static CaseChecker.MVVM.ViewModel.LoginViewModel;
 
 namespace CaseChecker.MVVM.ViewModel;
@@ -25,6 +20,7 @@ public partial class MainViewModel : ObservableObject
     public System.Timers.Timer _orderTimer;
     public System.Timers.Timer _countdownClock;
     private int Counter = 10;
+    Dictionary<string, double> UnitDoubles = [];
 
     #region Properties
 
@@ -135,6 +131,28 @@ public partial class MainViewModel : ObservableObject
         {
             exportClockCountDown = value;
             RaisePropertyChanged(nameof(ExportClockCountDown));
+        }
+    }
+
+    private List<string> debugMessages = [];
+    public List<string> DebugMessages
+    {
+        get => debugMessages;
+        set
+        {
+            debugMessages = value;
+            RaisePropertyChanged(nameof(DebugMessages));
+        }
+    }
+    
+    private Visibility debugShows = Visibility.Collapsed;
+    public Visibility DebugShows
+    {
+        get => debugShows;
+        set
+        {
+            debugShows = value;
+            RaisePropertyChanged(nameof(DebugShows));
         }
     }
 
@@ -326,6 +344,8 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
+    #region units
+
     private double totalUnitsLeftSide = 0;
     public double TotalUnitsLeftSide
     {
@@ -504,6 +524,186 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
+    private double totalUnitsLeftSideFinal = 0;
+    public double TotalUnitsLeftSideFinal
+    {
+        get => totalUnitsLeftSideFinal;
+        set
+        {
+            totalUnitsLeftSideFinal = value;
+            RaisePropertyChanged(nameof(TotalUnitsLeftSideFinal));
+        }
+    }
+
+    private double totalUnitsTodayLeftSideFinal = 0;
+    public double TotalUnitsTodayLeftSideFinal
+    {
+        get => totalUnitsTodayLeftSideFinal;
+        set
+        {
+            totalUnitsTodayLeftSideFinal = value;
+            RaisePropertyChanged(nameof(TotalUnitsTodayLeftSideFinal));
+        }
+    }
+
+    private double totalUnitsLeftOverLeftSideFinal = 0;
+    public double TotalUnitsLeftOverLeftSideFinal
+    {
+        get => totalUnitsLeftOverLeftSideFinal;
+        set
+        {
+            totalUnitsLeftOverLeftSideFinal = value;
+            RaisePropertyChanged(nameof(TotalUnitsLeftOverLeftSideFinal));
+        }
+    }
+
+
+
+    private double totalCrownsLeftSideFinal = 0;
+    public double TotalCrownsLeftSideFinal
+    {
+        get => totalCrownsLeftSideFinal;
+        set
+        {
+            totalCrownsLeftSideFinal = value;
+            RaisePropertyChanged(nameof(TotalCrownsLeftSideFinal));
+        }
+    }
+
+    private double totalAbutmentsLeftSideFinal = 0;
+    public double TotalAbutmentsLeftSideFinal
+    {
+        get => totalAbutmentsLeftSideFinal;
+        set
+        {
+            totalAbutmentsLeftSideFinal = value;
+            RaisePropertyChanged(nameof(TotalAbutmentsLeftSideFinal));
+        }
+    }
+
+    private double totalOrdersLeftSideFinal = 0;
+    public double TotalOrdersLeftSideFinal
+    {
+        get => totalOrdersLeftSideFinal;
+        set
+        {
+            totalOrdersLeftSideFinal = value;
+            RaisePropertyChanged(nameof(TotalOrdersLeftSideFinal));
+        }
+    }
+
+    private double totalOrdersTodayLeftSideFinal = 0;
+    public double TotalOrdersTodayLeftSideFinal
+    {
+        get => totalOrdersTodayLeftSideFinal;
+        set
+        {
+            totalOrdersTodayLeftSideFinal = value;
+            RaisePropertyChanged(nameof(TotalOrdersTodayLeftSideFinal));
+        }
+    }
+
+    private double totalOrdersLeftOversLeftSideFinal = 0;
+    public double TotalOrdersLeftOversLeftSideFinal
+    {
+        get => totalOrdersLeftOversLeftSideFinal;
+        set
+        {
+            totalOrdersLeftOversLeftSideFinal = value;
+            RaisePropertyChanged(nameof(TotalOrdersLeftOversLeftSideFinal));
+        }
+    }
+
+    private double totalUnitsRightSideFinal = 0;
+    public double TotalUnitsRightSideFinal
+    {
+        get => totalUnitsRightSideFinal;
+        set
+        {
+            totalUnitsRightSideFinal = value;
+            RaisePropertyChanged(nameof(TotalUnitsRightSideFinal));
+        }
+    }
+
+    private double totalUnitsTodayRightSideFinal = 0;
+    public double TotalUnitsTodayRightSideFinal
+    {
+        get => totalUnitsTodayRightSideFinal;
+        set
+        {
+            totalUnitsTodayRightSideFinal = value;
+            RaisePropertyChanged(nameof(TotalUnitsTodayRightSideFinal));
+        }
+    }
+
+    private double totalUnitsLeftOverRightSideFinal = 0;
+    public double TotalUnitsLeftOverRightSideFinal
+    {
+        get => totalUnitsLeftOverRightSideFinal;
+        set
+        {
+            totalUnitsLeftOverRightSideFinal = value;
+            RaisePropertyChanged(nameof(TotalUnitsLeftOverRightSideFinal));
+        }
+    }
+
+    private double totalCrownsRightSideFinal = 0;
+    public double TotalCrownsRightSideFinal
+    {
+        get => totalCrownsRightSideFinal;
+        set
+        {
+            totalCrownsRightSideFinal = value;
+            RaisePropertyChanged(nameof(TotalCrownsRightSideFinal));
+        }
+    }
+
+    private double totalAbutmentsRightSideFinal = 0;
+    public double TotalAbutmentsRightSideFinal
+    {
+        get => totalAbutmentsRightSideFinal;
+        set
+        {
+            totalAbutmentsRightSideFinal = value;
+            RaisePropertyChanged(nameof(TotalAbutmentsRightSideFinal));
+        }
+    }
+
+    private double totalOrdersRightSideFinal = 0;
+    public double TotalOrdersRightSideFinal
+    {
+        get => totalOrdersRightSideFinal;
+        set
+        {
+            totalOrdersRightSideFinal = value;
+            RaisePropertyChanged(nameof(TotalOrdersRightSideFinal));
+        }
+    }
+
+    private double totalOrdersTodayRightSideFinal = 0;
+    public double TotalOrdersTodayRightSideFinal
+    {
+        get => totalOrdersTodayRightSideFinal;
+        set
+        {
+            totalOrdersTodayRightSideFinal = value;
+            RaisePropertyChanged(nameof(TotalOrdersTodayRightSideFinal));
+        }
+    }
+
+    private double totalOrdersLeftOversRightSideFinal = 0;
+    public double TotalOrdersLeftOversRightSideFinal
+    {
+        get => totalOrdersLeftOversRightSideFinal;
+        set
+        {
+            totalOrdersLeftOversRightSideFinal = value;
+            RaisePropertyChanged(nameof(TotalOrdersLeftOversRightSideFinal));
+        }
+    }
+
+    #endregion units
+
     private Visibility totalUnitsTodaySameAsAllTimeTotalLeftSide = Visibility.Visible;
     public Visibility TotalUnitsTodaySameAsAllTimeTotalLeftSide
     {
@@ -565,6 +765,7 @@ public partial class MainViewModel : ObservableObject
     public RelayCommand UpdateRequestCommand { get; set; }
     public RelayCommand StartProgramUpdateCommand { get; set; }
     public RelayCommand SwitchLanguageCommand { get; set; }
+    public RelayCommand OpenUpAdminWindowCommand { get; set; }
 
     public MainViewModel()
     {
@@ -574,9 +775,31 @@ public partial class MainViewModel : ObservableObject
         ServerAddress = LoginViewModel.Instance.ServerAddress;
         Lang = LoginViewModel.Instance.Lang;
 
+        AddToDebug("#0: App started");
+
         Language = (string)Lang["language"];
 
         LastDBUpdateLocalTime = (string)Lang["fetchingData"];
+
+        #region UnitDoubles fillup
+        UnitDoubles.Add("TotalAbutmentsLeftSide", TotalAbutmentsLeftSideFinal);
+        UnitDoubles.Add("TotalCrownsLeftSide", TotalCrownsLeftSideFinal);
+        UnitDoubles.Add("TotalOrdersLeftSide", TotalOrdersLeftSideFinal);
+        UnitDoubles.Add("TotalOrdersTodayLeftSide", TotalOrdersTodayLeftSideFinal);
+        UnitDoubles.Add("TotalUnitsLeftSide", TotalUnitsLeftSideFinal);
+        UnitDoubles.Add("TotalUnitsTodayLeftSide", TotalUnitsTodayLeftSideFinal);
+        UnitDoubles.Add("TotalOrdersLeftOversLeftSide", TotalOrdersLeftOversLeftSideFinal);
+        UnitDoubles.Add("TotalUnitsLeftOverLeftSide", TotalUnitsLeftOverLeftSideFinal);
+
+        UnitDoubles.Add("TotalAbutmentsRightSide", TotalAbutmentsRightSideFinal);
+        UnitDoubles.Add("TotalCrownsRightSide", TotalCrownsRightSideFinal);
+        UnitDoubles.Add("TotalOrdersRightSide", TotalOrdersRightSideFinal);
+        UnitDoubles.Add("TotalOrdersTodayRightSide", TotalOrdersTodayRightSideFinal);
+        UnitDoubles.Add("TotalUnitsRightSide", TotalUnitsRightSideFinal);
+        UnitDoubles.Add("TotalUnitsTodayRightSide", TotalUnitsTodayRightSideFinal);
+        UnitDoubles.Add("TotalOrdersLeftOversRightSide", TotalOrdersLeftOversRightSideFinal);
+        UnitDoubles.Add("TotalUnitsLeftOverRightSide", TotalUnitsLeftOverRightSideFinal);
+        #endregion UnitDoubles fillup
 
         var assembly = Assembly.GetExecutingAssembly();
         string resourceName = assembly.GetManifestResourceNames().Single(str => str.EndsWith("version.txt"));
@@ -608,6 +831,7 @@ public partial class MainViewModel : ObservableObject
         UpdateRequestCommand = new RelayCommand(o => UpdateRequest());
         StartProgramUpdateCommand = new RelayCommand(o => StartProgramUpdate());
         SwitchLanguageCommand = new RelayCommand(o => SwitchLanguage());
+        OpenUpAdminWindowCommand = new RelayCommand(o => OpenUpAdminWindow());
         
         _countdownClock = new System.Timers.Timer(1000);
         _countdownClock.Elapsed += CountDownClock_Elapsed;
@@ -625,6 +849,15 @@ public partial class MainViewModel : ObservableObject
 
         ResetCountDownCounter();
         _ = GetTheOrderInfos();
+    }
+
+    private static void OpenUpAdminWindow()
+    {
+        ManagementWindow managementWindow = new()
+        {
+            Owner = MainWindow.Instance
+        };
+        managementWindow.ShowDialog();
     }
 
     private void SwitchLanguage()
@@ -665,8 +898,9 @@ public partial class MainViewModel : ObservableObject
             {
                 Lang.Source = new Uri("..\\..\\Lang\\StringResources_" + language + ".xaml", UriKind.Relative);
             }
-            catch (IOException)
+            catch (IOException ex)
             {
+                AddToDebug("#1: " + ex.Message);
                 Lang.Source = new Uri("..\\..\\Lang\\StringResources_English.xaml", UriKind.Relative);
             }
         }
@@ -702,6 +936,7 @@ public partial class MainViewModel : ObservableObject
         Thread.Sleep(500);
 
         string appPath = Path.GetDirectoryName(AppContext.BaseDirectory);
+        AddToDebug("#2: AppPath: " + appPath);
         try
         {
             if (File.Exists($@"{appPath}\CaseCheckerUpdater.exe"))
@@ -710,6 +945,7 @@ public partial class MainViewModel : ObservableObject
             Thread.Sleep(500);
             if (!File.Exists($@"{appPath}\CaseCheckerUpdater.exe"))
             {
+                AddToDebug("#2: Downloading updater app");
                 using var client = new HttpClient();
                 using var s = await client.GetStreamAsync("https://raw.githubusercontent.com/aml-one/CaseChecker/master/CaseChecker/Executable/CaseCheckerUpdater.exe");
                 using var fs = new FileStream($@"{appPath}\CaseCheckerUpdater.exe", FileMode.OpenOrCreate);
@@ -718,19 +954,22 @@ public partial class MainViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            Application.Current.Dispatcher.Invoke(() => 
-                MessageBox.Show(MainWindow.Instance, ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error)
-            );
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                AddToDebug("#2e: " + ex.Message);
+                MessageBox.Show(MainWindow.Instance, ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            });
         }
 
         Thread.Sleep(3000);
     }
 
-    private static void StartUpdaterApp()
+    private void StartUpdaterApp()
     {
         Thread.Sleep(3000);
         try
         {
+            AddToDebug("#3: Starting updater app");
             string appPath = Path.GetDirectoryName(AppContext.BaseDirectory);
 
             var p = new Process();
@@ -747,7 +986,10 @@ public partial class MainViewModel : ObservableObject
         catch (Exception ex)
         {
             Application.Current.Dispatcher.Invoke(() =>
-                MessageBox.Show(MainWindow.Instance, ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error)
+            {
+                AddToDebug("#3e: " + ex.Message);
+                MessageBox.Show(MainWindow.Instance, ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
             );
         }
     }
@@ -879,13 +1121,16 @@ public partial class MainViewModel : ObservableObject
                 TotalUnitsLeftSide = 0;
                 TotalUnitsTodayLeftSide = 0;
                 TotalOrdersLeftOversLeftSide = 0;
-                
+                TotalUnitsLeftOverLeftSide = 0;
+
                 TotalAbutmentsRightSide = 0;
                 TotalCrownsRightSide = 0;
                 TotalOrdersRightSide = 0;
                 TotalOrdersTodayRightSide = 0;
                 TotalUnitsRightSide = 0;
                 TotalUnitsTodayRightSide = 0;
+                TotalOrdersLeftOversRightSide = 0;
+                TotalUnitsLeftOverRightSide = 0;
 
                 foreach (var model in modelList)
                 {
@@ -1018,7 +1263,7 @@ public partial class MainViewModel : ObservableObject
 
                             if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
                                 TotalUnitsTodayLeftSide += crowns;
-                            if (model.SentOn!.Equals($"1{(string)Lang["change"]}"))
+                            if (model.SentOn!.Equals($"1{(string)Lang["change"]}") && DateTime.Now.Hour < 5)
                                 TotalUnitsTodayLeftSide += crowns;
                             if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
                                 TotalUnitsTodayLeftSide += crowns;
@@ -1031,7 +1276,7 @@ public partial class MainViewModel : ObservableObject
 
                             if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
                                 TotalUnitsTodayRightSide += crowns;
-                            if (model.SentOn!.Equals($"1{(string)Lang["change"]}"))
+                            if (model.SentOn!.Equals($"1{(string)Lang["change"]}") && DateTime.Now.Hour < 5)
                                 TotalUnitsTodayRightSide += crowns;
                             if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
                                 TotalUnitsTodayRightSide += crowns;
@@ -1048,7 +1293,7 @@ public partial class MainViewModel : ObservableObject
 
                             if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
                                 TotalUnitsTodayLeftSide += abutments;
-                            if (model.SentOn!.Equals($"1{(string)Lang["change"]}"))
+                            if (model.SentOn!.Equals($"1{(string)Lang["change"]}") && DateTime.Now.Hour < 5)
                                 TotalUnitsTodayLeftSide += abutments;
                             if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
                                 TotalUnitsTodayLeftSide += abutments;
@@ -1061,7 +1306,7 @@ public partial class MainViewModel : ObservableObject
 
                             if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
                                 TotalUnitsTodayRightSide += abutments;
-                            if (model.SentOn!.Equals($"1{(string)Lang["change"]}"))
+                            if (model.SentOn!.Equals($"1{(string)Lang["change"]}") && DateTime.Now.Hour < 5)
                                 TotalUnitsTodayRightSide += abutments;
                             if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
                                 TotalUnitsTodayRightSide += abutments;
@@ -1072,7 +1317,7 @@ public partial class MainViewModel : ObservableObject
                     {
                         if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
                             TotalOrdersTodayLeftSide++;
-                        if (model.SentOn!.Equals($"1{(string)Lang["change"]}"))
+                        if (model.SentOn!.Equals($"1{(string)Lang["change"]}") && DateTime.Now.Hour < 5)
                             TotalOrdersTodayLeftSide++;
                         if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
                             TotalOrdersTodayLeftSide++;
@@ -1084,7 +1329,7 @@ public partial class MainViewModel : ObservableObject
                     {
                         if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
                             TotalOrdersTodayRightSide++;
-                        if (model.SentOn!.Equals($"1{(string)Lang["change"]}"))
+                        if (model.SentOn!.Equals($"1{(string)Lang["change"]}") && DateTime.Now.Hour < 5)
                             TotalOrdersTodayRightSide++;
                         if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
                             TotalOrdersTodayRightSide++;
@@ -1123,7 +1368,7 @@ public partial class MainViewModel : ObservableObject
                     
 
                     if (Language == "Chinese")
-                        model.Comment = TranslateComment(model.Comment);
+                        model.Comment = TranslateComment(model.Comment!);
                 }
 
             }).Wait();
@@ -1133,6 +1378,8 @@ public partial class MainViewModel : ObservableObject
 
             TotalUnitsLeftOverLeftSide = TotalUnitsLeftSide - TotalUnitsTodayLeftSide;
             TotalUnitsLeftOverRightSide = TotalUnitsRightSide - TotalUnitsTodayRightSide;
+
+            _ = Task.Run(StartPresentingUnitNumbers);
 
             if (OrderByIndex == 0)
             {
@@ -1161,11 +1408,197 @@ public partial class MainViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"MVM {ex.Message}");
+            AddToDebug("#4: " + ex.Message);
         }
         http.Dispose();
         handler.Dispose();
     }
+
+    
+    private async void StartPresentingUnitNumbers()
+    {
+        if (TotalUnitsLeftSideFinal != TotalUnitsLeftSide)
+            await CountUp_TotalUnitsLeftSide(TotalUnitsLeftSide);
+        if (TotalCrownsLeftSideFinal != TotalCrownsLeftSide)
+            await CountUp_TotalCrownsLeftSide(TotalCrownsLeftSide);
+        if (TotalAbutmentsLeftSideFinal != TotalAbutmentsLeftSide)
+            await CountUp_TotalAbutmentsLeftSide(TotalAbutmentsLeftSide);
+        if (TotalOrdersLeftSideFinal != TotalOrdersLeftSide)
+            await CountUp_TotalOrdersLeftSide(TotalOrdersLeftSide);
+        if (TotalUnitsLeftOverLeftSideFinal != TotalUnitsLeftOverLeftSide)
+            await CountUp_TotalUnitsLeftOverLeftSide(TotalUnitsLeftOverLeftSide);
+        if (TotalOrdersLeftOversLeftSideFinal != TotalOrdersLeftOversLeftSide)
+            await CountUp_TotalOrdersLeftOversLeftSide(TotalOrdersLeftOversLeftSide);
+        if (TotalUnitsTodayLeftSideFinal != TotalUnitsTodayLeftSide)
+            await CountUp_TotalUnitsTodayLeftSide(TotalUnitsTodayLeftSide);
+        if (TotalOrdersTodayLeftSideFinal != TotalOrdersTodayLeftSide)
+            await CountUp_TotalOrdersTodayLeftSide(TotalOrdersTodayLeftSide);
+
+        if (TotalUnitsRightSideFinal != TotalUnitsRightSide)
+            await CountUp_TotalUnitsRightSide(TotalUnitsRightSide);
+        if (TotalCrownsRightSideFinal != TotalCrownsRightSide)
+            await CountUp_TotalCrownsRightSide(TotalCrownsRightSide);
+        if (TotalAbutmentsRightSideFinal != TotalAbutmentsRightSide)
+            await CountUp_TotalAbutmentsRightSide(TotalAbutmentsRightSide);
+        if (TotalOrdersRightSideFinal != TotalOrdersRightSide)
+            await CountUp_TotalOrdersRightSide(TotalOrdersRightSide);
+        if (TotalUnitsLeftOverRightSideFinal != TotalUnitsLeftOverRightSide)
+            await CountUp_TotalUnitsLeftOverRightSide(TotalUnitsLeftOverRightSide);
+        if (TotalOrdersLeftOversRightSideFinal != TotalOrdersLeftOversRightSide)
+            await CountUp_TotalOrdersLeftOversRightSide(TotalOrdersLeftOversRightSide);
+        if (TotalUnitsTodayRightSideFinal != TotalUnitsTodayRightSide)
+            await CountUp_TotalUnitsTodayRightSide(TotalUnitsTodayRightSide);
+        if (TotalOrdersTodayRightSideFinal != TotalOrdersTodayRightSide)
+            await CountUp_TotalOrdersTodayRightSide(TotalOrdersTodayRightSide);
+    }
+
+    #region CoutUp functions
+    private async Task CountUp_TotalUnitsLeftSide(double Max)
+    {
+        for(int i = 0; i <= Max; i++)
+        {
+            TotalUnitsLeftSideFinal = i;
+            Thread.Sleep(10);
+        }
+    }
+    
+    private async Task CountUp_TotalCrownsLeftSide(double Max)
+    {
+        for(int i = 0; i <= Max; i++)
+        {
+            TotalCrownsLeftSideFinal = i;
+            Thread.Sleep(10);
+        }
+    }
+    
+    private async Task CountUp_TotalAbutmentsLeftSide(double Max)
+    {
+        for(int i = 0; i <= Max; i++)
+        {
+            TotalAbutmentsLeftSideFinal = i;
+            Thread.Sleep(10);
+        }
+    }
+    
+    private async Task CountUp_TotalOrdersLeftSide(double Max)
+    {
+        for(int i = 0; i <= Max; i++)
+        {
+            TotalOrdersLeftSideFinal = i;
+            Thread.Sleep(10);
+        }
+    }
+    
+    private async Task CountUp_TotalUnitsLeftOverLeftSide(double Max)
+    {
+        for(int i = 0; i <= Max; i++)
+        {
+            TotalUnitsLeftOverLeftSideFinal = i;
+            Thread.Sleep(10);
+        }
+    }
+    
+    private async Task CountUp_TotalOrdersLeftOversLeftSide(double Max)
+    {
+        for(int i = 0; i <= Max; i++)
+        {
+            TotalOrdersLeftOversLeftSideFinal = i;
+            Thread.Sleep(10);
+        }
+    }
+    
+    private async Task CountUp_TotalUnitsTodayLeftSide(double Max)
+    {
+        for(int i = 0; i <= Max; i++)
+        {
+            TotalUnitsTodayLeftSideFinal = i;
+            Thread.Sleep(10);
+        }
+    }
+    
+    private async Task CountUp_TotalOrdersTodayLeftSide(double Max)
+    {
+        for(int i = 0; i <= Max; i++)
+        {
+            TotalOrdersTodayLeftSideFinal = i;
+            Thread.Sleep(10);
+        }
+    }
+
+
+    private async Task CountUp_TotalUnitsRightSide(double Max)
+    {
+        for (int i = 0; i <= Max; i++)
+        {
+            TotalUnitsRightSideFinal = i;
+            Thread.Sleep(10);
+        }
+    }
+
+    private async Task CountUp_TotalCrownsRightSide(double Max)
+    {
+        for (int i = 0; i <= Max; i++)
+        {
+            TotalCrownsRightSideFinal = i;
+            Thread.Sleep(10);
+        }
+    }
+
+    private async Task CountUp_TotalAbutmentsRightSide(double Max)
+    {
+        for (int i = 0; i <= Max; i++)
+        {
+            TotalAbutmentsRightSideFinal = i;
+            Thread.Sleep(10);
+        }
+    }
+
+    private async Task CountUp_TotalOrdersRightSide(double Max)
+    {
+        for (int i = 0; i <= Max; i++)
+        {
+            TotalOrdersRightSideFinal = i;
+            Thread.Sleep(10);
+        }
+    }
+
+    private async Task CountUp_TotalUnitsLeftOverRightSide(double Max)
+    {
+        for (int i = 0; i <= Max; i++)
+        {
+            TotalUnitsLeftOverRightSideFinal = i;
+            Thread.Sleep(10);
+        }
+    }
+
+    private async Task CountUp_TotalOrdersLeftOversRightSide(double Max)
+    {
+        for (int i = 0; i <= Max; i++)
+        {
+            TotalOrdersLeftOversRightSideFinal = i;
+            Thread.Sleep(10);
+        }
+    }
+
+    private async Task CountUp_TotalUnitsTodayRightSide(double Max)
+    {
+        for (int i = 0; i <= Max; i++)
+        {
+            TotalUnitsTodayRightSideFinal = i;
+            Thread.Sleep(10);
+        }
+    }
+
+    private async Task CountUp_TotalOrdersTodayRightSide(double Max)
+    {
+        for (int i = 0; i <= Max; i++)
+        {
+            TotalOrdersTodayRightSideFinal = i;
+            Thread.Sleep(10);
+        }
+    }
+
+    #endregion CoutUp functions
 
     private static string TranslateComment(string text)
     {
@@ -1321,7 +1754,7 @@ public partial class MainViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"MVM {ex.Message}");
+            AddToDebug("#5: " + ex.Message);
         }
         http.Dispose();
         handler.Dispose();
@@ -1343,7 +1776,7 @@ public partial class MainViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"MVM {ex.Message}");
+            AddToDebug("#6: " + ex.Message);
         }
         http.Dispose();
         handler.Dispose();
@@ -1399,6 +1832,11 @@ public partial class MainViewModel : ObservableObject
 
     }
 
+    public void AddToDebug(string message)
+    {
+        DebugMessages.Add(message);
+    }
+
     private async Task<bool> CheckIfServerIsAlive()
     {
         var handler = new HttpClientHandler()
@@ -1423,7 +1861,7 @@ public partial class MainViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"MVM {ex.Message}");
+            AddToDebug("#7: " + ex.Message);
         }
         http.Dispose();
         handler.Dispose();

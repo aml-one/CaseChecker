@@ -120,12 +120,21 @@ namespace CaseChecker.MVVM.View
                     versionLabel.ToolTip = $"{(string)Lang["lastAvailableVersion"]}: v{remVersion}";
                 }));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    MainViewModel.Instance.AddToDebug("#10e: " + ex.Message);
+                }));
             }
 
             if (remoteVersion > MainViewModel.Instance.AppVersionDouble)
             {
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    MainViewModel.Instance.AddToDebug("#10: Current version: " + MainViewModel.Instance.AppVersion + " - Remote version: " + remoteVersion);
+                }));
+
                 MainViewModel.Instance.UpdateAvailable = true;
                 if (!AppJustStarted)
                 {
@@ -147,6 +156,7 @@ namespace CaseChecker.MVVM.View
                 {
                     Application.Current.Dispatcher.Invoke(new Action(() =>
                     {
+                        MainViewModel.Instance.AddToDebug("#10: Starting auto update");
                         MainViewModel.Instance.StartProgramUpdate();
                     }));
                 }
@@ -181,8 +191,12 @@ namespace CaseChecker.MVVM.View
                 {
                     Lang.Source = new Uri("..\\..\\Lang\\StringResources_" + language + ".xaml", UriKind.Relative);
                 }
-                catch (IOException)
+                catch (IOException ex)
                 {
+                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    {
+                        MainViewModel.Instance.AddToDebug("#11e: " + ex.Message);
+                    }));
                     Lang.Source = new Uri("..\\..\\Lang\\StringResources_English.xaml", UriKind.Relative);
                 }
             }
@@ -199,8 +213,12 @@ namespace CaseChecker.MVVM.View
                     listViewRight.Items.Refresh();
                 }));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    MainViewModel.Instance.AddToDebug("#12e: " + ex.Message);
+                }));
             }
         }
 
@@ -331,6 +349,14 @@ namespace CaseChecker.MVVM.View
         private void versionLabel_MouseDown(object sender, MouseButtonEventArgs e)
         {
             LookForUpdate();
+        }
+
+        private void Label_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (MainViewModel.Instance.DebugShows == Visibility.Visible)
+                MainViewModel.Instance.DebugShows = Visibility.Collapsed;
+            else
+                MainViewModel.Instance.DebugShows = Visibility.Visible;
         }
     }
 }
