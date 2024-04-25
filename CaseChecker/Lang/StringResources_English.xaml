@@ -41,7 +41,7 @@
     
     <system:String x:Key="serverStatus">Server Status</system:String>
     <system:String x:Key="serverIs">Server is</system:String>
-    <system:String x:Key="nextExpectedExport">Next Expected Export Time In</system:String>
+    <system:String x:Key="nextExpectedExport">Next Expected Export Is In</system:String>
     <system:String x:Key="inLocalTime">In Local Time</system:String>
     <system:String x:Key="lastChange">Last change in database:</system:String>
     

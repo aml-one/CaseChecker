@@ -96,6 +96,9 @@ namespace CaseChecker.MVVM.View
             else
                 this.Width = 500;
 
+            if (LoginWindow.Instance.DontDoAutoUpdate)
+                AutoUpdateAtStart = true;
+
             SetLanguageDictionary();
         }
 
@@ -120,21 +123,31 @@ namespace CaseChecker.MVVM.View
                     versionLabel.ToolTip = $"{(string)Lang["lastAvailableVersion"]}: v{remVersion}";
                 }));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Application.Current.Dispatcher.Invoke(new Action(() =>
+                try
                 {
-                    MainViewModel.Instance.AddToDebug("#10e: " + ex.Message);
-                }));
+                    string result = await new HttpClient().GetStringAsync("https://aml.one/CaseChecker/version.txt");
+                    _ = double.TryParse(result[..result.IndexOf('-')].Trim(), out remoteVersion);
+                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    {
+                        string remVersion = remoteVersion.ToString();
+                        if (!remVersion.Contains('.'))
+                            remVersion += ".0";
+                        versionLabel.ToolTip = $"{(string)Lang["lastAvailableVersion"]}: v{remVersion}";
+                    }));
+                }
+                catch (Exception ex)
+                {
+                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    {
+                        MainViewModel.Instance.AddToDebug("#10e: " + ex.Message);
+                    }));
+                }
             }
 
             if (remoteVersion > MainViewModel.Instance.AppVersionDouble)
             {
-                Application.Current.Dispatcher.Invoke(new Action(() =>
-                {
-                    MainViewModel.Instance.AddToDebug("#10: Current version: " + MainViewModel.Instance.AppVersion + " - Remote version: " + remoteVersion);
-                }));
-
                 MainViewModel.Instance.UpdateAvailable = true;
                 if (!AppJustStarted)
                 {

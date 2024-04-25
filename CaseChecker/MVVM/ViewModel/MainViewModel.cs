@@ -853,11 +853,11 @@ public partial class MainViewModel : ObservableObject
 
     private static void OpenUpAdminWindow()
     {
-        ManagementWindow managementWindow = new()
+        PassCodeWindow passcodeWindow = new()
         {
             Owner = MainWindow.Instance
         };
-        managementWindow.ShowDialog();
+        passcodeWindow.ShowDialog();
     }
 
     private void SwitchLanguage()
@@ -936,7 +936,6 @@ public partial class MainViewModel : ObservableObject
         Thread.Sleep(500);
 
         string appPath = Path.GetDirectoryName(AppContext.BaseDirectory);
-        AddToDebug("#2: AppPath: " + appPath);
         try
         {
             if (File.Exists($@"{appPath}\CaseCheckerUpdater.exe"))
@@ -945,20 +944,34 @@ public partial class MainViewModel : ObservableObject
             Thread.Sleep(500);
             if (!File.Exists($@"{appPath}\CaseCheckerUpdater.exe"))
             {
-                AddToDebug("#2: Downloading updater app");
                 using var client = new HttpClient();
                 using var s = await client.GetStreamAsync("https://raw.githubusercontent.com/aml-one/CaseChecker/master/CaseChecker/Executable/CaseCheckerUpdater.exe");
                 using var fs = new FileStream($@"{appPath}\CaseCheckerUpdater.exe", FileMode.OpenOrCreate);
                 await s.CopyToAsync(fs);
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            Application.Current.Dispatcher.Invoke(() =>
+            try
             {
-                AddToDebug("#2e: " + ex.Message);
-                MessageBox.Show(MainWindow.Instance, ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            });
+                if (File.Exists($@"{appPath}\CaseCheckerUpdater.exe"))
+                    File.Delete($@"{appPath}\CaseCheckerUpdater.exe");
+
+                if (!File.Exists($@"{appPath}\CaseCheckerUpdater.exe"))
+                {
+                    using var client = new HttpClient();
+                    using var s = await client.GetStreamAsync("https://aml.one/CaseChecker/CaseCheckerUpdater.exe");
+                    using var fs = new FileStream($@"{appPath}\CaseCheckerUpdater.exe", FileMode.OpenOrCreate);
+                    await s.CopyToAsync(fs);
+                }
+            }
+            catch (Exception ex)
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    AddToDebug("#2e: " + ex.Message);
+                });
+            }
         }
 
         Thread.Sleep(3000);
@@ -969,7 +982,6 @@ public partial class MainViewModel : ObservableObject
         Thread.Sleep(3000);
         try
         {
-            AddToDebug("#3: Starting updater app");
             string appPath = Path.GetDirectoryName(AppContext.BaseDirectory);
 
             var p = new Process();
@@ -1219,6 +1231,9 @@ public partial class MainViewModel : ObservableObject
                     // clearing comment, if it's a standard iTero comment
                     if (model.CommentIn3Shape.Contains("Exported from iTero system"))
                         model.CommentIn3Shape = "";
+                    else if (!string.IsNullOrEmpty(model.CommentIn3Shape))
+                        model.CommentIn3Shape = char.ToUpper(model.CommentIn3Shape[0]) + model.CommentIn3Shape.Substring(1);
+
 
 
                     if (model.CommentIcon == "7")
@@ -1263,7 +1278,7 @@ public partial class MainViewModel : ObservableObject
 
                             if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
                                 TotalUnitsTodayLeftSide += crowns;
-                            if (model.SentOn!.Equals($"1{(string)Lang["change"]}") && DateTime.Now.Hour < 5)
+                            if (model.SentOn!.Equals($"1{(string)Lang["change"]}"))
                                 TotalUnitsTodayLeftSide += crowns;
                             if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
                                 TotalUnitsTodayLeftSide += crowns;
@@ -1276,7 +1291,7 @@ public partial class MainViewModel : ObservableObject
 
                             if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
                                 TotalUnitsTodayRightSide += crowns;
-                            if (model.SentOn!.Equals($"1{(string)Lang["change"]}") && DateTime.Now.Hour < 5)
+                            if (model.SentOn!.Equals($"1{(string)Lang["change"]}"))
                                 TotalUnitsTodayRightSide += crowns;
                             if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
                                 TotalUnitsTodayRightSide += crowns;
@@ -1293,7 +1308,7 @@ public partial class MainViewModel : ObservableObject
 
                             if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
                                 TotalUnitsTodayLeftSide += abutments;
-                            if (model.SentOn!.Equals($"1{(string)Lang["change"]}") && DateTime.Now.Hour < 5)
+                            if (model.SentOn!.Equals($"1{(string)Lang["change"]}"))
                                 TotalUnitsTodayLeftSide += abutments;
                             if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
                                 TotalUnitsTodayLeftSide += abutments;
@@ -1306,7 +1321,7 @@ public partial class MainViewModel : ObservableObject
 
                             if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
                                 TotalUnitsTodayRightSide += abutments;
-                            if (model.SentOn!.Equals($"1{(string)Lang["change"]}") && DateTime.Now.Hour < 5)
+                            if (model.SentOn!.Equals($"1{(string)Lang["change"]}"))
                                 TotalUnitsTodayRightSide += abutments;
                             if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
                                 TotalUnitsTodayRightSide += abutments;
@@ -1317,7 +1332,7 @@ public partial class MainViewModel : ObservableObject
                     {
                         if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
                             TotalOrdersTodayLeftSide++;
-                        if (model.SentOn!.Equals($"1{(string)Lang["change"]}") && DateTime.Now.Hour < 5)
+                        if (model.SentOn!.Equals($"1{(string)Lang["change"]}"))
                             TotalOrdersTodayLeftSide++;
                         if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
                             TotalOrdersTodayLeftSide++;
@@ -1329,7 +1344,7 @@ public partial class MainViewModel : ObservableObject
                     {
                         if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
                             TotalOrdersTodayRightSide++;
-                        if (model.SentOn!.Equals($"1{(string)Lang["change"]}") && DateTime.Now.Hour < 5)
+                        if (model.SentOn!.Equals($"1{(string)Lang["change"]}"))
                             TotalOrdersTodayRightSide++;
                         if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
                             TotalOrdersTodayRightSide++;
@@ -1417,38 +1432,38 @@ public partial class MainViewModel : ObservableObject
     
     private async void StartPresentingUnitNumbers()
     {
-        if (TotalUnitsLeftSideFinal != TotalUnitsLeftSide)
+        if (TotalUnitsLeftSideFinal != TotalUnitsLeftSide && !AccessLevel.Equals("Right"))
             await CountUp_TotalUnitsLeftSide(TotalUnitsLeftSide);
-        if (TotalCrownsLeftSideFinal != TotalCrownsLeftSide)
+        if (TotalCrownsLeftSideFinal != TotalCrownsLeftSide && !AccessLevel.Equals("Right"))
             await CountUp_TotalCrownsLeftSide(TotalCrownsLeftSide);
-        if (TotalAbutmentsLeftSideFinal != TotalAbutmentsLeftSide)
+        if (TotalAbutmentsLeftSideFinal != TotalAbutmentsLeftSide && !AccessLevel.Equals("Right"))
             await CountUp_TotalAbutmentsLeftSide(TotalAbutmentsLeftSide);
-        if (TotalOrdersLeftSideFinal != TotalOrdersLeftSide)
+        if (TotalOrdersLeftSideFinal != TotalOrdersLeftSide && !AccessLevel.Equals("Right"))
             await CountUp_TotalOrdersLeftSide(TotalOrdersLeftSide);
-        if (TotalUnitsLeftOverLeftSideFinal != TotalUnitsLeftOverLeftSide)
+        if (TotalUnitsLeftOverLeftSideFinal != TotalUnitsLeftOverLeftSide && !AccessLevel.Equals("Right"))
             await CountUp_TotalUnitsLeftOverLeftSide(TotalUnitsLeftOverLeftSide);
-        if (TotalOrdersLeftOversLeftSideFinal != TotalOrdersLeftOversLeftSide)
+        if (TotalOrdersLeftOversLeftSideFinal != TotalOrdersLeftOversLeftSide && !AccessLevel.Equals("Right"))
             await CountUp_TotalOrdersLeftOversLeftSide(TotalOrdersLeftOversLeftSide);
-        if (TotalUnitsTodayLeftSideFinal != TotalUnitsTodayLeftSide)
+        if (TotalUnitsTodayLeftSideFinal != TotalUnitsTodayLeftSide && !AccessLevel.Equals("Right"))
             await CountUp_TotalUnitsTodayLeftSide(TotalUnitsTodayLeftSide);
-        if (TotalOrdersTodayLeftSideFinal != TotalOrdersTodayLeftSide)
+        if (TotalOrdersTodayLeftSideFinal != TotalOrdersTodayLeftSide && !AccessLevel.Equals("Right"))
             await CountUp_TotalOrdersTodayLeftSide(TotalOrdersTodayLeftSide);
 
-        if (TotalUnitsRightSideFinal != TotalUnitsRightSide)
+        if (TotalUnitsRightSideFinal != TotalUnitsRightSide && !AccessLevel.Equals("Left"))
             await CountUp_TotalUnitsRightSide(TotalUnitsRightSide);
-        if (TotalCrownsRightSideFinal != TotalCrownsRightSide)
+        if (TotalCrownsRightSideFinal != TotalCrownsRightSide && !AccessLevel.Equals("Left"))
             await CountUp_TotalCrownsRightSide(TotalCrownsRightSide);
-        if (TotalAbutmentsRightSideFinal != TotalAbutmentsRightSide)
+        if (TotalAbutmentsRightSideFinal != TotalAbutmentsRightSide && !AccessLevel.Equals("Left"))
             await CountUp_TotalAbutmentsRightSide(TotalAbutmentsRightSide);
-        if (TotalOrdersRightSideFinal != TotalOrdersRightSide)
+        if (TotalOrdersRightSideFinal != TotalOrdersRightSide && !AccessLevel.Equals("Left"))
             await CountUp_TotalOrdersRightSide(TotalOrdersRightSide);
-        if (TotalUnitsLeftOverRightSideFinal != TotalUnitsLeftOverRightSide)
+        if (TotalUnitsLeftOverRightSideFinal != TotalUnitsLeftOverRightSide && !AccessLevel.Equals("Left"))
             await CountUp_TotalUnitsLeftOverRightSide(TotalUnitsLeftOverRightSide);
-        if (TotalOrdersLeftOversRightSideFinal != TotalOrdersLeftOversRightSide)
+        if (TotalOrdersLeftOversRightSideFinal != TotalOrdersLeftOversRightSide && !AccessLevel.Equals("Left"))
             await CountUp_TotalOrdersLeftOversRightSide(TotalOrdersLeftOversRightSide);
-        if (TotalUnitsTodayRightSideFinal != TotalUnitsTodayRightSide)
+        if (TotalUnitsTodayRightSideFinal != TotalUnitsTodayRightSide && !AccessLevel.Equals("Left"))
             await CountUp_TotalUnitsTodayRightSide(TotalUnitsTodayRightSide);
-        if (TotalOrdersTodayRightSideFinal != TotalOrdersTodayRightSide)
+        if (TotalOrdersTodayRightSideFinal != TotalOrdersTodayRightSide && !AccessLevel.Equals("Left"))
             await CountUp_TotalOrdersTodayRightSide(TotalOrdersTodayRightSide);
     }
 
@@ -1835,6 +1850,7 @@ public partial class MainViewModel : ObservableObject
     public void AddToDebug(string message)
     {
         DebugMessages.Add(message);
+        RaisePropertyChanged(nameof(DebugMessages));
     }
 
     private async Task<bool> CheckIfServerIsAlive()

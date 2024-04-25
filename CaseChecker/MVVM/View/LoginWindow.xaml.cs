@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Media;
 
 namespace CaseChecker
 {
@@ -31,6 +32,17 @@ namespace CaseChecker
             {
                 instance = value;
                 RaisePropertyChangedStatic(nameof(Instance));
+            }
+        }
+        
+        private bool dontDoAutoUpdate = false;
+        public bool DontDoAutoUpdate
+        {
+            get => dontDoAutoUpdate!;
+            set
+            {
+                dontDoAutoUpdate = value;
+                RaisePropertyChangedStatic(nameof(DontDoAutoUpdate));
             }
         }
 
@@ -86,6 +98,16 @@ namespace CaseChecker
         private void Label_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Close();
+        }
+
+        private void labelMadeByAmL_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            DontDoAutoUpdate = !DontDoAutoUpdate;
+
+            if (DontDoAutoUpdate)
+                labelMadeByAmL.Foreground = Brushes.Beige;
+            else
+                labelMadeByAmL.Foreground = Brushes.Silver;
         }
     }
 }

@@ -115,11 +115,22 @@ namespace CaseCheckerUpdater
                 using var fs = new FileStream($@"{appPath}\CaseChecker.exe", FileMode.OpenOrCreate);
                 await s.CopyToAsync(fs);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                if (File.Exists($@"{appPath}\CaseChecker_old.exe"))
-                    File.Move($@"{appPath}\CaseChecker_old.exe", $@"{appPath}\CaseChecker.exe");
+                try
+                {
+                    Thread.Sleep(500);
+                    using var client = new HttpClient();
+                    using var s = await client.GetStreamAsync("https://aml.one/CaseChecker/CaseChecker.exe");
+                    using var fs = new FileStream($@"{appPath}\CaseChecker.exe", FileMode.OpenOrCreate);
+                    await s.CopyToAsync(fs);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    if (File.Exists($@"{appPath}\CaseChecker_old.exe"))
+                        File.Move($@"{appPath}\CaseChecker_old.exe", $@"{appPath}\CaseChecker.exe");
+                }
             }
 
             Thread.Sleep(3000);

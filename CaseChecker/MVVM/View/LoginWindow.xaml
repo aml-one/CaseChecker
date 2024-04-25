@@ -154,6 +154,8 @@
                Grid.Row="2"
                FontSize="11"
                Foreground="#999"
-               HorizontalAlignment="Center"/>
+               HorizontalAlignment="Center"
+               x:Name="labelMadeByAmL"
+               MouseDoubleClick="labelMadeByAmL_MouseDoubleClick"/>
     </Grid>
 </Window>
