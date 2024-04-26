@@ -14,7 +14,7 @@
         Background="Transparent"
         AllowsTransparency="True"
         Title="Passcode"
-        Height="350"
+        Height="180"
         Width="800">
 
     <Window.DataContext>
@@ -50,8 +50,8 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="120"/>
                 <RowDefinition />
             </Grid.RowDefinitions>
             
@@ -181,12 +181,13 @@
                      KeyUp="box8_KeyUp"
                      />
 
-            <Label Content="{Binding PassCode}" 
-                   Foreground="Yellow"/>
+            <Label Content="Authentication" 
+                   Foreground="Beige"
+                   Grid.ColumnSpan="7"
+                   FontSize="30"
+                   FontWeight="Thin"/>
             
-            <Label Content="{Binding Goal}" 
-                   Foreground="LightGreen"
-                   Grid.Column="1"/>
+            
         </Grid>
     </Border>
 </Window>

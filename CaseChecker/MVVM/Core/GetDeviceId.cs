@@ -46,10 +46,64 @@ public class GetDeviceId
         sb.AppendLine("\"Idiom\" : \"" + "Desktop" + "\", ");
         sb.AppendLine("\"Platform\" : \"" + "WPF" + "\", ");
         sb.AppendLine("\"VirtualDevice\" : \"False\", ");
-        sb.AppendLine("\"AppVersion\" : \"" + GetAppVersion() + "\"");
+        sb.AppendLine("\"AppVersion\" : \"" + GetAppVersion() + "\", ");
+        sb.AppendLine("\"CPU\" : \"" + GetCpu() + "\", ");
+        sb.AppendLine("\"RAM\" : \"" + GetRAM() + "\", ");
+        sb.AppendLine("\"LastLogin\" : \"" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "\"");
         sb.AppendLine("}");
 
         return sb.ToString();
+    }
+
+    public static string GetRAM()
+    {
+        try
+        {
+            var gcMemoryInfo = GC.GetGCMemoryInfo();
+            long installedMemory = gcMemoryInfo.TotalAvailableMemoryBytes;
+            var physicalMemory = installedMemory / 1048576.0 / 1024;
+            return Math.Round(physicalMemory).ToString() + "GiB";
+        }
+        catch (Exception)
+        {
+
+        }
+        return "";
+    }
+
+    public static string GetCpu()
+    { 
+        try
+        {
+            ManagementObjectSearcher mosProcessor = new ManagementObjectSearcher("SELECT * FROM Win32_Processor");
+            string Procname = null;
+            string Core = null;
+            foreach (ManagementObject moProcessor in mosProcessor.Get())
+            {
+                if (moProcessor["name"] != null)
+                {
+                    Procname = moProcessor["name"].ToString();
+                }
+
+            }
+
+            Procname = Procname
+               .Replace("(TM)", "™")
+               .Replace("(tm)", "™")
+               .Replace("(R)", "®")
+               .Replace("(r)", "®")
+               .Replace("(C)", "©")
+               .Replace("(c)", "©")
+               .Replace("    ", " ")
+               .Replace("  ", " ");
+
+            return Procname;
+        }
+        catch (Exception) 
+        {
+        }
+
+        return "";
     }
 
     public static string GetAppVersion()

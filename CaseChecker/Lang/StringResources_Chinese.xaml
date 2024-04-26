@@ -86,5 +86,5 @@
     <system:String x:Key="rushCaseComment">匆忙案例</system:String>
     <system:String x:Key="rushForMorningComment">匆忙 案例 早上!</system:String>
     <system:String x:Key="orderDesignedComment">实验室收到订单，但自动导入失败</system:String>
-    
+
 </ResourceDictionary>

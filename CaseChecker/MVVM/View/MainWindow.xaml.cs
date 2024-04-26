@@ -20,6 +20,8 @@ namespace CaseChecker.MVVM.View
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        public static readonly string LocalConfigFolderHelper = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\Stats_CaseChecker\";
+
         private ResourceDictionary lang = [];
         public ResourceDictionary Lang
         {
@@ -39,6 +41,17 @@ namespace CaseChecker.MVVM.View
             {
                 remoteAppVersionDouble = value;
                 RaisePropertyChanged(nameof(RemoteAppVersionDouble));
+            }
+        }
+
+        private string latestAppVersion = string.Empty;
+        public string LatestAppVersion
+        {
+            get => latestAppVersion;
+            set
+            {
+                latestAppVersion = value;
+                RaisePropertyChanged(nameof(LatestAppVersion));
             }
         }
 
@@ -91,10 +104,39 @@ namespace CaseChecker.MVVM.View
             listViewLeft.Items.GroupDescriptions.Add(groupDescription);
             listViewRight.Items.GroupDescriptions.Add(groupDescription);
 
-            if (LoginViewModel.Instance.AccessLevel.Equals("both", StringComparison.CurrentCultureIgnoreCase))
-                this.Width = 1200;
+
+            if (File.Exists($"{LocalConfigFolderHelper}autoLogin.cf") && File.Exists($"{LocalConfigFolderHelper}windowPosition.cf"))
+            {
+                string[] wndwData = File.ReadAllText($"{LocalConfigFolderHelper}windowPosition.cf").Split('|');
+                _ = int.TryParse(wndwData[0], out int wWidth);
+                _ = int.TryParse(wndwData[1], out int wHeight);
+                _ = int.TryParse(wndwData[2], out int wTop);
+                _ = int.TryParse(wndwData[3], out int wLeft);
+
+                if (wndwData[4] != "Maximized")
+                {
+                    Width = wWidth;
+                    Height = wHeight;
+                    Top = wTop;
+                    Left = wLeft;
+                }
+
+                if (wndwData[4] == "Normal")
+                    WindowState = WindowState.Normal;
+                if (wndwData[4] == "Maximized")
+                    WindowState = WindowState.Maximized;
+
+                File.Delete($"{LocalConfigFolderHelper}autoLogin.cf");
+            }
             else
-                this.Width = 500;
+            {
+                if (LoginViewModel.Instance.AccessLevel.Equals("both", StringComparison.CurrentCultureIgnoreCase))
+                    this.Width = 1200;
+                else
+                    this.Width = 500;
+            }
+
+
 
             if (LoginWindow.Instance.DontDoAutoUpdate)
                 AutoUpdateAtStart = true;
@@ -121,6 +163,7 @@ namespace CaseChecker.MVVM.View
                     if (!remVersion.Contains('.'))
                         remVersion += ".0";
                     versionLabel.ToolTip = $"{(string)Lang["lastAvailableVersion"]}: v{remVersion}";
+                    LatestAppVersion = remVersion;
                 }));
             }
             catch (Exception)
@@ -357,6 +400,17 @@ namespace CaseChecker.MVVM.View
                 this.BorderThickness = new Thickness(0);
                 btnMaximize.Content = "▣";
             }
+
+            string windowPosition = $"{Width}|{Height}|{Top}|{Left}|{WindowState}";
+            if (Directory.Exists(LocalConfigFolderHelper))
+                File.WriteAllText($"{LocalConfigFolderHelper}windowPosition.cf", windowPosition);
+        }
+        
+        private void Window_LocationChanged(object sender, EventArgs e)
+        {
+            string windowPosition = $"{Width}|{Height}|{Top}|{Left}|{WindowState}";
+            if (Directory.Exists(LocalConfigFolderHelper)) 
+                File.WriteAllText($"{LocalConfigFolderHelper}windowPosition.cf", windowPosition);
         }
 
         private void versionLabel_MouseDown(object sender, MouseButtonEventArgs e)
@@ -371,5 +425,6 @@ namespace CaseChecker.MVVM.View
             else
                 MainViewModel.Instance.DebugShows = Visibility.Visible;
         }
+
     }
 }

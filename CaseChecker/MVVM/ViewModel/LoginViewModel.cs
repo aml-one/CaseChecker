@@ -135,6 +135,9 @@ public class LoginViewModel : ObservableObject
 
     public void AutoLogin()
     {
+        if (Directory.Exists(LocalConfigFolderHelper))
+            File.WriteAllText($"{LocalConfigFolderHelper}autoLogin.cf", "1");
+
         Login();
     }
 

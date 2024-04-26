@@ -9,6 +9,7 @@
     <converter:CommentIconToVisibleConverter x:Key="CommentIconToVisibleConverter" />
     <converter:RemoveFirstCharFromStringIfItsZConverter x:Key="RemoveFirstCharFromStringIfItsZConverter" />
     <converter:TextToVisibilityConverter x:Key="TextToVisibilityConverter" />
+    <converter:IdiomToImageConverter x:Key="IdiomToImageConverter" />
 
     <Style TargetType="ListViewItem"
            x:Key="LvItemLeft">
@@ -377,6 +378,194 @@
                                     Property="Background"
                                     Value="#f1fafa" />
                         </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    
+    <Style TargetType="ListViewItem"
+           x:Key="LvItemDeviceList">
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border x:Name="Item"
+                            BorderThickness="1"
+                            Tag="{Binding DeviceId}">
+                        <Grid Margin="4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="{Binding ElementName=headerIcon, Path=Width}" />
+                                <ColumnDefinition Width="{Binding ElementName=headerDeviceInfo, Path=Width}" />
+                                <ColumnDefinition Width="{Binding ElementName=headerPlatform, Path=Width}" />
+                                <ColumnDefinition Width="{Binding ElementName=headerAppVersion, Path=Width}" />
+                                <ColumnDefinition Width="{Binding ElementName=headerFriendlyName, Path=Width}" />
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Orientation="Horizontal"
+                                        VerticalAlignment="Top">
+                                <Image Source="{Binding Idiom,Converter={StaticResource IdiomToImageConverter}}"
+                                       Width="30"
+                                       Height="30"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1"
+                                        HorizontalAlignment="Stretch">
+                                <DockPanel HorizontalAlignment="Stretch"
+                                           Margin="0">
+                                    <TextBlock Text="{Binding Model}"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Left"
+                                               Margin="5,0,10,0"
+                                               FontWeight="SemiBold"
+                                               Foreground="SteelBlue"
+                                               TextTrimming="CharacterEllipsis" />
+                                </DockPanel>
+
+                                <TextBlock Text="{Binding Manufacturer}"
+                                           VerticalAlignment="Center"
+                                           Margin="5,-2,10,0"
+                                           FontSize="8"
+                                           Foreground="Green"
+                                           TextTrimming="CharacterEllipsis" />
+                                <TextBlock Text="{Binding Name}"
+                                           VerticalAlignment="Center"
+                                           Margin="5,-2,10,0"
+                                           FontSize="8"
+                                           Foreground="IndianRed"
+                                           Visibility="{Binding Name, Converter={StaticResource TextToVisibilityConverter}}"
+                                           TextTrimming="CharacterEllipsis" />
+                                <TextBlock Text="{Binding DeviceId}"
+                                           VerticalAlignment="Center"
+                                           Margin="5,-2,10,0"
+                                           FontSize="8"
+                                           Foreground="Purple"
+                                           Visibility="{Binding OSVersion, Converter={StaticResource TextToVisibilityConverter}}"
+                                           TextTrimming="CharacterEllipsis" />
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Access Level:"
+                                               VerticalAlignment="Center"
+                                               Margin="5,-2,4,0"
+                                               FontSize="8"
+                                               Foreground="Red"
+                                               Visibility="{Binding AccessTo, Converter={StaticResource TextToVisibilityConverter}}"
+                                               TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Text="{Binding AccessTo, StringFormat='\{0\} side'}"
+                                               VerticalAlignment="Center"
+                                               Margin="0,-2,10,0"
+                                               FontSize="8"
+                                               Foreground="SteelBlue"
+                                               Visibility="{Binding AccessTo, Converter={StaticResource TextToVisibilityConverter}}"
+                                               TextTrimming="CharacterEllipsis" />
+                                </StackPanel>
+                            </StackPanel>
+
+                            <StackPanel VerticalAlignment="Center"
+                                        HorizontalAlignment="Left"
+                                        Grid.Column="2">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Platform}"
+                                               Grid.Column="2"
+                                               Margin="0,0,5,0"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Left" />
+                                    <TextBlock Text="{Binding OSVersion}"
+                                               Grid.Column="2"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Left" />
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal"
+                                            Visibility="{Binding CPU, Converter={StaticResource TextToVisibilityConverter}}">
+                                    <TextBlock Text="CPU:"
+                                               FontSize="7"
+                                               Foreground="#666"
+                                               Margin="0,0,5,0"
+                                               VerticalAlignment="Bottom"/>
+                                    <TextBlock Text="{Binding CPU}"
+                                               FontSize="9"
+                                               Foreground="#999" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal"
+                                            Visibility="{Binding RAM, Converter={StaticResource TextToVisibilityConverter}}">
+                                    <TextBlock Text="RAM:"
+                                               FontSize="7"
+                                               Foreground="#666"
+                                               Margin="0,0,2,0"
+                                               VerticalAlignment="Bottom"/>
+                                    <TextBlock Text="{Binding RAM}"
+                                               FontSize="9"
+                                               Foreground="#999" />
+                                </StackPanel>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        Grid.Column="3">
+                                <TextBlock Text="{Binding AppVersion}"
+                                           Grid.Column="3"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center" />
+                            </StackPanel>
+
+
+                            <StackPanel Grid.Column="4"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding FriendlyName}"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center" />
+
+                                <TextBlock Text="{Binding LastLogin, StringFormat='Seen {0}'}"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center" 
+                                           FontSize="9"
+                                           Visibility="{Binding LastLogin, Converter={StaticResource TextToVisibilityConverter}}"
+                                           Foreground="#888"
+                                           />
+                            </StackPanel>
+
+
+
+
+
+                        </Grid>
+
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="ItemsControl.AlternationIndex"
+                                 Value="1">
+                            <Setter TargetName="Item"
+                                    Property="Background"
+                                    Value="WhiteSmoke" />
+                        </Trigger>
+
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter Property="BorderBrush"
+                                    Value="Gray"
+                                    TargetName="Item" />
+                            <Setter Property="Background"
+                                    Value="Beige"
+                                    TargetName="Item" />
+                            <Setter Property="Cursor"
+                                    Value="Arrow"
+                                    TargetName="Item" />
+                        </Trigger>
+                        <DataTrigger Binding="{Binding IsItTheHostDevice}"
+                                     Value="True">
+                            <Setter Property="Background"
+                                    Value="#dcfcef"
+                                    TargetName="Item" />
+                            <Setter Property="BorderBrush"
+                                    Value="#dcfcef"
+                                    TargetName="Item" />
+                            <Setter Property="FontWeight"
+                                    Value="SemiBold" />
+                        </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
