@@ -14,7 +14,7 @@
         Background="Transparent"
         AllowsTransparency="True"
         Title="ManagementWindow"
-        Height="450"
+        Height="470"
         Width="800">
 
     <Window.DataContext>

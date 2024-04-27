@@ -29,4 +29,6 @@ public class SentOutCasesModel
     public string? RushCaseComment { get; set; } = "(RUSH CASE)";
     public string? RushForMorningComment { get; set; } = "RUSH case for the morning!";
     public string? OrderDesignedComment { get; set; } = "(Order received by the lab, but auto import failed)";
+    public string? ScrewRetainedCaseComment { get; set; } = "(ACCESS HOLE)";
+    public bool ScrewRetained { get; set; } = false;
 }

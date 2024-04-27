@@ -1,27 +1,21 @@
-﻿using System.Diagnostics;
+﻿using IWshRuntimeLibrary;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
-using System.Text;
 using System.Timers;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using File = System.IO.File;
 using Path = System.IO.Path;
 
 namespace CaseCheckerUpdater
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        public static readonly string LocalConfigFolderHelper = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\Stats_CaseChecker\";
         public System.Timers.Timer _timer;
+        public int AppStartTryCount = 0;
+        public string appPath = @"C:\CaseChecker\";
 
         private ResourceDictionary lang = [];
         public ResourceDictionary Lang
@@ -100,20 +94,35 @@ namespace CaseCheckerUpdater
         {
             Thread.Sleep(2000);
 
-            string appPath = Path.GetDirectoryName(AppContext.BaseDirectory);
+            appPath = @"C:\CaseChecker\";
+
+            if (!Directory.Exists(appPath))
+            {
+                try
+                {
+                    Directory.CreateDirectory(appPath);
+                }
+                catch (Exception) 
+                {
+                    appPath = Environment.SpecialFolder.Desktop.ToString();
+                }
+            }
+
             try
             {
                 Thread.Sleep(500);
-                if (File.Exists($@"{appPath}\CaseChecker_old.exe"))
-                    File.Delete($@"{appPath}\CaseChecker_old.exe");
+                if (File.Exists($@"{LocalConfigFolderHelper}CaseChecker_old.exe"))
+                    File.Delete($@"{LocalConfigFolderHelper}CaseChecker_old.exe");
                 Thread.Sleep(500);
                 if (File.Exists($@"{appPath}\CaseChecker.exe"))
-                    File.Move($@"{appPath}\CaseChecker.exe", $@"{appPath}\CaseChecker_old.exe");
+                    File.Move($@"{appPath}\CaseChecker.exe", $@"{LocalConfigFolderHelper}CaseChecker_old.exe");
                 Thread.Sleep(2000);
                 using var client = new HttpClient();
                 using var s = await client.GetStreamAsync("https://raw.githubusercontent.com/aml-one/CaseChecker/master/CaseChecker/Executable/CaseChecker.exe");
-                using var fs = new FileStream($@"{appPath}\CaseChecker.exe", FileMode.OpenOrCreate);
+                using var fs = new FileStream($@"{appPath}CaseChecker.exe", FileMode.OpenOrCreate);
                 await s.CopyToAsync(fs);
+
+                CreateShortcut(appPath);
             }
             catch (Exception)
             {
@@ -122,31 +131,44 @@ namespace CaseCheckerUpdater
                     Thread.Sleep(500);
                     using var client = new HttpClient();
                     using var s = await client.GetStreamAsync("https://aml.one/CaseChecker/CaseChecker.exe");
-                    using var fs = new FileStream($@"{appPath}\CaseChecker.exe", FileMode.OpenOrCreate);
+                    using var fs = new FileStream($@"{appPath}CaseChecker.exe", FileMode.OpenOrCreate);
                     await s.CopyToAsync(fs);
+                    
+                    CreateShortcut(appPath);
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    if (File.Exists($@"{appPath}\CaseChecker_old.exe"))
-                        File.Move($@"{appPath}\CaseChecker_old.exe", $@"{appPath}\CaseChecker.exe");
+                    if (File.Exists($@"{LocalConfigFolderHelper}CaseChecker_old.exe"))
+                        File.Move($@"{LocalConfigFolderHelper}CaseChecker_old.exe", $@"{appPath}CaseChecker.exe");
                 }
             }
 
             Thread.Sleep(3000);
         }
 
+        private void CreateShortcut(string appFolder)
+        {
+            object shDesktop = (object)"Desktop";
+            WshShell shell = new ();
+            string shortcutAddress = (string)shell.SpecialFolders.Item(ref shDesktop) + @"\Case Checker.lnk";
+            IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutAddress);
+            shortcut.Description = "Case Checker For Stats";
+            shortcut.Hotkey = "Ctrl+Shift+C";
+            shortcut.TargetPath = @$"{appFolder}CaseChecker.exe";
+            shortcut.Save();
+        }
+
         private void StartCaseApp()
         {
+            AppStartTryCount++;
             Thread.Sleep(3000);
             try
             {
-                string appPath = Path.GetDirectoryName(AppContext.BaseDirectory);
-
                 var p = new Process();
 
                 p.StartInfo.FileName = "cmd.exe";
-                p.StartInfo.Arguments = $"/c \"{appPath}\\CaseChecker.exe\" updated";
+                p.StartInfo.Arguments = $"/c \"{appPath}CaseChecker.exe\" updated";
                 p.StartInfo.RedirectStandardOutput = true;
                 p.StartInfo.UseShellExecute = false;
                 p.StartInfo.CreateNoWindow = true;
@@ -158,8 +180,26 @@ namespace CaseCheckerUpdater
             catch (Exception)
             {
                 MessageBox.Show((string)Lang["couldNotStart"], (string)Lang["error"], MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
+
+            if (!CheckIfAppIsRunning() && AppStartTryCount < 4)
+                StartCaseApp();
         }
+
+        private static bool CheckIfAppIsRunning()
+        {
+            var Processes = Process.GetProcesses()
+                               .Where(pr => pr.ProcessName == "CaseChecker");
+            foreach (var process in Processes)
+            {
+                if (process.Id != null)
+                    return true;
+            }
+
+            return false;
+        }
+
 
         private static void CloseThisApp()
         {

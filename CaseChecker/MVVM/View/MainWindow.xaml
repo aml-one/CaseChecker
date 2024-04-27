@@ -668,6 +668,17 @@
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center" />
 
+                        <Image Source="/Images/models.png"
+                               Width="50"
+                               Height="50"
+                               Opacity="0.7"
+                               Grid.Column="0"
+                               Grid.RowSpan="2"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Margin="-65,0,0,0" />
+
+                        
                         <core:OutlinedTextBlock Text="{Binding TotalUnitsLeftSideFinal}"
                                                 Grid.Column="0"
                                                 Stroke="#333"
@@ -689,10 +700,20 @@
                                Grid.Row="1"
                                Grid.Column="0"
                                Margin="0,-8,0,0"
-                               FontSize="9"
-                               Foreground="Beige"
+                               FontSize="10"
+                               Foreground="Yellow"
                                HorizontalAlignment="Center" />
 
+
+                        <Image Source="/Images/crown.png"
+                               Width="40"
+                               Height="40"
+                               Opacity="0.7"
+                               Grid.Column="1"
+                               Grid.RowSpan="2"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" 
+                               Margin="-50,0,0,0"/>
                         <core:OutlinedTextBlock Text="{Binding TotalCrownsLeftSideFinal}"
                                                 Grid.Column="1"
                                                 Stroke="#333"
@@ -715,10 +736,19 @@
                                Grid.Row="1"
                                Grid.Column="1"
                                Margin="0,-8,0,0"
-                               FontSize="9"
-                               Foreground="Beige"
+                               FontSize="10"
+                               Foreground="PaleTurquoise"
                                HorizontalAlignment="Center" />
 
+                        <Image Source="/Images/abutment.png"
+                               Width="40"
+                               Height="40"
+                               Opacity="0.7"
+                               Grid.Column="2"
+                               Grid.RowSpan="2"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Margin="-50,0,0,0" />
                         <core:OutlinedTextBlock Text="{Binding TotalAbutmentsLeftSideFinal}"
                                                 Grid.Column="2"
                                                 Stroke="#333"
@@ -741,10 +771,19 @@
                                Grid.Row="1"
                                Grid.Column="2"
                                Margin="0,-8,0,0"
-                               FontSize="9"
-                               Foreground="Beige"
+                               FontSize="10"
+                               Foreground="Pink"
                                HorizontalAlignment="Center" />
 
+                        <Image Source="/Images/i33.png"
+                               Width="40"
+                               Height="40"
+                               Opacity="0.7"
+                               Grid.Column="3"
+                               Grid.RowSpan="2"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Margin="-65,0,0,0" />
                         <core:OutlinedTextBlock Text="{Binding TotalOrdersLeftSideFinal}"
                                                 Grid.Column="3"
                                                 Stroke="#333"
@@ -767,8 +806,8 @@
                                Grid.Row="1"
                                Grid.Column="3"
                                Margin="0,-8,0,0"
-                               FontSize="9"
-                               Foreground="Beige"
+                               FontSize="10"
+                               Foreground="LightGreen"
                                HorizontalAlignment="Center" />
 
 
@@ -778,7 +817,7 @@
                                Grid.Column="4"
                                Margin="0,-6,0,0"
                                FontSize="9"
-                               Foreground="Beige"
+                               Foreground="Pink"
                                Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalLeftSide}"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Top" />
@@ -794,31 +833,50 @@
                             </Grid.RowDefinitions>
 
 
-                            <core:OutlinedTextBlock Text="{Binding TotalUnitsLeftOverLeftSideFinal}"
-                                                    Grid.Column="0"
-                                                    Grid.Row="0"
-                                                    Stroke="#333"
-                                                    StrokePosition="Outside"
-                                                    FontSize="16"
-                                                    FontWeight="SemiBold"
-                                                    Fill="Salmon"
-                                                    StrokeThickness="1"
-                                                    HorizontalAlignment="Left"
-                                                    Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalLeftSide}"
-                                                    Margin="4,7,-2,-8" />
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="4,7,-2,-8"
+                                        Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalLeftSide}">
+                                <Image Source="/Images/models.png"
+                                       Width="14"
+                                       Height="14"
+                                       Opacity="0.8"
+                                       Margin="0,0,2,0"
+                                       VerticalAlignment="Center" />
+                                <core:OutlinedTextBlock Text="{Binding TotalUnitsLeftOverLeftSideFinal}"
+                                                        Grid.Column="0"
+                                                        Grid.Row="0"
+                                                        Stroke="#333"
+                                                        StrokePosition="Outside"
+                                                        FontSize="16"
+                                                        FontWeight="SemiBold"
+                                                        Fill="Salmon"
+                                                        StrokeThickness="1"
+                                                        HorizontalAlignment="Left"
+                                                        />
+                            </StackPanel>
 
-                            <core:OutlinedTextBlock Text="{Binding TotalUnitsTodayLeftSideFinal}"
-                                                    Grid.Column="0"
-                                                    Grid.Row="1"
-                                                    Stroke="#333"
-                                                    StrokePosition="Outside"
-                                                    FontSize="16"
-                                                    FontWeight="SemiBold"
-                                                    Fill="Yellow"
-                                                    StrokeThickness="1"
-                                                    HorizontalAlignment="Left"
-                                                    Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalLeftSide}"
-                                                    Margin="4,2,-2,-8" />
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Column="0"
+                                        Grid.Row="1"
+                                        Margin="4,2,-2,-8"
+                                        Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalLeftSide}">
+                                <Image Source="/Images/models.png"
+                                       Width="14"
+                                       Height="14"
+                                       Opacity="0.8"
+                                       Margin="0,-5,2,0"
+                                       VerticalAlignment="Center" />
+                                <core:OutlinedTextBlock Text="{Binding TotalUnitsTodayLeftSideFinal}"
+                                                        Stroke="#333"
+                                                        StrokePosition="Outside"
+                                                        FontSize="16"
+                                                        FontWeight="SemiBold"
+                                                        Fill="Yellow"
+                                                        StrokeThickness="1"
+                                                        HorizontalAlignment="Left"
+                                                        
+                                                         />
+                            </StackPanel>
 
                             <d:Label Grid.Column="0"
                                      Grid.Row="0"
@@ -840,9 +898,9 @@
                                d:Content="Total Units Today"
                                Grid.Row="1"
                                Grid.Column="4"
-                               Margin="0,-8,2,0"
+                               Margin="0,-7,2,0"
                                FontSize="9"
-                               Foreground="Beige"
+                               Foreground="Yellow"
                                Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalLeftSide}"
                                HorizontalAlignment="Left" />
 
@@ -853,7 +911,7 @@
                                Grid.Column="5"
                                Margin="0,-6,0,0"
                                FontSize="9"
-                               Foreground="Beige"
+                               Foreground="Pink"
                                Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalLeftSide}"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Top" />
@@ -869,31 +927,51 @@
                             </Grid.RowDefinitions>
 
 
-                            <core:OutlinedTextBlock Text="{Binding TotalOrdersLeftOversLeftSideFinal}"
-                                                    Grid.Column="0"
-                                                    Grid.Row="0"
-                                                    Stroke="#333"
-                                                    StrokePosition="Outside"
-                                                    FontSize="16"
-                                                    FontWeight="SemiBold"
-                                                    Fill="Salmon"
-                                                    StrokeThickness="1"
-                                                    HorizontalAlignment="Left"
-                                                    Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalLeftSide}"
-                                                    Margin="4,7,-2,-8" />
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Column="0"
+                                        Grid.Row="0"
+                                        Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalLeftSide}"
+                                        Margin="4,7,-2,-8">
+                                <Image Source="/Images/i33.png"
+                                       Width="16"
+                                       Height="16"
+                                       Opacity="0.8"
+                                       Margin="0,0,2,0"
+                                       VerticalAlignment="Center" />
+                                <core:OutlinedTextBlock Text="{Binding TotalOrdersLeftOversLeftSideFinal}"
+                                                        
+                                                        Stroke="#333"
+                                                        StrokePosition="Outside"
+                                                        FontSize="16"
+                                                        FontWeight="SemiBold"
+                                                        Fill="Salmon"
+                                                        StrokeThickness="1"
+                                                        HorizontalAlignment="Left"
+                                                         />
+                            </StackPanel>
 
-                            <core:OutlinedTextBlock Text="{Binding TotalOrdersTodayLeftSideFinal}"
-                                                    Grid.Column="0"
-                                                    Grid.Row="1"
-                                                    Stroke="#333"
-                                                    StrokePosition="Outside"
-                                                    FontSize="16"
-                                                    FontWeight="SemiBold"
-                                                    Fill="Yellow"
-                                                    StrokeThickness="1"
-                                                    HorizontalAlignment="Left"
-                                                    Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalLeftSide}"
-                                                    Margin="4,2,2,-8" />
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Column="0"
+                                        Grid.Row="1"
+                                        Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalLeftSide}"
+                                        Margin="4,2,2,-8">
+                                <Image Source="/Images/i33.png"
+                                       Width="16"
+                                       Height="16"
+                                       Opacity="0.8"
+                                       Margin="0,-5,2,0"
+                                       VerticalAlignment="Center" />
+                                <core:OutlinedTextBlock Text="{Binding TotalOrdersTodayLeftSideFinal}"
+                                                        
+                                                        Stroke="#333"
+                                                        StrokePosition="Outside"
+                                                        FontSize="16"
+                                                        FontWeight="SemiBold"
+                                                        Fill="Yellow"
+                                                        StrokeThickness="1"
+                                                        HorizontalAlignment="Left"
+                                                         />
+                            </StackPanel>
 
                             <d:Label Grid.Column="0"
                                      Grid.Row="0"
@@ -916,9 +994,9 @@
                                d:Content="New Cases Today"
                                Grid.Row="1"
                                Grid.Column="5"
-                               Margin="0,-8,2,0"
+                               Margin="0,-7,2,0"
                                FontSize="9"
-                               Foreground="Beige"
+                               Foreground="Yellow"
                                Visibility="{Binding TotalOrdersTodaySameAsAllTimeTotalLeftSide}"
                                HorizontalAlignment="Left" />
 
@@ -1115,6 +1193,17 @@
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center" />
 
+                        <Image Source="/Images/models.png"
+                               Width="50"
+                               Height="50"
+                               Opacity="0.7"
+                               Grid.Column="0"
+                               Grid.RowSpan="2"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Margin="-65,0,0,0" />
+
+
                         <core:OutlinedTextBlock Text="{Binding TotalUnitsRightSideFinal}"
                                                 Grid.Column="0"
                                                 Stroke="#333"
@@ -1136,10 +1225,20 @@
                                Grid.Row="1"
                                Grid.Column="0"
                                Margin="0,-8,0,0"
-                               FontSize="9"
-                               Foreground="Beige"
+                               FontSize="10"
+                               Foreground="Yellow"
                                HorizontalAlignment="Center" />
 
+
+                        <Image Source="/Images/crown.png"
+                               Width="40"
+                               Height="40"
+                               Opacity="0.7"
+                               Grid.Column="1"
+                               Grid.RowSpan="2"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Margin="-50,0,0,0" />
                         <core:OutlinedTextBlock Text="{Binding TotalCrownsRightSideFinal}"
                                                 Grid.Column="1"
                                                 Stroke="#333"
@@ -1162,10 +1261,19 @@
                                Grid.Row="1"
                                Grid.Column="1"
                                Margin="0,-8,0,0"
-                               FontSize="9"
-                               Foreground="Beige"
+                               FontSize="10"
+                               Foreground="PaleTurquoise"
                                HorizontalAlignment="Center" />
 
+                        <Image Source="/Images/abutment.png"
+                               Width="40"
+                               Height="40"
+                               Opacity="0.7"
+                               Grid.Column="2"
+                               Grid.RowSpan="2"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Margin="-50,0,0,0" />
                         <core:OutlinedTextBlock Text="{Binding TotalAbutmentsRightSideFinal}"
                                                 Grid.Column="2"
                                                 Stroke="#333"
@@ -1188,10 +1296,19 @@
                                Grid.Row="1"
                                Grid.Column="2"
                                Margin="0,-8,0,0"
-                               FontSize="9"
-                               Foreground="Beige"
+                               FontSize="10"
+                               Foreground="Pink"
                                HorizontalAlignment="Center" />
 
+                        <Image Source="/Images/i33.png"
+                               Width="40"
+                               Height="40"
+                               Opacity="0.7"
+                               Grid.Column="3"
+                               Grid.RowSpan="2"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Margin="-65,0,0,0" />
                         <core:OutlinedTextBlock Text="{Binding TotalOrdersRightSideFinal}"
                                                 Grid.Column="3"
                                                 Stroke="#333"
@@ -1214,8 +1331,8 @@
                                Grid.Row="1"
                                Grid.Column="3"
                                Margin="0,-8,0,0"
-                               FontSize="9"
-                               Foreground="Beige"
+                               FontSize="10"
+                               Foreground="LightGreen"
                                HorizontalAlignment="Center" />
 
 
@@ -1225,7 +1342,7 @@
                                Grid.Column="4"
                                Margin="0,-6,0,0"
                                FontSize="9"
-                               Foreground="Beige"
+                               Foreground="Pink"
                                Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalRightSide}"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Top" />
@@ -1241,31 +1358,47 @@
                             </Grid.RowDefinitions>
 
 
-                            <core:OutlinedTextBlock Text="{Binding TotalUnitsLeftOverRightSideFinal}"
-                                                    Grid.Column="0"
-                                                    Grid.Row="0"
-                                                    Stroke="#333"
-                                                    StrokePosition="Outside"
-                                                    FontSize="16"
-                                                    FontWeight="SemiBold"
-                                                    Fill="Salmon"
-                                                    StrokeThickness="1"
-                                                    HorizontalAlignment="Left"
-                                                    Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalRightSide}"
-                                                    Margin="4,7,-2,-8" />
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="4,7,-2,-8"
+                                        Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalRightSide}">
+                                <Image Source="/Images/models.png"
+                                       Width="14"
+                                       Height="14"
+                                       Opacity="0.8"
+                                       Margin="0,0,2,0"
+                                       VerticalAlignment="Center" />
+                                <core:OutlinedTextBlock Text="{Binding TotalUnitsLeftOverRightSideFinal}"
+                                                        Grid.Column="0"
+                                                        Grid.Row="0"
+                                                        Stroke="#333"
+                                                        StrokePosition="Outside"
+                                                        FontSize="16"
+                                                        FontWeight="SemiBold"
+                                                        Fill="Salmon"
+                                                        StrokeThickness="1"
+                                                        HorizontalAlignment="Left" />
+                            </StackPanel>
 
-                            <core:OutlinedTextBlock Text="{Binding TotalUnitsTodayRightSideFinal}"
-                                                    Grid.Column="0"
-                                                    Grid.Row="1"
-                                                    Stroke="#333"
-                                                    StrokePosition="Outside"
-                                                    FontSize="16"
-                                                    FontWeight="SemiBold"
-                                                    Fill="Yellow"
-                                                    StrokeThickness="1"
-                                                    HorizontalAlignment="Left"
-                                                    Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalRightSide}"
-                                                    Margin="4,2,-2,-8" />
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Column="0"
+                                        Grid.Row="1"
+                                        Margin="4,2,-2,-8"
+                                        Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalRightSide}">
+                                <Image Source="/Images/models.png"
+                                       Width="14"
+                                       Height="14"
+                                       Opacity="0.8"
+                                       Margin="0,-5,2,0"
+                                       VerticalAlignment="Center" />
+                                <core:OutlinedTextBlock Text="{Binding TotalUnitsTodayRightSideFinal}"
+                                                        Stroke="#333"
+                                                        StrokePosition="Outside"
+                                                        FontSize="16"
+                                                        FontWeight="SemiBold"
+                                                        Fill="Yellow"
+                                                        StrokeThickness="1"
+                                                        HorizontalAlignment="Left" />
+                            </StackPanel>
 
                             <d:Label Grid.Column="0"
                                      Grid.Row="0"
@@ -1289,7 +1422,7 @@
                                Grid.Column="4"
                                Margin="0,-8,2,0"
                                FontSize="9"
-                               Foreground="Beige"
+                               Foreground="Yellow"
                                Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalRightSide}"
                                HorizontalAlignment="Left" />
 
@@ -1300,7 +1433,7 @@
                                Grid.Column="5"
                                Margin="0,-6,0,0"
                                FontSize="9"
-                               Foreground="Beige"
+                               Foreground="Pink"
                                Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalRightSide}"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Top" />
@@ -1316,31 +1449,47 @@
                             </Grid.RowDefinitions>
 
 
-                            <core:OutlinedTextBlock Text="{Binding TotalOrdersLeftOversRightSideFinal}"
-                                                    Grid.Column="0"
-                                                    Grid.Row="0"
-                                                    Stroke="#333"
-                                                    StrokePosition="Outside"
-                                                    FontSize="16"
-                                                    FontWeight="SemiBold"
-                                                    Fill="Salmon"
-                                                    StrokeThickness="1"
-                                                    HorizontalAlignment="Left"
-                                                    Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalRightSide}"
-                                                    Margin="4,7,-2,-8" />
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Column="0"
+                                        Grid.Row="0"
+                                        Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalRightSide}"
+                                        Margin="4,7,-2,-8">
+                                <Image Source="/Images/i33.png"
+                                       Width="16"
+                                       Height="16"
+                                       Opacity="0.8"
+                                       Margin="0,0,2,0"
+                                       VerticalAlignment="Center" />
+                                <core:OutlinedTextBlock Text="{Binding TotalOrdersLeftOversRightSideFinal}"
+                                                        Stroke="#333"
+                                                        StrokePosition="Outside"
+                                                        FontSize="16"
+                                                        FontWeight="SemiBold"
+                                                        Fill="Salmon"
+                                                        StrokeThickness="1"
+                                                        HorizontalAlignment="Left" />
+                            </StackPanel>
 
-                            <core:OutlinedTextBlock Text="{Binding TotalOrdersTodayRightSideFinal}"
-                                                    Grid.Column="0"
-                                                    Grid.Row="1"
-                                                    Stroke="#333"
-                                                    StrokePosition="Outside"
-                                                    FontSize="16"
-                                                    FontWeight="SemiBold"
-                                                    Fill="Yellow"
-                                                    StrokeThickness="1"
-                                                    HorizontalAlignment="Left"
-                                                    Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalRightSide}"
-                                                    Margin="4,2,2,-8" />
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Column="0"
+                                        Grid.Row="1"
+                                        Visibility="{Binding TotalUnitsTodaySameAsAllTimeTotalRightSide}"
+                                        Margin="4,2,2,-8">
+                                <Image Source="/Images/i33.png"
+                                       Width="16"
+                                       Height="16"
+                                       Opacity="0.8"
+                                       Margin="0,-5,2,0"
+                                       VerticalAlignment="Center" />
+                                <core:OutlinedTextBlock Text="{Binding TotalOrdersTodayRightSideFinal}"
+                                                        Stroke="#333"
+                                                        StrokePosition="Outside"
+                                                        FontSize="16"
+                                                        FontWeight="SemiBold"
+                                                        Fill="Yellow"
+                                                        StrokeThickness="1"
+                                                        HorizontalAlignment="Left" />
+                            </StackPanel>
 
                             <d:Label Grid.Column="0"
                                      Grid.Row="0"
@@ -1365,7 +1514,7 @@
                                Grid.Column="5"
                                Margin="0,-8,2,0"
                                FontSize="9"
-                               Foreground="Beige"
+                               Foreground="Yellow"
                                Visibility="{Binding TotalOrdersTodaySameAsAllTimeTotalRightSide}"
                                HorizontalAlignment="Left" />
 

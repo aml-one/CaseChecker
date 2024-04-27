@@ -49,7 +49,7 @@ public class GetDeviceId
         sb.AppendLine("\"AppVersion\" : \"" + GetAppVersion() + "\", ");
         sb.AppendLine("\"CPU\" : \"" + GetCpu() + "\", ");
         sb.AppendLine("\"RAM\" : \"" + GetRAM() + "\", ");
-        sb.AppendLine("\"LastLogin\" : \"" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "\"");
+        sb.AppendLine("\"LastLogin\" : \"" + DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") + " UTC\"");
         sb.AppendLine("}");
 
         return sb.ToString();

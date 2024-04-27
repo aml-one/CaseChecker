@@ -938,15 +938,15 @@ public partial class MainViewModel : ObservableObject
         string appPath = Path.GetDirectoryName(AppContext.BaseDirectory);
         try
         {
-            if (File.Exists($@"{appPath}\CaseCheckerUpdater.exe"))
-                File.Delete($@"{appPath}\CaseCheckerUpdater.exe");
+            if (File.Exists($@"{LocalConfigFolderHelper}CaseCheckerUpdater.exe"))
+                File.Delete($@"{LocalConfigFolderHelper}CaseCheckerUpdater.exe");
 
             Thread.Sleep(500);
-            if (!File.Exists($@"{appPath}\CaseCheckerUpdater.exe"))
+            if (!File.Exists($@"{LocalConfigFolderHelper}CaseCheckerUpdater.exe"))
             {
                 using var client = new HttpClient();
                 using var s = await client.GetStreamAsync("https://raw.githubusercontent.com/aml-one/CaseChecker/master/CaseChecker/Executable/CaseCheckerUpdater.exe");
-                using var fs = new FileStream($@"{appPath}\CaseCheckerUpdater.exe", FileMode.OpenOrCreate);
+                using var fs = new FileStream($@"{LocalConfigFolderHelper}CaseCheckerUpdater.exe", FileMode.OpenOrCreate);
                 await s.CopyToAsync(fs);
             }
         }
@@ -954,14 +954,14 @@ public partial class MainViewModel : ObservableObject
         {
             try
             {
-                if (File.Exists($@"{appPath}\CaseCheckerUpdater.exe"))
-                    File.Delete($@"{appPath}\CaseCheckerUpdater.exe");
+                if (File.Exists($@"{LocalConfigFolderHelper}CaseCheckerUpdater.exe"))
+                    File.Delete($@"{LocalConfigFolderHelper}CaseCheckerUpdater.exe");
 
-                if (!File.Exists($@"{appPath}\CaseCheckerUpdater.exe"))
+                if (!File.Exists($@"{LocalConfigFolderHelper}CaseCheckerUpdater.exe"))
                 {
                     using var client = new HttpClient();
                     using var s = await client.GetStreamAsync("https://aml.one/CaseChecker/CaseCheckerUpdater.exe");
-                    using var fs = new FileStream($@"{appPath}\CaseCheckerUpdater.exe", FileMode.OpenOrCreate);
+                    using var fs = new FileStream($@"{LocalConfigFolderHelper}CaseCheckerUpdater.exe", FileMode.OpenOrCreate);
                     await s.CopyToAsync(fs);
                 }
             }
@@ -987,7 +987,7 @@ public partial class MainViewModel : ObservableObject
             var p = new Process();
 
             p.StartInfo.FileName = "cmd.exe";
-            p.StartInfo.Arguments = $"/c \"{appPath}\\CaseCheckerUpdater.exe\"";
+            p.StartInfo.Arguments = $"/c \"{LocalConfigFolderHelper}CaseCheckerUpdater.exe\"";
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.CreateNoWindow = true;
@@ -1150,6 +1150,7 @@ public partial class MainViewModel : ObservableObject
                     model.RushCaseComment = (string)Lang["rushCaseComment"];
                     model.RushForMorningComment = (string)Lang["rushForMorningComment"];
                     model.OrderDesignedComment = (string)Lang["orderDesignedComment"];
+                    model.ScrewRetainedCaseComment = (string)Lang["screwRetainedCaseComment"];
 
                     if (model.TotalUnits!.Length == 1)
                         model.TotalUnitsWithPrefixZero = "0" + model.TotalUnits;
@@ -1226,6 +1227,18 @@ public partial class MainViewModel : ObservableObject
                     {
                         model.CommentColor = "Maroon";
                         model.Redo = "1";
+                    }
+                    
+                    if (model.CommentIn3Shape!.Contains("screw retained", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.CommentIn3Shape!.Contains("access hole", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.CommentIn3Shape!.Contains("screwmented", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.CommentIn3Shape!.Contains("screwret", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.CommentIn3Shape!.Contains("srewret", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.OrderID!.EndsWith("-SCR", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.OrderID!.EndsWith("-SRC", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        model.ScrewRetained = true;
+                        model.CommentColor = "HotPink";
                     }
 
                     // clearing comment, if it's a standard iTero comment
