@@ -292,9 +292,9 @@ namespace CaseChecker.MVVM.View
 
            
             gView.Columns[0].Width = 34;
-            gView.Columns[1].Width = workingWidth - 250;
-            gView.Columns[2].Width = 38;
-            gView.Columns[3].Width = 34;
+            gView.Columns[1].Width = workingWidth - 268;
+            gView.Columns[2].Width = 45;
+            gView.Columns[3].Width = 44;
             gView.Columns[4].Width = 30;
             gView.Columns[5].Width = 110;
         }
@@ -307,9 +307,9 @@ namespace CaseChecker.MVVM.View
             var workingWidth = listView.ActualWidth - SystemParameters.VerticalScrollBarWidth; // take into account vertical scrollbar
 
             gView.Columns[0].Width = 34;
-            gView.Columns[1].Width = workingWidth - 250;
-            gView.Columns[2].Width = 38;
-            gView.Columns[3].Width = 34;
+            gView.Columns[1].Width = workingWidth - 268;
+            gView.Columns[2].Width = 45;
+            gView.Columns[3].Width = 44;
             gView.Columns[4].Width = 30;
             gView.Columns[5].Width = 110;
         }

@@ -86,6 +86,6 @@
     <system:String x:Key="rushCaseComment">(RUSH CASE)</system:String>
     <system:String x:Key="rushForMorningComment">RUSH case for the morning!</system:String>
     <system:String x:Key="orderDesignedComment">(Order received by the lab, but auto import failed)</system:String>
-    <system:String x:Key="screwRetainedCaseComment">(ACCESS HOLE)</system:String>
+    <system:String x:Key="screwRetainedCaseComment">ACH</system:String>
     
 </ResourceDictionary>

@@ -101,7 +101,8 @@
                                            Margin="5,-2,10,0"
                                            FontSize="8"
                                            Foreground="Gray"
-                                           TextTrimming="CharacterEllipsis" />
+                                           TextTrimming="CharacterEllipsis"
+                                           TextWrapping="Wrap" />
                                 <TextBlock Text="{Binding Comment}"
                                            VerticalAlignment="Center"
                                            Margin="5,-2,10,0"
@@ -116,7 +117,8 @@
                                            Foreground="MediumOrchid"
                                            Cursor="Hand"
                                            Visibility="{Binding CommentIn3Shape, Converter={StaticResource TextToVisibilityConverter}}"
-                                           TextTrimming="CharacterEllipsis" />
+                                           TextTrimming="CharacterEllipsis" 
+                                           TextWrapping="Wrap"/>
 
                                 <TextBlock Text="{Binding RushForMorningComment}"
                                            VerticalAlignment="Center"
@@ -130,59 +132,64 @@
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal"
-                                        VerticalAlignment="Center"
-                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Top"
+                                        HorizontalAlignment="Left"
                                         Grid.Column="2"
+                                        Margin="4,-2,0,0"
                                         Visibility="{Binding Crowns, Converter={StaticResource TextToVisibilityConverter}}">
                                 <Grid Visibility="{Binding ScrewRetained, Converter={StaticResource BoolToInverseVisibilityConverter}}">
                                     <Image Source="\Images\crown.png"
                                            Grid.Column="4"
-                                           Width="14"
-                                           Height="14"
+                                           Width="18"
+                                           Height="18"
                                            Margin="0,0,2,0"
                                            />
                                 </Grid>
                                 <Grid Visibility="{Binding ScrewRetained, Converter={StaticResource BoolToVisibilityConverter}}">
                                     <Image Source="\Images\screwretained.png"
                                            Grid.Column="4"
-                                           Width="14"
-                                           Height="14"
+                                           Width="18"
+                                           Height="18"
                                            Margin="0,0,2,0"
                                            />
                                 </Grid>
                                 <TextBlock Text="{Binding Crowns}"
                                            Grid.Column="2"
+                                           FontSize="18"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal"
-                                        VerticalAlignment="Center"
-                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Top"
+                                        HorizontalAlignment="Left"
+                                        Margin="4,-2,0,0"
                                         Grid.Column="3">
                                 <Image Source="\Images\abutment.png"
                                        Grid.Column="4"
-                                       Width="14"
-                                       Height="14"
-                                       Margin="0,0,-2,0"
+                                       Width="18"
+                                       Height="18"
+                                       Margin="0,2,-1,0"
                                        Visibility="{Binding Abutments, Converter={StaticResource TextToVisibilityConverter}}" />
                                 <TextBlock Text="{Binding Abutments}"
                                            Grid.Column="3"
+                                           FontSize="18"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center" />
                             </StackPanel>
 
                             <Image Source="\Images\models.png"
                                    Grid.Column="4"
-                                   VerticalAlignment="Center"
+                                   VerticalAlignment="Top"
                                    HorizontalAlignment="Center"
-                                   Width="16"
-                                   Height="16"
+                                   Margin="0,1,0,0"
+                                   Width="18"
+                                   Height="18"
                                    Visibility="{Binding Models, Converter={StaticResource TextToVisibilityConverter}}" />
 
                             <TextBlock Text="{Binding SentOn, Converter={StaticResource RemoveFirstCharFromStringIfItsZConverter}}"
                                        Grid.Column="5"
-                                       VerticalAlignment="Center"
+                                       VerticalAlignment="Top"
                                        HorizontalAlignment="Center" />
 
 
@@ -308,7 +315,8 @@
                                            Margin="5,-2,10,0"
                                            FontSize="8"
                                            Foreground="Gray"
-                                           TextTrimming="CharacterEllipsis" />
+                                           TextTrimming="CharacterEllipsis"
+                                           TextWrapping="Wrap"/>
                                 <TextBlock Text="{Binding Comment}"
                                            VerticalAlignment="Center"
                                            Margin="5,-2,10,0"
@@ -323,7 +331,8 @@
                                            Foreground="MediumOrchid"
                                            Cursor="Hand"
                                            Visibility="{Binding CommentIn3Shape, Converter={StaticResource TextToVisibilityConverter}}"
-                                           TextTrimming="CharacterEllipsis" />
+                                           TextTrimming="CharacterEllipsis"
+                                           TextWrapping="Wrap"/>
 
                                 <TextBlock Text="{Binding RushForMorningComment}"
                                            VerticalAlignment="Center"
@@ -336,33 +345,46 @@
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal"
-                                        VerticalAlignment="Center"
-                                        HorizontalAlignment="Center"
-                                        Grid.Column="2">
-                                <Image Source="\Images\crown.png"
-                                       Grid.Column="4"
-                                       Width="14"
-                                       Height="14"
-                                       Margin="0,0,2,0"
-                                       Visibility="{Binding Crowns, Converter={StaticResource TextToVisibilityConverter}}" />
+                                        VerticalAlignment="Top"
+                                        HorizontalAlignment="Left"
+                                        Grid.Column="2"
+                                        Margin="4,-2,0,0"
+                                        Visibility="{Binding Crowns, Converter={StaticResource TextToVisibilityConverter}}">
+                                <Grid Visibility="{Binding ScrewRetained, Converter={StaticResource BoolToInverseVisibilityConverter}}">
+                                    <Image Source="\Images\crown.png"
+                                           Grid.Column="4"
+                                           Width="18"
+                                           Height="18"
+                                           Margin="0,0,2,0" />
+                                </Grid>
+                                <Grid Visibility="{Binding ScrewRetained, Converter={StaticResource BoolToVisibilityConverter}}">
+                                    <Image Source="\Images\screwretained.png"
+                                           Grid.Column="4"
+                                           Width="18"
+                                           Height="18"
+                                           Margin="0,0,2,0" />
+                                </Grid>
                                 <TextBlock Text="{Binding Crowns}"
                                            Grid.Column="2"
+                                           FontSize="18"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal"
-                                        VerticalAlignment="Center"
-                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Top"
+                                        HorizontalAlignment="Left"
+                                        Margin="4,-2,0,0"
                                         Grid.Column="3">
                                 <Image Source="\Images\abutment.png"
                                        Grid.Column="4"
-                                       Width="14"
-                                       Height="14"
-                                       Margin="0,0,-2,0"
+                                       Width="18"
+                                       Height="18"
+                                       Margin="0,2,-1,0"
                                        Visibility="{Binding Abutments, Converter={StaticResource TextToVisibilityConverter}}" />
                                 <TextBlock Text="{Binding Abutments}"
                                            Grid.Column="3"
+                                           FontSize="18"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center" />
                             </StackPanel>
@@ -370,8 +392,9 @@
 
                             <Image Source="\Images\models.png"
                                    Grid.Column="4"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center" 
+                                   VerticalAlignment="Top"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,1,0,0"
                                    Width="16"
                                    Height="16"
                                    Visibility="{Binding Models, Converter={StaticResource TextToVisibilityConverter}}"
@@ -379,7 +402,7 @@
 
                             <TextBlock Text="{Binding SentOn, Converter={StaticResource RemoveFirstCharFromStringIfItsZConverter}}"
                                        Grid.Column="5"
-                                       VerticalAlignment="Center"
+                                       VerticalAlignment="Top"
                                        HorizontalAlignment="Center" />
 
 

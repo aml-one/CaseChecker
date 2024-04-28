@@ -1152,6 +1152,8 @@ public partial class MainViewModel : ObservableObject
                     model.OrderDesignedComment = (string)Lang["orderDesignedComment"];
                     model.ScrewRetainedCaseComment = (string)Lang["screwRetainedCaseComment"];
 
+                    model.OriginalSentOn = model.SentOn;
+
                     if (model.TotalUnits!.Length == 1)
                         model.TotalUnitsWithPrefixZero = "0" + model.TotalUnits;
                     else
@@ -1166,9 +1168,9 @@ public partial class MainViewModel : ObservableObject
                     else
                         model.Models = "🗸";
 
-                    if (model.SentOn == DateTime.Now.ToString("MM-dd-yyyy"))
+                    if (model.OriginalSentOn == DateTime.Now.ToString("MM-dd-yyyy"))
                         model.SentOn = $"z{(string)Lang["today"]}";
-                    if (model.SentOn == DateTime.Now.AddDays(-1).ToString("MM-dd-yyyy"))
+                    if (model.OriginalSentOn == DateTime.Now.AddDays(-1).ToString("MM-dd-yyyy"))
                         model.SentOn = $"9{(string)Lang["yesterday"]}";
 
                     if (model.SentOn != $"z{(string)Lang["today"]}" || model.SentOn != $"9{(string)Lang["yesterday"]}")
@@ -1234,11 +1236,13 @@ public partial class MainViewModel : ObservableObject
                         model.CommentIn3Shape!.Contains("screwmented", StringComparison.CurrentCultureIgnoreCase) ||
                         model.CommentIn3Shape!.Contains("screwret", StringComparison.CurrentCultureIgnoreCase) ||
                         model.CommentIn3Shape!.Contains("srewret", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.CommentIn3Shape!.Contains("screw access", StringComparison.CurrentCultureIgnoreCase) ||
                         model.OrderID!.EndsWith("-SCR", StringComparison.CurrentCultureIgnoreCase) ||
-                        model.OrderID!.EndsWith("-SRC", StringComparison.CurrentCultureIgnoreCase))
+                        model.OrderID!.EndsWith("-SRC", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.OrderID!.EndsWith("-ACH", StringComparison.CurrentCultureIgnoreCase))
                     {
                         model.ScrewRetained = true;
-                        model.CommentColor = "HotPink";
+                        model.CommentColor = "#b90ffa";
                     }
 
                     // clearing comment, if it's a standard iTero comment
@@ -1289,11 +1293,9 @@ public partial class MainViewModel : ObservableObject
                             TotalCrownsLeftSide += crowns;
                             TotalUnitsLeftSide += crowns;
 
-                            if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
-                                TotalUnitsTodayLeftSide += crowns;
-                            if (model.SentOn!.Equals($"1{(string)Lang["change"]}"))
-                                TotalUnitsTodayLeftSide += crowns;
-                            if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
+                            if (model.OriginalSentOn!.Equals(DateTime.Now.ToString("MM-dd-yyyy")) ||
+                                (model.OriginalSentOn!.Equals(DateTime.Now.AddDays(-1).ToString("MM-dd-yyyy")) &&
+                                 DateTime.Now.Hour < 5))
                                 TotalUnitsTodayLeftSide += crowns;
                         }
                         
@@ -1302,11 +1304,9 @@ public partial class MainViewModel : ObservableObject
                             TotalCrownsRightSide += crowns;
                             TotalUnitsRightSide += crowns;
 
-                            if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
-                                TotalUnitsTodayRightSide += crowns;
-                            if (model.SentOn!.Equals($"1{(string)Lang["change"]}"))
-                                TotalUnitsTodayRightSide += crowns;
-                            if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
+                            if (model.OriginalSentOn!.Equals(DateTime.Now.ToString("MM-dd-yyyy")) ||
+                                (model.OriginalSentOn!.Equals(DateTime.Now.AddDays(-1).ToString("MM-dd-yyyy")) &&
+                                 DateTime.Now.Hour < 5))
                                 TotalUnitsTodayRightSide += crowns;
                         }
                     }
@@ -1319,11 +1319,9 @@ public partial class MainViewModel : ObservableObject
                             TotalAbutmentsLeftSide += abutments;
                             TotalUnitsLeftSide += abutments;
 
-                            if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
-                                TotalUnitsTodayLeftSide += abutments;
-                            if (model.SentOn!.Equals($"1{(string)Lang["change"]}"))
-                                TotalUnitsTodayLeftSide += abutments;
-                            if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
+                            if (model.OriginalSentOn!.Equals(DateTime.Now.ToString("MM-dd-yyyy")) ||
+                                (model.OriginalSentOn!.Equals(DateTime.Now.AddDays(-1).ToString("MM-dd-yyyy")) &&
+                                 DateTime.Now.Hour < 5))
                                 TotalUnitsTodayLeftSide += abutments;
                         }
                         
@@ -1332,22 +1330,18 @@ public partial class MainViewModel : ObservableObject
                             TotalAbutmentsRightSide += abutments;
                             TotalUnitsRightSide += abutments;
 
-                            if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
-                                TotalUnitsTodayRightSide += abutments;
-                            if (model.SentOn!.Equals($"1{(string)Lang["change"]}"))
-                                TotalUnitsTodayRightSide += abutments;
-                            if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
+                            if (model.OriginalSentOn!.Equals(DateTime.Now.ToString("MM-dd-yyyy")) ||
+                                (model.OriginalSentOn!.Equals(DateTime.Now.AddDays(-1).ToString("MM-dd-yyyy")) &&
+                                 DateTime.Now.Hour < 5))
                                 TotalUnitsTodayRightSide += abutments;
                         }
                     }
 
                     if (model.Side!.Equals("left", StringComparison.CurrentCultureIgnoreCase))
                     {
-                        if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
-                            TotalOrdersTodayLeftSide++;
-                        if (model.SentOn!.Equals($"1{(string)Lang["change"]}"))
-                            TotalOrdersTodayLeftSide++;
-                        if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
+                        if (model.OriginalSentOn!.Equals(DateTime.Now.ToString("MM-dd-yyyy")) ||
+                                (model.OriginalSentOn!.Equals(DateTime.Now.AddDays(-1).ToString("MM-dd-yyyy")) &&
+                                 DateTime.Now.Hour < 5))
                             TotalOrdersTodayLeftSide++;
 
                         TotalOrdersLeftSide++;
@@ -1355,11 +1349,9 @@ public partial class MainViewModel : ObservableObject
                     
                     if (model.Side!.Equals("right", StringComparison.CurrentCultureIgnoreCase))
                     {
-                        if (model.SentOn!.Equals($"z{(string)Lang["today"]}"))
-                            TotalOrdersTodayRightSide++;
-                        if (model.SentOn!.Equals($"1{(string)Lang["change"]}"))
-                            TotalOrdersTodayRightSide++;
-                        if (model.SentOn!.Equals($"9{(string)Lang["yesterday"]}") && DateTime.Now.Hour < 5)
+                        if (model.OriginalSentOn!.Equals(DateTime.Now.ToString("MM-dd-yyyy")) ||
+                                (model.OriginalSentOn!.Equals(DateTime.Now.AddDays(-1).ToString("MM-dd-yyyy")) &&
+                                 DateTime.Now.Hour < 5))
                             TotalOrdersTodayRightSide++;
 
                         TotalOrdersRightSide++;
