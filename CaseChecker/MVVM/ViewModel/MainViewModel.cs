@@ -20,7 +20,6 @@ public partial class MainViewModel : ObservableObject
     public System.Timers.Timer _orderTimer;
     public System.Timers.Timer _countdownClock;
     private int Counter = 10;
-    Dictionary<string, double> UnitDoubles = [];
 
     #region Properties
 
@@ -43,6 +42,36 @@ public partial class MainViewModel : ObservableObject
         {
             lang = value;
             RaisePropertyChangedStatic(nameof(Lang));
+        }
+    }
+
+    private string seachLeftSide;
+    public string SeachLeftSide
+    {
+        get => seachLeftSide;
+        set
+        {
+            seachLeftSide = value;
+            RaisePropertyChanged(nameof(SeachLeftSide));
+            if (!string.IsNullOrEmpty(value))
+                FilterLeftSide();
+            else
+                SentOutCasesModelLeftSideFinal = SentOutCasesModelLeftSide;
+        }
+    }
+    
+    private string seachRightSide;
+    public string SeachRightSide
+    {
+        get => seachRightSide;
+        set
+        {
+            seachRightSide = value;
+            RaisePropertyChanged(nameof(SeachRightSide));
+            if (!string.IsNullOrEmpty(value))
+                FilterRightSide();
+            else
+                SentOutCasesModelRightSideFinal = SentOutCasesModelRightSide;
         }
     }
 
@@ -186,6 +215,28 @@ public partial class MainViewModel : ObservableObject
         {
             sentOutCasesModelRightSide = value;
             RaisePropertyChanged(nameof(SentOutCasesModelRightSide));
+        }
+    }
+    
+    private List<SentOutCasesModel> sentOutCasesModelLeftSideFinal = [];
+    public List<SentOutCasesModel> SentOutCasesModelLeftSideFinal
+    {
+        get => sentOutCasesModelLeftSideFinal;
+        set
+        {
+            sentOutCasesModelLeftSideFinal = value;
+            RaisePropertyChanged(nameof(SentOutCasesModelLeftSideFinal));
+        }
+    }
+    
+    private List<SentOutCasesModel> sentOutCasesModelRightSideFinal = [];
+    public List<SentOutCasesModel> SentOutCasesModelRightSideFinal
+    {
+        get => sentOutCasesModelRightSideFinal;
+        set
+        {
+            sentOutCasesModelRightSideFinal = value;
+            RaisePropertyChanged(nameof(SentOutCasesModelRightSideFinal));
         }
     }
 
@@ -766,6 +817,10 @@ public partial class MainViewModel : ObservableObject
     public RelayCommand StartProgramUpdateCommand { get; set; }
     public RelayCommand SwitchLanguageCommand { get; set; }
     public RelayCommand OpenUpAdminWindowCommand { get; set; }
+    public RelayCommand LeftSideFilterCommand { get; set; }
+    public RelayCommand RightSideFilterCommand { get; set; }
+    public RelayCommand ClearLeftSideFilterCommand { get; set; }
+    public RelayCommand ClearRightSideFilterCommand { get; set; }
 
     public MainViewModel()
     {
@@ -781,26 +836,7 @@ public partial class MainViewModel : ObservableObject
 
         LastDBUpdateLocalTime = (string)Lang["fetchingData"];
 
-        #region UnitDoubles fillup
-        UnitDoubles.Add("TotalAbutmentsLeftSide", TotalAbutmentsLeftSideFinal);
-        UnitDoubles.Add("TotalCrownsLeftSide", TotalCrownsLeftSideFinal);
-        UnitDoubles.Add("TotalOrdersLeftSide", TotalOrdersLeftSideFinal);
-        UnitDoubles.Add("TotalOrdersTodayLeftSide", TotalOrdersTodayLeftSideFinal);
-        UnitDoubles.Add("TotalUnitsLeftSide", TotalUnitsLeftSideFinal);
-        UnitDoubles.Add("TotalUnitsTodayLeftSide", TotalUnitsTodayLeftSideFinal);
-        UnitDoubles.Add("TotalOrdersLeftOversLeftSide", TotalOrdersLeftOversLeftSideFinal);
-        UnitDoubles.Add("TotalUnitsLeftOverLeftSide", TotalUnitsLeftOverLeftSideFinal);
-
-        UnitDoubles.Add("TotalAbutmentsRightSide", TotalAbutmentsRightSideFinal);
-        UnitDoubles.Add("TotalCrownsRightSide", TotalCrownsRightSideFinal);
-        UnitDoubles.Add("TotalOrdersRightSide", TotalOrdersRightSideFinal);
-        UnitDoubles.Add("TotalOrdersTodayRightSide", TotalOrdersTodayRightSideFinal);
-        UnitDoubles.Add("TotalUnitsRightSide", TotalUnitsRightSideFinal);
-        UnitDoubles.Add("TotalUnitsTodayRightSide", TotalUnitsTodayRightSideFinal);
-        UnitDoubles.Add("TotalOrdersLeftOversRightSide", TotalOrdersLeftOversRightSideFinal);
-        UnitDoubles.Add("TotalUnitsLeftOverRightSide", TotalUnitsLeftOverRightSideFinal);
-        #endregion UnitDoubles fillup
-
+        
         var assembly = Assembly.GetExecutingAssembly();
         string resourceName = assembly.GetManifestResourceNames().Single(str => str.EndsWith("version.txt"));
         string versionResult = "";
@@ -832,6 +868,10 @@ public partial class MainViewModel : ObservableObject
         StartProgramUpdateCommand = new RelayCommand(o => StartProgramUpdate());
         SwitchLanguageCommand = new RelayCommand(o => SwitchLanguage());
         OpenUpAdminWindowCommand = new RelayCommand(o => OpenUpAdminWindow());
+        LeftSideFilterCommand = new RelayCommand(o => FilterLeftSide());
+        RightSideFilterCommand = new RelayCommand(o => FilterRightSide());
+        ClearLeftSideFilterCommand = new RelayCommand(o => ClearLeftSideFilter());
+        ClearRightSideFilterCommand = new RelayCommand(o => ClearRightSideFilter());
         
         _countdownClock = new System.Timers.Timer(1000);
         _countdownClock.Elapsed += CountDownClock_Elapsed;
@@ -849,6 +889,36 @@ public partial class MainViewModel : ObservableObject
 
         ResetCountDownCounter();
         _ = GetTheOrderInfos();
+    }
+
+    private void ClearRightSideFilter()
+    {
+        SeachRightSide = "";
+    }
+
+    private void ClearLeftSideFilter()
+    {
+        SeachLeftSide = "";
+    }
+
+    private void FilterLeftSide()
+    {
+        if (!string.IsNullOrEmpty(SeachLeftSide))
+            SentOutCasesModelLeftSideFinal = SentOutCasesModelLeftSide.Where(x => 
+                x.OrderID!.Contains(SeachLeftSide, StringComparison.CurrentCultureIgnoreCase) || 
+                x.Items!.Contains(SeachLeftSide, StringComparison.CurrentCultureIgnoreCase) ||
+                x.CommentIn3Shape!.Contains(SeachLeftSide, StringComparison.CurrentCultureIgnoreCase)
+            ).ToList();
+    }
+    
+    private void FilterRightSide()
+    {
+        if (!string.IsNullOrEmpty(SeachRightSide))
+            SentOutCasesModelRightSideFinal = SentOutCasesModelRightSide.Where(x =>
+                x.OrderID!.Contains(SeachRightSide, StringComparison.CurrentCultureIgnoreCase) ||
+                x.Items!.Contains(SeachRightSide, StringComparison.CurrentCultureIgnoreCase) ||
+                x.CommentIn3Shape!.Contains(SeachRightSide, StringComparison.CurrentCultureIgnoreCase)
+            ).ToList();
     }
 
     private static void OpenUpAdminWindow()
@@ -1423,15 +1493,22 @@ public partial class MainViewModel : ObservableObject
             if (side.Equals("left", StringComparison.CurrentCultureIgnoreCase))
             {
                 SentOutCasesModelLeftSide = sortedModelList;
+                SentOutCasesModelLeftSideFinal = sortedModelList;
             }
             
             if (side.Equals("right", StringComparison.CurrentCultureIgnoreCase))
+            {
                 SentOutCasesModelRightSide = sortedModelList;
+                SentOutCasesModelRightSideFinal = sortedModelList;
+            }
 
             if (side.Equals("both", StringComparison.CurrentCultureIgnoreCase))
             {
                 SentOutCasesModelLeftSide = sortedModelList.Where(x => x.Side == "Left").ToList();
                 SentOutCasesModelRightSide = sortedModelList.Where(x => x.Side == "Right").ToList();
+                
+                SentOutCasesModelLeftSideFinal = sortedModelList.Where(x => x.Side == "Left").ToList();
+                SentOutCasesModelRightSideFinal = sortedModelList.Where(x => x.Side == "Right").ToList();
             }
         }
         catch (Exception ex)

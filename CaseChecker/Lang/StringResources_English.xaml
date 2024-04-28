@@ -50,6 +50,7 @@
     <system:String x:Key="cases">case(s)</system:String>
 
     <system:String x:Key="openDebugWindow">Open Debug Panel</system:String>
+    <system:String x:Key="search">SEARCH</system:String>
 
     <!-- MainViewModel -->
     <system:String x:Key="due">Due</system:String>

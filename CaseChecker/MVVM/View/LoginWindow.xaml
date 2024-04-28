@@ -9,7 +9,9 @@
         WindowStyle="None"
         ResizeMode="NoResize"
         AllowsTransparency="True"
-        Title="CaseChecker for Stats" Height="500" Width="400"
+        Title="CaseChecker for Stats"
+        Height="500"
+        Width="400"
         Icon="/Images/new_logo.png">
 
     <Window.Background>
@@ -34,10 +36,10 @@
                     Value="Beige" />
             <Setter Property="BorderThickness"
                     Value="1" />
-            
+
             <Setter Property="Cursor"
                     Value="Hand" />
-            
+
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
@@ -47,8 +49,7 @@
                                 <ContentPresenter x:Name="MyContentPresenter"
                                                   Content="{TemplateBinding Content}"
                                                   HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center" 
-                                                  />
+                                                  VerticalAlignment="Center" />
                             </Grid>
                         </Border>
                     </ControlTemplate>
@@ -62,7 +63,7 @@
                             Value="#46494F" />
                     <Setter Property="Foreground"
                             Value="#CCC" />
-                    
+
                     <Setter Property="BorderBrush"
                             Value="#666" />
                 </Trigger>
@@ -72,23 +73,43 @@
 
     <Grid Margin="0,15,0,0">
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto" />
             <RowDefinition />
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Vertical">
             <Image Source="/Images/new_logo.png"
                    Width="128"
                    Height="128" />
-            <Label Content="Case Checker for Stats" 
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <TextBlock Text="&lt;/"
+                           FontSize="30"
+                           FontWeight="SemiBold"
+                           Foreground="#fa9e9b"
+                           VerticalAlignment="Center" />
+                <TextBlock Text="CaseChecker"
+                           FontSize="30"
+                           FontWeight="SemiBold"
+                           Foreground="White"
+                           VerticalAlignment="Center" />
+                <TextBlock Text="&gt;"
+                           FontSize="30"
+                           FontWeight="SemiBold"
+                           Foreground="#fa9e9b"
+                           VerticalAlignment="Center" />
+            </StackPanel>
+            <Label Content="for Stats"
                    HorizontalAlignment="Center"
-                   FontSize="30"
+                   VerticalAlignment="Bottom"
+                   FontSize="12"
+                   Margin="0,-8,0,0"
                    Foreground="Beige"
-                   FontWeight="SemiBold"/>
+                   FontWeight="SemiBold" />
         </StackPanel>
 
-        <Label Content="╳" 
+        <Label Content="╳"
                Grid.Row="0"
                Foreground="#CCC"
                HorizontalAlignment="Right"
@@ -99,17 +120,16 @@
                Cursor="Hand"
                PreviewMouseDown="Label_PreviewMouseDown"
                Height="35"
-               Width="30"
-               />
+               Width="30" />
 
         <StackPanel Orientation="Vertical"
                     Grid.Row="1"
                     Margin="15,20,15,0">
 
-            <Label Content="{DynamicResource yourDeviceSecret}" 
+            <Label Content="{DynamicResource yourDeviceSecret}"
                    d:Content="Your Device Secret"
-                   Foreground="Beige"/>
-            <TextBox Text="{Binding DeviceId}" 
+                   Foreground="Beige" />
+            <TextBox Text="{Binding DeviceId}"
                      IsReadOnly="True"
                      Margin="4,0,4,0"
                      FontSize="14"
@@ -121,7 +141,7 @@
             <Label Content="{DynamicResource serverAddress}"
                    d:Content="Server Address"
                    Foreground="Beige"
-                   Margin="0,20,0,0"/>
+                   Margin="0,20,0,0" />
             <TextBox Text="{Binding ServerAddress, Mode=TwoWay}"
                      Margin="4,0,4,0"
                      FontSize="14"
@@ -129,8 +149,7 @@
                      Background="#46494F"
                      BorderBrush="Beige"
                      Foreground="BlanchedAlmond"
-                     IsEnabled="{Binding IsNotWorking, Mode=TwoWay}"
-                     />
+                     IsEnabled="{Binding IsNotWorking, Mode=TwoWay}" />
 
             <Button Content="{DynamicResource connectToServer}"
                     d:Content="Connect to server"
@@ -140,22 +159,21 @@
                     BorderBrush="Beige"
                     Style="{StaticResource ConnectButton}"
                     IsEnabled="{Binding IsNotWorking, Mode=TwoWay}"
-                    Command="{Binding ConnectToServerCommand}"
-                    />
+                    Command="{Binding ConnectToServerCommand}" />
 
             <Label Content="{Binding Messages}"
                    d:Content="Info / Error Messages"
                    HorizontalAlignment="Center"
                    Foreground="{Binding MessagesColor}"
-                   d:Foreground="LightGreen"/>
+                   d:Foreground="LightGreen" />
         </StackPanel>
 
-        <Label Content="Made by AmL - 2024" 
+        <Label Content="Made by AmL - 2024"
                Grid.Row="2"
                FontSize="11"
                Foreground="#999"
                HorizontalAlignment="Center"
                x:Name="labelMadeByAmL"
-               MouseDoubleClick="labelMadeByAmL_MouseDoubleClick"/>
+               MouseDoubleClick="labelMadeByAmL_MouseDoubleClick" />
     </Grid>
 </Window>

@@ -50,6 +50,7 @@
     <system:String x:Key="cases">案例</system:String>
 
     <system:String x:Key="openDebugWindow">打开调试面板</system:String>
+    <system:String x:Key="search">搜索</system:String>
 
     <!-- MainViewModel -->
     <system:String x:Key="due">到期的</system:String>

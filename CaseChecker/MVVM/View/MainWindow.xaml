@@ -25,7 +25,7 @@
         Icon="/Images/new_logo.png">
 
     <Window.Background>
-        <SolidColorBrush Opacity="0.97"/>
+        <SolidColorBrush Opacity="0.97" />
     </Window.Background>
 
     <Window.DataContext>
@@ -57,6 +57,7 @@
             <converter:SwitchLanguageInToolTipConverter x:Key="SwitchLanguageInToolTipConverter" />
             <converter:AccessLevelToVisibilityConverter x:Key="AccessLevelToVisibilityConverter" />
             <converter:CountToColorConverter x:Key="CountToColorConverter" />
+            <converter:ZeroToCollapsedVisibilityConverter x:Key="ZeroToCollapsedVisibilityConverter" />
 
             <Style x:Key="lvHeaderStyle"
                    TargetType="{x:Type GridViewColumnHeader}">
@@ -109,6 +110,194 @@
                        Margin="10,0,6,0" />
             </DataTemplate>
 
+            <ControlTemplate x:Key="ComboBoxToggleButton"
+                             TargetType="{x:Type ToggleButton}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="18" />
+                    </Grid.ColumnDefinitions>
+                    <Border x:Name="Border"
+                            Grid.ColumnSpan="2"
+                            CornerRadius="0"
+                            Background="#76797F"
+                            BorderBrush="#FF97A0A5"
+                            BorderThickness="1" />
+                    <Border Grid.Column="0"
+                            CornerRadius="0"
+                            Margin="1"
+                            Background="#76797F"
+                            BorderBrush="#FF97A0A5"
+                            BorderThickness="0,0,1,0" />
+                    <Path x:Name="Arrow"
+                          Grid.Column="1"
+                          Fill="BlanchedAlmond"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          Data="M0,0 L0,2 L4,6 L8,2 L8,0 L4,4 z" />
+                </Grid>
+                
+            </ControlTemplate>
+
+            <ControlTemplate x:Key="ComboBoxTextBox"
+                             TargetType="{x:Type TextBox}">
+                <Border x:Name="PART_ContentHost"
+                        Focusable="False"
+                        Background="{TemplateBinding Background}" />
+            </ControlTemplate>
+
+            <Style x:Key="{x:Type ComboBox}"
+                   TargetType="{x:Type ComboBox}">
+                <Setter Property="SnapsToDevicePixels"
+                        Value="true" />
+                <Setter Property="OverridesDefaultStyle"
+                        Value="true" />
+                <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"
+                        Value="Auto" />
+                <Setter Property="ScrollViewer.VerticalScrollBarVisibility"
+                        Value="Auto" />
+                <Setter Property="ScrollViewer.CanContentScroll"
+                        Value="true" />
+                <Setter Property="MinWidth"
+                        Value="72" />
+                <Setter Property="MinHeight"
+                        Value="18" />
+                <Setter Property="Foreground"
+                        Value="Beige" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ComboBox}">
+                            <Grid>
+                                <ToggleButton Name="ToggleButton"
+                                              Template="{StaticResource ComboBoxToggleButton}"
+                                              Grid.Column="2"
+                                              Focusable="false"
+                                              IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
+                                              ClickMode="Press">
+                                </ToggleButton>
+                                <ContentPresenter Name="ContentSite"
+                                                  IsHitTestVisible="False"
+                                                  Content="{TemplateBinding SelectionBoxItem}"
+                                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                  ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                                  Margin="3,3,23,3"
+                                                  VerticalAlignment="Center"
+                                                  HorizontalAlignment="Left" />
+                                <TextBox x:Name="PART_EditableTextBox"
+                                         Style="{x:Null}"
+                                         Template="{StaticResource ComboBoxTextBox}"
+                                         HorizontalAlignment="Left"
+                                         VerticalAlignment="Center"
+                                         Margin="3,3,23,3"
+                                         Focusable="True"
+                                         Background="#76797F"
+                                         Foreground="Green"
+                                         Visibility="Hidden"
+                                         IsReadOnly="{TemplateBinding IsReadOnly}" />
+                                <Popup Name="Popup"
+                                       Placement="Bottom"
+                                       IsOpen="{TemplateBinding IsDropDownOpen}"
+                                       AllowsTransparency="True"
+                                       Focusable="False"
+                                       PopupAnimation="Slide">
+
+                                    <Grid Name="DropDown"
+                                          SnapsToDevicePixels="True"
+                                          MinWidth="{TemplateBinding ActualWidth}"
+                                          MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                        <Border x:Name="DropDownBorder"
+                                                Background="#FF3F3F3F"
+                                                BorderThickness="1"
+                                                BorderBrush="#888888" />
+                                        <ScrollViewer Margin="4,6,4,6"
+                                                      SnapsToDevicePixels="True">
+                                            <StackPanel IsItemsHost="True"
+                                                        KeyboardNavigation.DirectionalNavigation="Contained" />
+                                        </ScrollViewer>
+                                    </Grid>
+                                </Popup>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="HasItems"
+                                         Value="false">
+                                    <Setter TargetName="DropDownBorder"
+                                            Property="MinHeight"
+                                            Value="95" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled"
+                                         Value="false">
+                                    <Setter Property="Foreground"
+                                            Value="#888888" />
+                                </Trigger>
+                                <Trigger Property="IsGrouping"
+                                         Value="true">
+                                    <Setter Property="ScrollViewer.CanContentScroll"
+                                            Value="false" />
+                                </Trigger>
+                                <Trigger SourceName="Popup"
+                                         Property="Popup.AllowsTransparency"
+                                         Value="true">
+                                    <Setter TargetName="DropDownBorder"
+                                            Property="CornerRadius"
+                                            Value="0" />
+                                    <Setter TargetName="DropDownBorder"
+                                            Property="Margin"
+                                            Value="0,2,0,0" />
+                                </Trigger>
+                                <Trigger Property="IsEditable"
+                                         Value="true">
+                                    <Setter Property="IsTabStop"
+                                            Value="false" />
+                                    <Setter TargetName="PART_EditableTextBox"
+                                            Property="Visibility"
+                                            Value="Visible" />
+                                    <Setter TargetName="ContentSite"
+                                            Property="Visibility"
+                                            Value="Hidden" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                </Style.Triggers>
+            </Style>
+
+            <!-- SimpleStyles: ComboBoxItem -->
+            <Style x:Key="{x:Type ComboBoxItem}"
+                   TargetType="{x:Type ComboBoxItem}">
+                <Setter Property="SnapsToDevicePixels"
+                        Value="true" />
+                <Setter Property="Foreground"
+                        Value="Beige" />
+                <Setter Property="OverridesDefaultStyle"
+                        Value="true" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                            <Border Name="Border"
+                                    Padding="2"
+                                    SnapsToDevicePixels="true">
+                                <ContentPresenter />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsHighlighted"
+                                         Value="true">
+                                    <Setter TargetName="Border"
+                                            Property="Background"
+                                            Value="#96999F" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled"
+                                         Value="false">
+                                    <Setter Property="Foreground"
+                                            Value="#888888" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
             <Style TargetType="Button"
                    x:Key="UpdateButton">
                 <Setter Property="OverridesDefaultStyle"
@@ -118,7 +307,7 @@
                 <Setter Property="Foreground"
                         Value="Beige" />
                 <Setter Property="BorderBrush"
-                        Value="BlanchedAlmond" />
+                        Value="#FF97A0A5" />
                 <Setter Property="BorderThickness"
                         Value="1" />
 
@@ -155,11 +344,11 @@
                     <Trigger Property="IsMouseOver"
                              Value="True">
                         <Setter Property="Background"
-                                Value="#96999F" />
+                                Value="#86898F" />
                         <Setter Property="Foreground"
                                 Value="BlanchedAlmond" />
                         <Setter Property="BorderBrush"
-                                Value="Yellow" />
+                                Value="BlanchedAlmond" />
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -172,7 +361,7 @@
             Background="#56595F"
             Opacity="0.97"
             ClipToBounds="True">
-            
+
         <Grid Margin="4,0,4,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="35" />
@@ -364,12 +553,34 @@
                                Margin="6,0,0,0" />
 
 
-                        <TextBlock Text="{Binding SiteID, StringFormat='Case Checker for Stats 2024 - {0}'}"
-                                   FontSize="14"
-                                   Foreground="Beige"
-                                   VerticalAlignment="Center"
-                                   PreviewMouseDown="TitleBar_PreviewMouseDown"
-                                   Margin="8,0" />
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="8,0"
+                                    PreviewMouseDown="TitleBar_PreviewMouseDown">
+
+                            <TextBlock Text="&lt;/"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
+                                       Foreground="#fa9e9b"
+                                       VerticalAlignment="Center" />
+                            <TextBlock Text="CaseChecker"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
+                                       Foreground="White"
+                                       VerticalAlignment="Center" />
+                            <TextBlock Text="&gt;"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
+                                       Foreground="#fa9e9b"
+                                       VerticalAlignment="Center" />
+                            <TextBlock Text=" for Stats 2024 - "
+                                       FontSize="11"
+                                       Foreground="Beige"
+                                       VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding SiteID}"
+                                       FontSize="14"
+                                       Foreground="Beige"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
                     </StackPanel>
 
                 </Border>
@@ -474,12 +685,63 @@
                   Margin="2,0,2,0">
 
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="23" />
                     <RowDefinition />
                     <RowDefinition Height="66" />
                 </Grid.RowDefinitions>
 
+                <Border BorderBrush="BlanchedAlmond"
+                        Margin="0,0,0,3"
+                        Background="OldLace"
+                        BorderThickness="1">
+
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{DynamicResource search}"
+                                   d:Text="SEARCH"
+                                   Foreground="#888"
+                                   FontSize="10"
+                                   FontWeight="SemiBold"
+                                   Padding="7,0"
+                                   VerticalAlignment="Center" />
+
+                        <TextBox Text="{Binding SeachLeftSide, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Grid.Column="1"
+                                 BorderThickness="0"
+                                 Background="Transparent"
+                                 Padding="4,0,0,0">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="KeyDown">
+                                    <i:InvokeCommandAction Command="{Binding LeftSideFilterCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+
+                        <TextBlock Text="╳"
+                                   Grid.Column="2"
+                                   Foreground="Maroon"
+                                   FontSize="10"
+                                   FontWeight="SemiBold"
+                                   Padding="10,0"
+                                   Margin="0,-2,0,0"
+                                   Cursor="Hand"
+                                   Visibility="{Binding SeachLeftSide, Converter={StaticResource TextToVisibilityConverter}}"
+                                   VerticalAlignment="Center">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseDown">
+                                    <i:InvokeCommandAction Command="{Binding ClearLeftSideFilterCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBlock>
+                    </Grid>
+                </Border>
+
                 <Grid Grid.Column="0"
-                      Grid.Row="0"
+                      Grid.Row="1"
                       Background="White">
                     <Image Source="/Images/new_logo.png"
                            Panel.ZIndex="1"
@@ -510,11 +772,11 @@
                              Margin="4,2,-2,-8" />
                 </Grid>
 
-                <ListView ItemsSource="{Binding SentOutCasesModelLeftSide}"
+                <ListView ItemsSource="{Binding SentOutCasesModelLeftSideFinal}"
                           ItemContainerStyle="{StaticResource LvItemLeft}"
                           x:Name="listViewLeft"
                           AlternationCount="2"
-                          Grid.Row="0"
+                          Grid.Row="1"
                           Panel.ZIndex="2"
                           BorderBrush="Beige"
                           Opacity="0.96"
@@ -626,8 +888,8 @@
                     </ListView.GroupStyle>
                 </ListView>
 
-                <Border Grid.Row="1"
-                        Grid.Column="0"
+                <Border Grid.Row="2"
+                        Grid.Column="1"
                         BorderThickness="1"
                         Margin="0,4,0,0"
                         BorderBrush="#BBB">
@@ -679,9 +941,10 @@
                                Grid.RowSpan="2"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
+                               Visibility="{Binding TotalUnitsLeftSideFinal, Converter={StaticResource ZeroToCollapsedVisibilityConverter}}"
                                Margin="-65,0,0,0" />
 
-                        
+
                         <core:OutlinedTextBlock Text="{Binding TotalUnitsLeftSideFinal}"
                                                 Grid.Column="0"
                                                 Stroke="#333"
@@ -691,6 +954,7 @@
                                                 Fill="Yellow"
                                                 StrokeThickness="1"
                                                 HorizontalAlignment="Center"
+                                                Visibility="{Binding TotalUnitsLeftSideFinal, Converter={StaticResource ZeroToCollapsedVisibilityConverter}}"
                                                 Margin="3,-8,3,0" />
                         <d:Label Grid.Column="0"
                                  Content="13"
@@ -705,6 +969,7 @@
                                Margin="0,-8,0,0"
                                FontSize="10"
                                Foreground="Yellow"
+                               Visibility="{Binding TotalUnitsLeftSideFinal, Converter={StaticResource ZeroToCollapsedVisibilityConverter}}"
                                HorizontalAlignment="Center" />
 
 
@@ -715,8 +980,9 @@
                                Grid.Column="1"
                                Grid.RowSpan="2"
                                HorizontalAlignment="Center"
-                               VerticalAlignment="Center" 
-                               Margin="-50,0,0,0"/>
+                               VerticalAlignment="Center"
+                               Visibility="{Binding TotalCrownsLeftSideFinal, Converter={StaticResource ZeroToCollapsedVisibilityConverter}}"
+                               Margin="-50,0,0,0" />
                         <core:OutlinedTextBlock Text="{Binding TotalCrownsLeftSideFinal}"
                                                 Grid.Column="1"
                                                 Stroke="#333"
@@ -726,6 +992,7 @@
                                                 Fill="PaleTurquoise"
                                                 HorizontalAlignment="Center"
                                                 StrokeThickness="1"
+                                                Visibility="{Binding TotalCrownsLeftSideFinal, Converter={StaticResource ZeroToCollapsedVisibilityConverter}}"
                                                 Margin="3" />
                         <d:Label Grid.Column="1"
                                  Content="13"
@@ -741,6 +1008,7 @@
                                Margin="0,-8,0,0"
                                FontSize="10"
                                Foreground="PaleTurquoise"
+                               Visibility="{Binding TotalCrownsLeftSideFinal, Converter={StaticResource ZeroToCollapsedVisibilityConverter}}"
                                HorizontalAlignment="Center" />
 
                         <Image Source="/Images/abutment.png"
@@ -751,6 +1019,7 @@
                                Grid.RowSpan="2"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
+                               Visibility="{Binding TotalAbutmentsLeftSideFinal, Converter={StaticResource ZeroToCollapsedVisibilityConverter}}"
                                Margin="-50,0,0,0" />
                         <core:OutlinedTextBlock Text="{Binding TotalAbutmentsLeftSideFinal}"
                                                 Grid.Column="2"
@@ -761,6 +1030,7 @@
                                                 Fill="PaleVioletRed"
                                                 StrokeThickness="1"
                                                 HorizontalAlignment="Center"
+                                                Visibility="{Binding TotalAbutmentsLeftSideFinal, Converter={StaticResource ZeroToCollapsedVisibilityConverter}}"
                                                 Margin="3" />
                         <d:Label Grid.Column="2"
                                  Content="13"
@@ -776,6 +1046,7 @@
                                Margin="0,-8,0,0"
                                FontSize="10"
                                Foreground="Pink"
+                               Visibility="{Binding TotalAbutmentsLeftSideFinal, Converter={StaticResource ZeroToCollapsedVisibilityConverter}}"
                                HorizontalAlignment="Center" />
 
                         <Image Source="/Images/i33.png"
@@ -854,8 +1125,7 @@
                                                         FontWeight="SemiBold"
                                                         Fill="Salmon"
                                                         StrokeThickness="1"
-                                                        HorizontalAlignment="Left"
-                                                        />
+                                                        HorizontalAlignment="Left" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal"
@@ -876,9 +1146,7 @@
                                                         FontWeight="SemiBold"
                                                         Fill="Yellow"
                                                         StrokeThickness="1"
-                                                        HorizontalAlignment="Left"
-                                                        
-                                                         />
+                                                        HorizontalAlignment="Left" />
                             </StackPanel>
 
                             <d:Label Grid.Column="0"
@@ -942,15 +1210,13 @@
                                        Margin="0,0,2,0"
                                        VerticalAlignment="Center" />
                                 <core:OutlinedTextBlock Text="{Binding TotalOrdersLeftOversLeftSideFinal}"
-                                                        
                                                         Stroke="#333"
                                                         StrokePosition="Outside"
                                                         FontSize="16"
                                                         FontWeight="SemiBold"
                                                         Fill="Salmon"
                                                         StrokeThickness="1"
-                                                        HorizontalAlignment="Left"
-                                                         />
+                                                        HorizontalAlignment="Left" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal"
@@ -965,15 +1231,13 @@
                                        Margin="0,-5,2,0"
                                        VerticalAlignment="Center" />
                                 <core:OutlinedTextBlock Text="{Binding TotalOrdersTodayLeftSideFinal}"
-                                                        
                                                         Stroke="#333"
                                                         StrokePosition="Outside"
                                                         FontSize="16"
                                                         FontWeight="SemiBold"
                                                         Fill="Yellow"
                                                         StrokeThickness="1"
-                                                        HorizontalAlignment="Left"
-                                                         />
+                                                        HorizontalAlignment="Left" />
                             </StackPanel>
 
                             <d:Label Grid.Column="0"
@@ -1018,12 +1282,13 @@
                   Margin="2,0,2,0">
 
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="23" />
                     <RowDefinition />
                     <RowDefinition Height="66" />
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Column="0"
-                      Grid.Row="0"
+                      Grid.Row="1"
                       Background="White">
                     <Image Source="/Images/new_logo.png"
                            Panel.ZIndex="1"
@@ -1054,14 +1319,64 @@
                              Margin="4,2,-2,-8" />
                 </Grid>
 
-                <ListView ItemsSource="{Binding SentOutCasesModelRightSide}"
+                <Border BorderBrush="BlanchedAlmond"
+                        Margin="0,0,0,3"
+                        Background="OldLace"
+                        BorderThickness="1">
+
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{DynamicResource search}"
+                                   d:Text="SEARCH"
+                                   Foreground="#888"
+                                   FontSize="10"
+                                   FontWeight="SemiBold"
+                                   Padding="7,0"
+                                   VerticalAlignment="Center" />
+
+                        <TextBox Text="{Binding SeachRightSide, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Grid.Column="1"
+                                 BorderThickness="0"
+                                 Background="Transparent"
+                                 Padding="4,0,0,0">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="KeyDown">
+                                    <i:InvokeCommandAction Command="{Binding RightSideFilterCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+
+                        <TextBlock Text="╳"
+                                   Grid.Column="2"
+                                   Foreground="Maroon"
+                                   FontSize="10"
+                                   FontWeight="SemiBold"
+                                   Padding="10,0"
+                                   Margin="0,-2,0,0"
+                                   Cursor="Hand"
+                                   Visibility="{Binding SeachRightSide, Converter={StaticResource TextToVisibilityConverter}}"
+                                   VerticalAlignment="Center">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseDown">
+                                    <i:InvokeCommandAction Command="{Binding ClearRightSideFilterCommand}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBlock>
+                    </Grid>
+                </Border>
+
+                <ListView ItemsSource="{Binding SentOutCasesModelRightSideFinal}"
                           ItemContainerStyle="{StaticResource LvItemRight}"
                           x:Name="listViewRight"
                           AlternationCount="2"
                           Panel.ZIndex="2"
                           BorderBrush="Beige"
                           Opacity="0.96"
-                          Grid.Row="0"
+                          Grid.Row="1"
                           SizeChanged="listViewRight_SizeChanged">
                     <ListView.Resources>
                         <Style TargetType="{x:Type GridViewColumnHeader}">
@@ -1150,7 +1465,7 @@
                     </ListView.GroupStyle>
                 </ListView>
 
-                <Border Grid.Row="1"
+                <Border Grid.Row="2"
                         Grid.Column="0"
                         BorderThickness="1"
                         Margin="0,4,0,0"
@@ -1204,6 +1519,7 @@
                                Grid.RowSpan="2"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
+                               Visibility="{Binding TotalUnitsRightSideFinal, Converter={StaticResource ZeroToCollapsedVisibilityConverter}}"
                                Margin="-65,0,0,0" />
 
 
@@ -1216,6 +1532,7 @@
                                                 Fill="Yellow"
                                                 StrokeThickness="1"
                                                 HorizontalAlignment="Center"
+                                                Visibility="{Binding TotalUnitsRightSideFinal, Converter={StaticResource ZeroToCollapsedVisibilityConverter}}"
                                                 Margin="3,-8,3,0" />
                         <d:Label Grid.Column="0"
                                  Content="13"
@@ -1230,6 +1547,7 @@
                                Margin="0,-8,0,0"
                                FontSize="10"
                                Foreground="Yellow"
+                               Visibility="{Binding TotalUnitsRightSideFinal, Converter={StaticResource ZeroToCollapsedVisibilityConverter}}"
                                HorizontalAlignment="Center" />
 
 
@@ -1241,6 +1559,7 @@
                                Grid.RowSpan="2"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
+                               Visibility="{Binding TotalCrownsRightSideFinal, Converter={StaticResource ZeroToCollapsedVisibilityConverter}}"
                                Margin="-50,0,0,0" />
                         <core:OutlinedTextBlock Text="{Binding TotalCrownsRightSideFinal}"
                                                 Grid.Column="1"
@@ -1251,6 +1570,7 @@
                                                 Fill="PaleTurquoise"
                                                 HorizontalAlignment="Center"
                                                 StrokeThickness="1"
+                                                Visibility="{Binding TotalCrownsRightSideFinal, Converter={StaticResource ZeroToCollapsedVisibilityConverter}}"
                                                 Margin="3" />
                         <d:Label Grid.Column="1"
                                  Content="13"
@@ -1266,6 +1586,7 @@
                                Margin="0,-8,0,0"
                                FontSize="10"
                                Foreground="PaleTurquoise"
+                               Visibility="{Binding TotalCrownsRightSideFinal, Converter={StaticResource ZeroToCollapsedVisibilityConverter}}"
                                HorizontalAlignment="Center" />
 
                         <Image Source="/Images/abutment.png"
@@ -1276,6 +1597,7 @@
                                Grid.RowSpan="2"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
+                               Visibility="{Binding TotalAbutmentsRightSideFinal, Converter={StaticResource ZeroToCollapsedVisibilityConverter}}"
                                Margin="-50,0,0,0" />
                         <core:OutlinedTextBlock Text="{Binding TotalAbutmentsRightSideFinal}"
                                                 Grid.Column="2"
@@ -1286,6 +1608,7 @@
                                                 Fill="PaleVioletRed"
                                                 StrokeThickness="1"
                                                 HorizontalAlignment="Center"
+                                                Visibility="{Binding TotalAbutmentsRightSideFinal, Converter={StaticResource ZeroToCollapsedVisibilityConverter}}"
                                                 Margin="3" />
                         <d:Label Grid.Column="2"
                                  Content="13"
@@ -1301,6 +1624,7 @@
                                Margin="0,-8,0,0"
                                FontSize="10"
                                Foreground="Pink"
+                               Visibility="{Binding TotalAbutmentsRightSideFinal, Converter={StaticResource ZeroToCollapsedVisibilityConverter}}"
                                HorizontalAlignment="Center" />
 
                         <Image Source="/Images/i33.png"
@@ -1311,6 +1635,7 @@
                                Grid.RowSpan="2"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
+                               Visibility="{Binding TotalOrdersRightSideFinal, Converter={StaticResource ZeroToCollapsedVisibilityConverter}}"
                                Margin="-65,0,0,0" />
                         <core:OutlinedTextBlock Text="{Binding TotalOrdersRightSideFinal}"
                                                 Grid.Column="3"
@@ -1321,6 +1646,7 @@
                                                 Fill="LightGreen"
                                                 StrokeThickness="1"
                                                 HorizontalAlignment="Center"
+                                                Visibility="{Binding TotalOrdersRightSideFinal, Converter={StaticResource ZeroToCollapsedVisibilityConverter}}"
                                                 Margin="3,-8,3,0" />
                         <d:Label Grid.Column="3"
                                  Content="13"
@@ -1336,6 +1662,7 @@
                                Margin="0,-8,0,0"
                                FontSize="10"
                                Foreground="LightGreen"
+                               Visibility="{Binding TotalOrdersRightSideFinal, Converter={StaticResource ZeroToCollapsedVisibilityConverter}}"
                                HorizontalAlignment="Center" />
 
 
@@ -1527,7 +1854,7 @@
             </Grid>
 
 
-            <Grid Grid.Row="2" 
+            <Grid Grid.Row="2"
                   Grid.Column="0"
                   Grid.ColumnSpan="2"
                   Panel.ZIndex="100"
@@ -1535,8 +1862,8 @@
                   d:Visibility="Visible"
                   Margin="1,0,1,1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="2*" />
                 </Grid.RowDefinitions>
                 <Label Content="╳"
                        Grid.Row="1"
@@ -1553,8 +1880,7 @@
                        Width="30" />
                 <ListView ItemsSource="{Binding DebugMessages}"
                           Grid.Row="1"
-                          Background="AntiqueWhite"
-                          />
+                          Background="AntiqueWhite" />
             </Grid>
 
             <StackPanel Orientation="Horizontal"
@@ -1584,7 +1910,7 @@
                        Margin="0,-1,0,0" />
                 <Button Grid.Row="2"
                         Width="70"
-                        Height="16"
+                        Height="18"
                         HorizontalAlignment="Left"
                         Margin="2,0,0,0"
                         FontSize="8"
@@ -1599,10 +1925,9 @@
                        FontSize="9"
                        Foreground="Beige"
                        Margin="15,-1,0,0" />
-                <ComboBox Margin="0,2,4,2"
+                <ComboBox Margin="0,0,4,0"
                           FontSize="9"
-                          Width="64"
-                          Padding="3,2,0,0"
+                          Height="18"
                           SelectedIndex="{Binding OrderByIndex, Mode=TwoWay}">
                     <ComboBoxItem Content="{DynamicResource unitCount}"
                                   d:Content="Unit count" />
@@ -1622,7 +1947,7 @@
                         Margin="0,0,10,0"
                         FontSize="8"
                         Width="70"
-                        Height="16"
+                        Height="18"
                         Command="{Binding OpenUpAdminWindowCommand}"
                         Visibility="{Binding AccessLevel, Converter={StaticResource AccessLevelToVisibilityConverter}}" />
 
@@ -1678,6 +2003,6 @@
                        d:Content="Made by AmL - v1.0 000000b" />
             </StackPanel>
         </Grid>
-        
+
     </Border>
 </Window>
