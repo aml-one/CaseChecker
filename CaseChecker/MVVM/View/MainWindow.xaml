@@ -25,7 +25,7 @@
         Icon="/Images/new_logo.png">
 
     <Window.Background>
-        <SolidColorBrush Opacity="0.94" />
+        <SolidColorBrush Opacity="0.97"/>
     </Window.Background>
 
     <Window.DataContext>
@@ -169,7 +169,10 @@
     <Border CornerRadius="8"
             BorderThickness="0.5"
             BorderBrush="Black"
-            Background="#56595F">
+            Background="#56595F"
+            Opacity="0.97"
+            ClipToBounds="True">
+            
         <Grid Margin="4,0,4,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="35" />
@@ -776,8 +779,8 @@
                                HorizontalAlignment="Center" />
 
                         <Image Source="/Images/i33.png"
-                               Width="40"
-                               Height="40"
+                               Width="50"
+                               Height="50"
                                Opacity="0.7"
                                Grid.Column="3"
                                Grid.RowSpan="2"
@@ -1301,8 +1304,8 @@
                                HorizontalAlignment="Center" />
 
                         <Image Source="/Images/i33.png"
-                               Width="40"
-                               Height="40"
+                               Width="50"
+                               Height="50"
                                Opacity="0.7"
                                Grid.Column="3"
                                Grid.RowSpan="2"
@@ -1675,5 +1678,6 @@
                        d:Content="Made by AmL - v1.0 000000b" />
             </StackPanel>
         </Grid>
+        
     </Border>
 </Window>

@@ -1249,7 +1249,15 @@ public partial class MainViewModel : ObservableObject
                     if (model.CommentIn3Shape.Contains("Exported from iTero system"))
                         model.CommentIn3Shape = "";
                     else if (!string.IsNullOrEmpty(model.CommentIn3Shape))
+                    {
+                        string comment = model.CommentIn3Shape;
+                        foreach (var line in comment.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
+                        {
+                            if (!line.StartsWith("This case is a copy of") || !line.StartsWith("Renamed file of:"))
+                                model.CommentIn3Shape = line + Environment.NewLine;
+                        }
                         model.CommentIn3Shape = char.ToUpper(model.CommentIn3Shape[0]) + model.CommentIn3Shape.Substring(1);
+                    }
 
 
 

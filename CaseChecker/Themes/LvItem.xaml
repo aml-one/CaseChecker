@@ -135,7 +135,7 @@
                                         VerticalAlignment="Top"
                                         HorizontalAlignment="Left"
                                         Grid.Column="2"
-                                        Margin="4,-2,0,0"
+                                        Margin="6,-2,0,0"
                                         Visibility="{Binding Crowns, Converter={StaticResource TextToVisibilityConverter}}">
                                 <Grid Visibility="{Binding ScrewRetained, Converter={StaticResource BoolToInverseVisibilityConverter}}">
                                     <Image Source="\Images\crown.png"
@@ -348,7 +348,7 @@
                                         VerticalAlignment="Top"
                                         HorizontalAlignment="Left"
                                         Grid.Column="2"
-                                        Margin="4,-2,0,0"
+                                        Margin="6,-2,0,0"
                                         Visibility="{Binding Crowns, Converter={StaticResource TextToVisibilityConverter}}">
                                 <Grid Visibility="{Binding ScrewRetained, Converter={StaticResource BoolToInverseVisibilityConverter}}">
                                     <Image Source="\Images\crown.png"
