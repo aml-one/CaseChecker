@@ -54,6 +54,7 @@
             <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
             <converter:BoolToInverseVisibilityConverter x:Key="BoolToInverseVisibilityConverter" />
             <converter:StringToUriConverter x:Key="StringToUriConverter" />
+            <converter:LanguageToFlagConverter x:Key="LanguageToFlagConverter" />
             <converter:SwitchLanguageInToolTipConverter x:Key="SwitchLanguageInToolTipConverter" />
             <converter:AccessLevelToVisibilityConverter x:Key="AccessLevelToVisibilityConverter" />
             <converter:CountToColorConverter x:Key="CountToColorConverter" />
@@ -375,6 +376,20 @@
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
 
+            <Image Source="{Binding Language, Converter={StaticResource LanguageToFlagConverter}}"
+                   d:Source="\Images\English.png"
+                   Margin="60,-35,190,0"
+                   Panel.ZIndex="-1"
+                   Opacity="0.05"
+                   Width="150"
+                   Height="150"
+                   HorizontalAlignment="Left"
+                   Grid.Column="0"
+                   Grid.RowSpan="2"
+                   />
+
+
+
             <ProgressBar IsIndeterminate="True"
                          Grid.ColumnSpan="2"
                          Grid.RowSpan="2"
@@ -428,6 +443,7 @@
                             Foreground="Beige"
                             Background="Transparent"
                             BorderThickness="0"
+                            IsTabStop="False"
                             Click="BtnMinimize_Click">
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
@@ -468,6 +484,7 @@
                             Foreground="Beige"
                             Background="Transparent"
                             BorderThickness="0"
+                            IsTabStop="False"
                             Click="BtnMaximize_Click">
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
@@ -506,6 +523,7 @@
                             Foreground="Beige"
                             Background="Transparent"
                             BorderThickness="0"
+                            IsTabStop="False"
                             Click="BtnCloseApplication_Click">
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
