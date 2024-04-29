@@ -1271,6 +1271,8 @@ public partial class MainViewModel : ObservableObject
                         }
                     }
 
+                    model.OriginalSentOnForChangedSentOn = model.SentOn;
+
                     model.IconImage = GetIcon(model.ScanSource!, model.CommentIcon!);
 
                     if (Language == "Chinese")

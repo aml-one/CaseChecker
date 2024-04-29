@@ -130,6 +130,8 @@ namespace CaseChecker.MVVM.View
             }
             else
             {
+                WindowStartupLocation = WindowStartupLocation.CenterScreen;
+             
                 if (LoginViewModel.Instance.AccessLevel.Equals("both", StringComparison.CurrentCultureIgnoreCase))
                     this.Width = 1200;
                 else

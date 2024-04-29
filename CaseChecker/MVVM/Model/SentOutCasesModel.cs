@@ -23,6 +23,7 @@ public class SentOutCasesModel
     public string? IconImage { get; set; }
 
     public string? TotalUnitsWithPrefixZero { get; set; } = "0";
+    public string? OriginalSentOnForChangedSentOn { get; set; }
     public string? OriginalSentOn { get; set; }
 
     public string? Redo { get; set; } = "";

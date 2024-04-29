@@ -12,6 +12,7 @@
     <converter:IdiomToImageConverter x:Key="IdiomToImageConverter" />
     <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     <converter:BoolToInverseVisibilityConverter x:Key="BoolToInverseVisibilityConverter" />
+    <converter:EqualToCollapsedVisibilityConverter x:Key="EqualToCollapsedVisibilityConverter" />
 
     <Style TargetType="ListViewItem"
            x:Key="LvItemLeft">
@@ -84,7 +85,7 @@
                                                Margin="0,0,5,0"
                                                Visibility="{Binding Redo, Converter={StaticResource RushToVisibleConverter}}"
                                                TextTrimming="CharacterEllipsis" />
-                                    
+
                                     <TextBlock Text="{Binding ScrewRetainedCaseComment}"
                                                VerticalAlignment="Center"
                                                HorizontalAlignment="Right"
@@ -117,8 +118,8 @@
                                            Foreground="MediumOrchid"
                                            Cursor="Hand"
                                            Visibility="{Binding CommentIn3Shape, Converter={StaticResource TextToVisibilityConverter}}"
-                                           TextTrimming="CharacterEllipsis" 
-                                           TextWrapping="Wrap"/>
+                                           TextTrimming="CharacterEllipsis"
+                                           TextWrapping="Wrap" />
 
                                 <TextBlock Text="{Binding RushForMorningComment}"
                                            VerticalAlignment="Center"
@@ -128,7 +129,7 @@
                                            Foreground="Crimson"
                                            Visibility="{Binding Rush, Converter={StaticResource RushToVisibleConverter}}"
                                            TextTrimming="CharacterEllipsis" />
-                                
+
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal"
@@ -142,20 +143,18 @@
                                            Grid.Column="4"
                                            Width="18"
                                            Height="18"
-                                           Margin="0,0,2,0"
-                                           />
+                                           Margin="0,0,2,0" />
                                 </Grid>
                                 <Grid Visibility="{Binding ScrewRetained, Converter={StaticResource BoolToVisibilityConverter}}">
                                     <Image Source="\Images\screwretained.png"
                                            Grid.Column="4"
                                            Width="18"
                                            Height="18"
-                                           Margin="0,0,2,0"
-                                           />
+                                           Margin="0,0,2,0" />
                                 </Grid>
                                 <TextBlock Text="{Binding Crowns}"
                                            Grid.Column="2"
-                                           FontSize="18"
+                                           FontSize="16"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center" />
                             </StackPanel>
@@ -173,7 +172,7 @@
                                        Visibility="{Binding Abutments, Converter={StaticResource TextToVisibilityConverter}}" />
                                 <TextBlock Text="{Binding Abutments}"
                                            Grid.Column="3"
-                                           FontSize="18"
+                                           FontSize="16"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center" />
                             </StackPanel>
@@ -187,14 +186,23 @@
                                    Height="18"
                                    Visibility="{Binding Models, Converter={StaticResource TextToVisibilityConverter}}" />
 
-                            <TextBlock Text="{Binding SentOn, Converter={StaticResource RemoveFirstCharFromStringIfItsZConverter}}"
-                                       Grid.Column="5"
-                                       VerticalAlignment="Top"
-                                       HorizontalAlignment="Center" />
-
-
-
-
+                            <StackPanel Grid.Column="5"
+                                        VerticalAlignment="Top"
+                                        HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding SentOn, Converter={StaticResource RemoveFirstCharFromStringIfItsZConverter}}" />
+                                <TextBlock Text="{Binding OriginalSentOnForChangedSentOn, Converter={StaticResource RemoveFirstCharFromStringIfItsZConverter}}"
+                                           FontSize="10"
+                                           HorizontalAlignment="Center"
+                                           Foreground="{Binding CommentColor}">
+                                    <TextBlock.Visibility>
+                                        <MultiBinding StringFormat=" {0}, {1}"
+                                                      Converter="{StaticResource EqualToCollapsedVisibilityConverter}">
+                                            <Binding Path="SentOn" />
+                                            <Binding Path="OriginalSentOnForChangedSentOn" />
+                                        </MultiBinding>
+                                    </TextBlock.Visibility>
+                                </TextBlock>
+                            </StackPanel>
 
                         </Grid>
 
@@ -280,7 +288,7 @@
                                                HorizontalAlignment="Left"
                                                Visibility="{Binding Rush, Converter={StaticResource RushToVisibleConverter}}"
                                                TextTrimming="CharacterEllipsis" />
-                                    
+
 
                                     <TextBlock Text="{Binding OrderDesignedComment}"
                                                VerticalAlignment="Center"
@@ -298,7 +306,7 @@
                                                Margin="0,0,5,0"
                                                Visibility="{Binding Redo, Converter={StaticResource RushToVisibleConverter}}"
                                                TextTrimming="CharacterEllipsis" />
-                                    
+
                                     <TextBlock Text="{Binding ScrewRetainedCaseComment}"
                                                VerticalAlignment="Center"
                                                HorizontalAlignment="Right"
@@ -316,7 +324,7 @@
                                            FontSize="8"
                                            Foreground="Gray"
                                            TextTrimming="CharacterEllipsis"
-                                           TextWrapping="Wrap"/>
+                                           TextWrapping="Wrap" />
                                 <TextBlock Text="{Binding Comment}"
                                            VerticalAlignment="Center"
                                            Margin="5,-2,10,0"
@@ -332,7 +340,7 @@
                                            Cursor="Hand"
                                            Visibility="{Binding CommentIn3Shape, Converter={StaticResource TextToVisibilityConverter}}"
                                            TextTrimming="CharacterEllipsis"
-                                           TextWrapping="Wrap"/>
+                                           TextWrapping="Wrap" />
 
                                 <TextBlock Text="{Binding RushForMorningComment}"
                                            VerticalAlignment="Center"
@@ -366,7 +374,7 @@
                                 </Grid>
                                 <TextBlock Text="{Binding Crowns}"
                                            Grid.Column="2"
-                                           FontSize="18"
+                                           FontSize="16"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center" />
                             </StackPanel>
@@ -384,11 +392,11 @@
                                        Visibility="{Binding Abutments, Converter={StaticResource TextToVisibilityConverter}}" />
                                 <TextBlock Text="{Binding Abutments}"
                                            Grid.Column="3"
-                                           FontSize="18"
+                                           FontSize="16"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center" />
                             </StackPanel>
-                            
+
 
                             <Image Source="\Images\models.png"
                                    Grid.Column="4"
@@ -397,16 +405,25 @@
                                    Margin="0,1,0,0"
                                    Width="16"
                                    Height="16"
-                                   Visibility="{Binding Models, Converter={StaticResource TextToVisibilityConverter}}"
-                                   />
+                                   Visibility="{Binding Models, Converter={StaticResource TextToVisibilityConverter}}" />
 
-                            <TextBlock Text="{Binding SentOn, Converter={StaticResource RemoveFirstCharFromStringIfItsZConverter}}"
-                                       Grid.Column="5"
-                                       VerticalAlignment="Top"
-                                       HorizontalAlignment="Center" />
-
-
-
+                            <StackPanel Grid.Column="5"
+                                        VerticalAlignment="Top"
+                                        HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding SentOn, Converter={StaticResource RemoveFirstCharFromStringIfItsZConverter}}" />
+                                <TextBlock Text="{Binding OriginalSentOnForChangedSentOn, Converter={StaticResource RemoveFirstCharFromStringIfItsZConverter}}"
+                                           FontSize="10"
+                                           HorizontalAlignment="Center"
+                                           Foreground="{Binding CommentColor}">
+                                    <TextBlock.Visibility>
+                                        <MultiBinding StringFormat=" {0}, {1}"
+                                                      Converter="{StaticResource EqualToCollapsedVisibilityConverter}">
+                                            <Binding Path="SentOn" />
+                                            <Binding Path="OriginalSentOnForChangedSentOn" />
+                                        </MultiBinding>
+                                    </TextBlock.Visibility>
+                                </TextBlock>
+                            </StackPanel>
 
 
                         </Grid>
@@ -438,8 +455,8 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
-    
+
+
     <Style TargetType="ListViewItem"
            x:Key="LvItemDeviceList">
 
@@ -462,7 +479,7 @@
                                         VerticalAlignment="Top">
                                 <Image Source="{Binding Idiom,Converter={StaticResource IdiomToImageConverter}}"
                                        Width="30"
-                                       Height="30"/>
+                                       Height="30" />
                             </StackPanel>
 
                             <StackPanel Grid.Column="1"
@@ -537,7 +554,7 @@
                                                FontSize="7"
                                                Foreground="#666"
                                                Margin="0,0,4,1"
-                                               VerticalAlignment="Bottom"/>
+                                               VerticalAlignment="Bottom" />
                                     <TextBlock Text="{Binding CPU}"
                                                FontSize="9"
                                                Foreground="#999"
@@ -549,11 +566,11 @@
                                                FontSize="7"
                                                Foreground="#666"
                                                Margin="0,0,2,1"
-                                               VerticalAlignment="Bottom"/>
+                                               VerticalAlignment="Bottom" />
                                     <TextBlock Text="{Binding RAM}"
                                                FontSize="9"
                                                Foreground="#999"
-                                               VerticalAlignment="Bottom"/>
+                                               VerticalAlignment="Bottom" />
                                 </StackPanel>
                             </StackPanel>
 
@@ -577,11 +594,10 @@
 
                                 <TextBlock Text="{Binding LastLogin, StringFormat='Seen {0}'}"
                                            VerticalAlignment="Center"
-                                           HorizontalAlignment="Center" 
+                                           HorizontalAlignment="Center"
                                            FontSize="9"
                                            Visibility="{Binding LastLogin, Converter={StaticResource TextToVisibilityConverter}}"
-                                           Foreground="#888"
-                                           />
+                                           Foreground="#888" />
                             </StackPanel>
 
 
