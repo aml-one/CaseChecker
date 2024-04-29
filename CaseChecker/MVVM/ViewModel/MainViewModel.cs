@@ -1295,6 +1295,9 @@ public partial class MainViewModel : ObservableObject
                     if (model.CommentIn3Shape!.Contains(" redo", StringComparison.CurrentCultureIgnoreCase) ||
                         model.CommentIn3Shape!.Contains("redo ", StringComparison.CurrentCultureIgnoreCase) ||
                         model.CommentIn3Shape!.Equals("redo", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.CommentIn3Shape!.Contains("remake ", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.CommentIn3Shape!.Contains(" remake", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.CommentIn3Shape!.Equals("remake", StringComparison.CurrentCultureIgnoreCase) ||
                         model.CommentIn3Shape!.Contains("return to lab", StringComparison.CurrentCultureIgnoreCase) ||
                         model.CommentIn3Shape!.Contains("returned to lab", StringComparison.CurrentCultureIgnoreCase) ||
                         model.CommentIn3Shape!.Contains("open margin", StringComparison.CurrentCultureIgnoreCase))
