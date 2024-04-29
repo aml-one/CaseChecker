@@ -1495,22 +1495,25 @@ public partial class MainViewModel : ObservableObject
             if (side.Equals("left", StringComparison.CurrentCultureIgnoreCase))
             {
                 SentOutCasesModelLeftSide = sortedModelList;
-                SentOutCasesModelLeftSideFinal = sortedModelList;
+                if (string.IsNullOrEmpty(SeachLeftSide))
+                    SentOutCasesModelLeftSideFinal = sortedModelList;
             }
             
             if (side.Equals("right", StringComparison.CurrentCultureIgnoreCase))
             {
                 SentOutCasesModelRightSide = sortedModelList;
-                SentOutCasesModelRightSideFinal = sortedModelList;
+                if (string.IsNullOrEmpty(SeachRightSide))
+                    SentOutCasesModelRightSideFinal = sortedModelList;
             }
 
             if (side.Equals("both", StringComparison.CurrentCultureIgnoreCase))
             {
                 SentOutCasesModelLeftSide = sortedModelList.Where(x => x.Side == "Left").ToList();
                 SentOutCasesModelRightSide = sortedModelList.Where(x => x.Side == "Right").ToList();
-                
-                SentOutCasesModelLeftSideFinal = sortedModelList.Where(x => x.Side == "Left").ToList();
-                SentOutCasesModelRightSideFinal = sortedModelList.Where(x => x.Side == "Right").ToList();
+                if (string.IsNullOrEmpty(SeachLeftSide))
+                    SentOutCasesModelLeftSideFinal = sortedModelList.Where(x => x.Side == "Left").ToList();
+                if (string.IsNullOrEmpty(SeachRightSide))
+                    SentOutCasesModelRightSideFinal = sortedModelList.Where(x => x.Side == "Right").ToList();
             }
         }
         catch (Exception ex)
