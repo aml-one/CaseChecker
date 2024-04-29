@@ -1319,6 +1319,23 @@ public partial class MainViewModel : ObservableObject
                         model.ScrewRetained = true;
                         model.CommentColor = "#b90ffa";
                     }
+                    
+                    if (model.CommentIn3Shape!.Contains(" rush", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.CommentIn3Shape!.Contains("rush ", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.CommentIn3Shape!.Equals("rush", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.CommentIn3Shape!.Contains("expedite ", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.CommentIn3Shape!.Contains(" expedite", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.CommentIn3Shape!.Equals("expedite", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.CommentIn3Shape!.Contains("asap ", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.CommentIn3Shape!.Contains(" asap", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.CommentIn3Shape!.Equals("asap", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.OrderID!.EndsWith("-ASAP", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.OrderID!.EndsWith("-RUSH", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        model.Rush = "1";
+                        model.CommentColor = "Crimson";
+                        model.SentOn = $"0{(string)Lang["rush"]}";
+                    }
 
                     // clearing comment, if it's a standard iTero comment
                     if (model.CommentIn3Shape.Contains("Exported from iTero system"))
