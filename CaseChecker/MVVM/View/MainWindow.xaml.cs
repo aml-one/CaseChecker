@@ -301,14 +301,14 @@ namespace CaseChecker.MVVM.View
             gView.Columns[5].Width = 110;
         }
 
-        private void listViewRight_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void listViewRight_SizeChanged(object? sender, SizeChangedEventArgs e)
         {
             ListView listView = sender as ListView;
-            GridView gView = listView.View as GridView;
+            GridView gView = listView.View! as GridView;
 
             var workingWidth = listView.ActualWidth - SystemParameters.VerticalScrollBarWidth; // take into account vertical scrollbar
 
-            gView.Columns[0].Width = 34;
+            gView!.Columns[0].Width = 34;
             gView.Columns[1].Width = workingWidth - 268;
             gView.Columns[2].Width = 45;
             gView.Columns[3].Width = 44;
@@ -373,6 +373,9 @@ namespace CaseChecker.MVVM.View
             MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
 
+            double ActualScreenHeight = SystemParameters.PrimaryScreenHeight;
+            double ActualScreenWidth = SystemParameters.PrimaryScreenWidth;
+                        
             if (WindowState == WindowState.Maximized)
             {
                 WindowState = WindowState.Normal;
@@ -384,6 +387,12 @@ namespace CaseChecker.MVVM.View
                 WindowState = WindowState.Maximized;
                 this.BorderThickness = new Thickness(6, 6, 6, 3);
                 btnMaximize.Content = "⧉";
+
+                if (GetTaskBarLocation() == TaskBarLocation.LEFT)
+                    Left = ActualScreenWidth - MaxWidth;
+
+                if (GetTaskBarLocation() == TaskBarLocation.TOP)
+                    Top = ActualScreenHeight - MaxHeight;
             }
 
         }
@@ -429,6 +438,21 @@ namespace CaseChecker.MVVM.View
                 MainViewModel.Instance.DebugShows = Visibility.Collapsed;
             else
                 MainViewModel.Instance.DebugShows = Visibility.Visible;
+        }
+
+        private enum TaskBarLocation { TOP, BOTTOM, LEFT, RIGHT }
+
+        private TaskBarLocation GetTaskBarLocation()
+        {
+            //System.Windows.SystemParameters....
+            if (SystemParameters.WorkArea.Left > 0)
+                return TaskBarLocation.LEFT;
+            if (SystemParameters.WorkArea.Top > 0)
+                return TaskBarLocation.TOP;
+            if (SystemParameters.WorkArea.Left == 0
+              && SystemParameters.WorkArea.Width < SystemParameters.PrimaryScreenWidth)
+                return TaskBarLocation.RIGHT;
+            return TaskBarLocation.BOTTOM;
         }
 
     }

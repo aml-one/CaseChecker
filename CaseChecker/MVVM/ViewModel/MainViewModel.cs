@@ -26,7 +26,7 @@ public partial class MainViewModel : ObservableObject
     private static MainViewModel? instance;
     public static MainViewModel Instance
     {
-        get => instance;
+        get => instance!;
         set
         {
             instance = value;
@@ -1863,7 +1863,7 @@ public partial class MainViewModel : ObservableObject
 
             if (!AccessLevel.Equals("both", StringComparison.CurrentCultureIgnoreCase))
             {
-                string siteId = ServerInfoModel.SiteID;
+                string siteId = ServerInfoModel.SiteID!;
                 if (siteId is not null)
                 {
                     ServerInfoModel.DesignerNameAnteriors = siteId[..siteId.IndexOf('-')];
