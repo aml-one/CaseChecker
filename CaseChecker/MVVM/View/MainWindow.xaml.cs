@@ -370,6 +370,9 @@ namespace CaseChecker.MVVM.View
 
         private void BtnMaximize_Click(object sender, RoutedEventArgs e)
         {
+            MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+            MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
+
             if (WindowState == WindowState.Maximized)
             {
                 WindowState = WindowState.Normal;

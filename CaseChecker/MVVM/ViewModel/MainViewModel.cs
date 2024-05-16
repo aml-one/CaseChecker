@@ -1294,6 +1294,7 @@ public partial class MainViewModel : ObservableObject
 
                     if (model.CommentIn3Shape!.Contains(" redo", StringComparison.CurrentCultureIgnoreCase) ||
                         model.CommentIn3Shape!.Contains("redo ", StringComparison.CurrentCultureIgnoreCase) ||
+                        model.CommentIn3Shape!.Contains("re do", StringComparison.CurrentCultureIgnoreCase) ||
                         model.CommentIn3Shape!.Equals("redo", StringComparison.CurrentCultureIgnoreCase) ||
                         model.CommentIn3Shape!.Contains("remake ", StringComparison.CurrentCultureIgnoreCase) ||
                         model.CommentIn3Shape!.Contains(" remake", StringComparison.CurrentCultureIgnoreCase) ||
@@ -1749,6 +1750,7 @@ public partial class MainViewModel : ObservableObject
         text = text.Replace("Unsectioned model", "未分割模型");
         text = text.Replace("Antagonist model", "对合模型");
         text = text.Replace("Sectioned (die ditched) model", "分割模型");
+        text = text.Replace("Soft tissue", "软组织");
         text = text.Replace("Die", "代型");
 
         text = text.Replace("Temporary on prepared model", "已制备模型上的临时冠");
