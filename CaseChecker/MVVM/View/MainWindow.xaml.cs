@@ -385,14 +385,20 @@ namespace CaseChecker.MVVM.View
             else if (WindowState == WindowState.Normal)
             {
                 WindowState = WindowState.Maximized;
-                this.BorderThickness = new Thickness(6, 6, 6, 3);
-                btnMaximize.Content = "⧉";
+                double LeftMargin = 6;
+                double TopMargin = 6;
 
                 if (GetTaskBarLocation() == TaskBarLocation.LEFT)
-                    Left = ActualScreenWidth - MaxWidth;
+                    LeftMargin = ActualScreenWidth - MaxWidth + 6;
 
                 if (GetTaskBarLocation() == TaskBarLocation.TOP)
-                    Top = ActualScreenHeight - MaxHeight;
+                    TopMargin = ActualScreenHeight - MaxHeight + 6;
+                
+                    
+
+                this.BorderThickness = new Thickness(LeftMargin, TopMargin, 6, 3);
+                btnMaximize.Content = "⧉";
+
             }
 
         }
