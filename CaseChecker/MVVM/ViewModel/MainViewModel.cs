@@ -1368,6 +1368,7 @@ public partial class MainViewModel : ObservableObject
                         model.SentOn = $"0{(string)Lang["designReady"]}";
                     }
 
+                    bool noScanFile = false;
                     if (model.Comment is not null)
                     {
                         if (model.Comment.StartsWith("This case is NOT in"))
@@ -1379,6 +1380,7 @@ public partial class MainViewModel : ObservableObject
                             model.TotalUnitsWithPrefixZero = "00";
                             model.CommentColor = "Gray";
                             model.SentOn = (string)Lang["noScanFile"];
+                            noScanFile = true;
                         }    
                     }
 
@@ -1447,9 +1449,13 @@ public partial class MainViewModel : ObservableObject
                         if (model.OriginalSentOn!.Equals(DateTime.Now.ToString("MM-dd-yyyy")) ||
                                 (model.OriginalSentOn!.Equals(DateTime.Now.AddDays(-1).ToString("MM-dd-yyyy")) &&
                                  DateTime.Now.Hour < 5))
-                            TotalOrdersTodayLeftSide++;
+                        {
+                            if (!noScanFile)
+                                TotalOrdersTodayLeftSide++;
+                        }
 
-                        TotalOrdersLeftSide++;
+                        if (!noScanFile)
+                            TotalOrdersLeftSide++;
                     }
                     
                     if (model.Side!.Equals("right", StringComparison.CurrentCultureIgnoreCase))
@@ -1457,9 +1463,13 @@ public partial class MainViewModel : ObservableObject
                         if (model.OriginalSentOn!.Equals(DateTime.Now.ToString("MM-dd-yyyy")) ||
                                 (model.OriginalSentOn!.Equals(DateTime.Now.AddDays(-1).ToString("MM-dd-yyyy")) &&
                                  DateTime.Now.Hour < 5))
-                            TotalOrdersTodayRightSide++;
+                        {
+                            if (!noScanFile)
+                                TotalOrdersTodayRightSide++;
+                        }
 
-                        TotalOrdersRightSide++;
+                        if (!noScanFile)
+                            TotalOrdersRightSide++;
                     }
 
                     if (TotalOrdersLeftSide == TotalOrdersTodayLeftSide || TotalOrdersTodayLeftSide == 0)
